@@ -2,6 +2,8 @@ package com.pathfinder.server.thread.entity;
 
 
 import com.pathfinder.server.audit.Auditable;
+import com.pathfinder.server.member.entity.Member;
+import com.pathfinder.server.recommend.entity.Recommend;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +11,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,16 +34,22 @@ public class Thread extends Auditable {
     @Column
     private int views;
 
-//    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
-//    private List<Recommend> recommends = new ArrayList<>();
-//    public void setRecommend(Recommend recommend) {
-//        recommends.add(recommend);
-//        if (recommend.getThread() != this) {
-//            recommend.setThread(this);
-//        }
-//    }
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    private List<Recommend> recommends = new ArrayList<>();
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void setRecommend(Recommend recommend) {
+        recommends.add(recommend);
+        if (recommend.getThread() != this) {
+            recommend.setThread(this);
+        }
+    }
+    
 }
