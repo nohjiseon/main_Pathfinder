@@ -71,4 +71,8 @@ public class MemberService {
         }
         return false;
     }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId).orElse(null);
+    }
 }
