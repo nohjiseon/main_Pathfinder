@@ -28,6 +28,7 @@ public class ThreadDto {
     }
     @Getter
     @Builder
+    @AllArgsConstructor
     public static class Response {
         private Long threadId;
         // 작성자 name 가져오기

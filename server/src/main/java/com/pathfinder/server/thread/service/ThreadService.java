@@ -31,7 +31,7 @@ public class ThreadService {
         Optional.ofNullable(thread.getContent())
                 .ifPresent(content -> findThread.setContent(content));
 //        findThread.setModifiedAt(LocalDateTime.now());
-        return findThread;
+        return threadRepository.save(findThread);
     }
 
     public Thread getThread(Long threadId){
@@ -40,8 +40,8 @@ public class ThreadService {
         return threadRepository.save(findThread);
     }
 
-    public Page<Thread> getThreads(int page, int size){
-        return threadRepository.findAll(PageRequest.of(page, size, Sort.by("threadId").descending()));
+    public Page<Thread> getThreads(int page){
+        return threadRepository.findAll(PageRequest.of(page, 10, Sort.by("threadId").descending()));
     }
 
     public void deleteThread(Long threadId) {
@@ -50,7 +50,7 @@ public class ThreadService {
         threadRepository.delete(findThread);
     }
 
-    private Thread findVerifiedThread(Long threadId) {
+    public Thread findVerifiedThread(Long threadId) {
         Optional<Thread> optionalQuestion = threadRepository.findById(threadId);
         Thread findThread = optionalQuestion.orElseThrow(()-> new BusinessLogicException(ExceptionCode.THREAD_NOT_FOUND));
         return findThread;

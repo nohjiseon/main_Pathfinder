@@ -46,9 +46,8 @@ public class ThreadController {
     }
 
     @GetMapping // 전체 게시글 조회
-    public ResponseEntity getThreads(@RequestParam int page,
-                                     @RequestParam int size) {
-        Page<Thread> pageThreads = threadService.getThreads(page - 1, size);
+    public ResponseEntity getThreads(@RequestParam int page) {
+        Page<Thread> pageThreads = threadService.getThreads(page - 1);
 
         List<Thread> threads = pageThreads.getContent();
 
