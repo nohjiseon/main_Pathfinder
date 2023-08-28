@@ -6,6 +6,7 @@ public enum ExceptionCode {
     // User 관련 예외
     USER_NOT_FOUND(404, "User not found"),
     EMAIL_EXISTS(409, "Email already exists"),
+    NAME_EXISTS(409, "Name already exists"),
     USER_CREDENTIALS_INVALID(401, "Invalid user credentials"),
 
     // Question 관련 예외
