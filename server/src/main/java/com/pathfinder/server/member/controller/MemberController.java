@@ -19,7 +19,6 @@ import java.net.URI;
 @RequestMapping("/member")
 @Validated
 public class MemberController {
-    private final static String MEMBER_DEFAULT_URL = "/member/mypage";
     private final MemberService memberService;
     private final MemberMapper mapper;
 
@@ -32,11 +31,10 @@ public class MemberController {
     public ResponseEntity memberSignup(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = memberService.createMember(mapper.memberPostToMember(requestBody));
 
-        URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, member.getMemberId());
-
-        // 마이페이지로 리다이렉트
-        return ResponseEntity.created(location).build();
+        return new ResponseEntity(HttpStatus.CREATED);
     }
+
+    // todo 로그인 시큐리티에서 처리
 
     @PatchMapping("/mypage/{member-id}")
     public ResponseEntity memberPatch(@PathVariable("member-id") @Positive long memberId,
