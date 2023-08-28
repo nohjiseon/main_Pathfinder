@@ -47,7 +47,7 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
-    private Member findVerifiedMember(Long memberId) {
+    public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
         Member findMember =
@@ -72,7 +72,4 @@ public class MemberService {
         return false;
     }
 
-    public Member findById(Long memberId) {
-        return memberRepository.findById(memberId).orElse(null);
-    }
 }

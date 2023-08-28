@@ -1,6 +1,7 @@
 package com.pathfinder.server.member.entity;
 
 import com.pathfinder.server.recommend.entity.Recommend;
+import com.pathfinder.server.thread.entity.Thread;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,13 +19,14 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 30, nullable = false, updatable = false)
     private String name;
 
-    @Column(length = 30, updatable = false)
+    @Column(length = 30, nullable = false)
     private String email;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
+
     private String password;
 
 //    @Column(nullable = false)
@@ -36,8 +38,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<Thread> threads = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Thread> threads = new ArrayList<>();
 
     public void setRecommend(Recommend recommend) {
         recommends.add(recommend);
