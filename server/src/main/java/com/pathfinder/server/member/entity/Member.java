@@ -47,4 +47,11 @@ public class Member {
             recommend.setMember(this);
         }
     }
+
+    public void setThread(Thread thread) {
+        threads.add(thread);
+        if (thread.getMember() != this) {
+            thread.setMember(this);
+        }
+    }
 }

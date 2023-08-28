@@ -34,16 +34,22 @@ public class Thread extends Auditable {
     @Column
     private int views;
 
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
     public void setRecommend(Recommend recommend) {
         recommends.add(recommend);
         if (recommend.getThread() != this) {
             recommend.setThread(this);
         }
     }
-
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    
 }
