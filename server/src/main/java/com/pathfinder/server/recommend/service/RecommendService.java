@@ -23,7 +23,7 @@ public class RecommendService {
     }
 
     public void toggleRecommend(Long memberId, Long threadId) {
-        Optional<Recommend> optionalRecommend = recommendRepository.findByMemberIdAndThreadId(memberId, threadId);
+        Optional<Recommend> optionalRecommend = recommendRepository.findByMemberMemberIdAndThreadThreadId(memberId, threadId);
 
         if (optionalRecommend.isPresent()) {
             recommendRepository.delete(optionalRecommend.get());
