@@ -8,8 +8,8 @@ public enum ExceptionCode {
     EMAIL_EXISTS(409, "Email already exists"),
     USER_CREDENTIALS_INVALID(401, "Invalid user credentials"),
 
-    // Question 관련 예외
-    QUESTION_NOT_FOUND(404, "Question not found"),
+    // Thread 관련 예외
+    THREAD_NOT_FOUND(404, "Question not found"),
     QUESTION_EDIT_UNAUTHORIZED(403, "Unauthorized Quesiton edit"),
 
     ANSWER_NOT_FOUND(404, "Answer not found"),
