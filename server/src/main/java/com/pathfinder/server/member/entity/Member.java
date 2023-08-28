@@ -1,19 +1,18 @@
 package com.pathfinder.server.member.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.pathfinder.server.recommend.entity.Recommend;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Entity(name = "MEMBERS")
+@Getter
+@Setter
+@Entity
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +33,16 @@ public class Member {
 //    @ElementCollection(fetch = FetchType.EAGER) // 인가
 //    private List<String> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Recommend> recommends = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<Thread> threads = new ArrayList<>();
+
+    public void setRecommend(Recommend recommend) {
+        recommends.add(recommend);
+        if (recommend.getMember() != this) {
+            recommend.setMember(this);
+        }
+    }
 }
