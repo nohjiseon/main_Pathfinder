@@ -33,6 +33,9 @@ public class Member {
     @Column(nullable = false)
     private Authority authority;
 
+    @Column(nullable = false)
+    private String introduce = "안녕하세요.";
+
 //    @Column(nullable = false)
 //    private String profileImageUrl = "http://localhost:8080/images/sample.jpg";
 

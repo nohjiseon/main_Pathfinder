@@ -51,6 +51,9 @@ public class MemberService {
         // 이미지 변경
 //        Optional.ofNullable(member.getProfileImageUrl())
 //                .ifPresent(image -> findMember.setProfileImageUrl(image));
+//         자기소개 변경
+        Optional.ofNullable(member.getIntroduce())
+                .ifPresent(introduce -> findMember.setIntroduce(introduce));
 
         return memberRepository.save(findMember);
     }
