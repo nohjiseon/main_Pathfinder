@@ -7,14 +7,25 @@ spring:
     url: jdbc:h2:mem:test
   jpa:
     hibernate:
-      ddl-auto: create  # (1) ??? ?? ??
-    show-sql: true      # (2) SQL ?? ??
+      ddl-auto: create
+    show-sql: true
     properties:
       hibernate:
-        format_sql: true  # (3) SQL pretty print
+        format_sql: true
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${S3_ACCESSKEY}
+        secretKey: ${S3_SECRETKEY}
+      s3:
+        bucket: main20-pathfinder
+      region:
+        static: ap-northeast-2
+      stack:
+        auto: false
 logging:
   level:
     org:
