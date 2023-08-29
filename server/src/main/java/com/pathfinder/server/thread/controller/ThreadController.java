@@ -31,7 +31,7 @@ public class ThreadController {
 
     @PostMapping("/registration") // 게시글 생성
     public ResponseEntity postQuestion(@RequestBody ThreadDto.Post threadPostDto) {
-        Thread thread = threadService.createQuestion(mapper.threadPostDtoToThread(threadPostDto));
+        Thread thread = threadService.createThread(mapper.threadPostDtoToThread(threadPostDto));
 
         URI location = UriCreator.createUri(THREAD_DEFAULT_URL, thread.getThreadId());
 
@@ -61,7 +61,7 @@ public class ThreadController {
     @GetMapping("/area/{area1}") // area1을 갖는 게시글 조회
     public ResponseEntity getThreadsByRegion(@PathVariable("area1") String area1,
                                              @RequestParam int page) {
-        Page<Thread> pageThreads = threadService.getThreadsByRegion(area1, PageRequest.of(page - 1,10, Sort.by(Sort.Direction.DESC,"threadId")));
+        Page<Thread> pageThreads = threadService.getThreadsByRegion(area1, page);
 
         List<Thread> threads = pageThreads.getContent();
 

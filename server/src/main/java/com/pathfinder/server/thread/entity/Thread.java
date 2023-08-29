@@ -38,7 +38,7 @@ public class Thread extends Auditable {
     private String area2; // 시
 
     @Column
-    private int recommendedCount;
+    private long recommendedCount;
 
     @Column
     private int views;

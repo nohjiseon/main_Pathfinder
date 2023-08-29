@@ -24,8 +24,8 @@ public class ThreadService {
         this.memberService = memberService;
     }
 
-    public Thread createQuestion(Thread thread) {
-        verifyQuestion(thread);
+    public Thread createThread(Thread thread) {
+        verifyThreadGetMemberName(thread);
 
         return threadRepository.save(thread);
     }
@@ -36,12 +36,17 @@ public class ThreadService {
                 .ifPresent(title -> findThread.setTitle(title));
         Optional.ofNullable(thread.getContent())
                 .ifPresent(content -> findThread.setContent(content));
+        Optional.ofNullable(thread.getArea1())
+                .ifPresent(area1 -> findThread.setArea1(area1));
+        Optional.ofNullable(thread.getArea2())
+                .ifPresent(area2 -> findThread.setArea2(area2));
         return threadRepository.save(findThread);
     }
 
     public Thread getThread(Long threadId){
         Thread findThread = findVerifiedThread(threadId);
         findThread.setViews(findThread.getViews() + 1); // 조회수 증가
+        findThread.setRecommendedCount(findThread.getRecommends().stream().count());
 
         return threadRepository.save(findThread);
     }
@@ -50,8 +55,8 @@ public class ThreadService {
         return threadRepository.findAll(PageRequest.of(page, 10, Sort.by("threadId").descending()));
     }
 
-    public Page<Thread> getThreadsByRegion(String area1, Pageable pageable){
-        return threadRepository.findByArea1(area1, pageable);
+    public Page<Thread> getThreadsByRegion(String area1, int page){
+        return threadRepository.findByArea1(area1, PageRequest.of(page - 1,10, Sort.by("threadId").descending()));
     }
 
     public void deleteThread(Long threadId) {
@@ -65,9 +70,8 @@ public class ThreadService {
         Thread findThread = optionalQuestion.orElseThrow(()-> new BusinessLogicException(ExceptionCode.THREAD_NOT_FOUND));
         return findThread;
     }
-    private void verifyQuestion(Thread thread){
-        Member findMember = memberService.findMember(thread.getMember().getMemberId());
-        thread.setName(findMember.getName()); // 작성한 Member의 name 가져오기
+    private void verifyThreadGetMemberName(Thread thread){
+        thread.setName(thread.getMember().getName());
     }
 
 

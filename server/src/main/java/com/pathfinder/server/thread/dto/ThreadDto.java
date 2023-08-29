@@ -39,7 +39,7 @@ public class ThreadDto {
         private String content;
         private String area1;
         private String area2;
-        private Integer recommendedCount;
+        private Long recommendedCount;
         private Integer views;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
