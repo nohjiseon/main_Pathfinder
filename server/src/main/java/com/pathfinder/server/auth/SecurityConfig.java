@@ -1,5 +1,6 @@
 package com.pathfinder.server.auth;
 
+import com.pathfinder.server.auth.jwt.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,105 +22,105 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.pathfinder.server.auth.jwt.filter.*;
 import com.pathfinder.server.auth.jwt.handler.*;
-//import com.pathfinder.server.auth.jwt.service.TokenProvider;
 
 
 import java.util.List;
 
-//@Configuration
-//@RequiredArgsConstructor
-//public class SecurityConfig {
-//
-//    private final TokenProvider tokenProvider;
-//
-//    @Value("frontendurl")
-//    private String frontBaseUrl;
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
-//
-//        httpSecurity
-//                .csrf().disable()
-//                .httpBasic().disable()
-//                .formLogin().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .cors(getCorsConfigurerCustomizer());
-//
-//        httpSecurity
-//                .apply(new CustomFilterConfigurer());
-//
-////        httpSecurity.oauth2Login();
-//
-//        httpSecurity.exceptionHandling()
-//                .accessDeniedHandler(new MemberAccessDeniedHandler())
-//                .authenticationEntryPoint(new MemberAuthenticationEntryPoint());
-//
-//        httpSecurity.authorizeRequests(getAuthorizeRequestsCustomizer());
-//
-//        return httpSecurity.build();
-//    }
-//
-//    @Bean
-//    public RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
-//
-//    @Bean
-//    public DefaultOAuth2UserService defaultOAuth2UserService() {
-//        return new DefaultOAuth2UserService();
-//    }
-//
-//    private Customizer<ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry> getAuthorizeRequestsCustomizer() {
-//        return (requests) -> requests
-//                .antMatchers(HttpMethod.GET, "/").permitAll()
-//                .antMatchers("/auth/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/member/**").permitAll()
-//                .antMatchers(HttpMethod.POST, "/member/email/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/thread/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/snippets/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/tag/**").permitAll()
-//                .anyRequest().authenticated();
-//    }
-//
-//    @Bean
-//    public Customizer<CorsConfigurer<HttpSecurity>> getCorsConfigurerCustomizer() {
-//
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.addAllowedOrigin(frontBaseUrl);
-//        configuration.addAllowedOrigin("http://localhost:3000");
-//        configuration.addAllowedMethod("*");
-//        configuration.addAllowedHeader("*");
-//        configuration.setAllowCredentials(true);
-//        configuration.setExposedHeaders(List.of(AUTHORIZATION, REFRESH, LOCATION));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return corsConfigurer -> corsConfigurer.configurationSource(source);
-//    }
-//
-//    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-//        @Override
-//        public void configure(HttpSecurity builder) {
-//            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-//
-//            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, tokenProvider);
-//            jwtAuthenticationFilter.setFilterProcessesUrl(AUTH_LOGIN_URL);
-//            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
-//            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
-//
-//            JwtRefreshFilter jwtRefreshFilter = new JwtRefreshFilter(tokenProvider, new MemberRefreshFailureHandler());
-//            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(tokenProvider);
-//
-//            builder
-//                    .addFilter(jwtAuthenticationFilter)
-//                    .addFilterAfter(jwtRefreshFilter, JwtAuthenticationFilter.class)
-//                    .addFilterAfter(jwtVerificationFilter, JwtRefreshFilter.class);
-//        }
-//    }
-//
-//}
+import static com.pathfinder.server.auth.utils.AuthConstant.*;
+
+@Configuration
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+    private final TokenProvider tokenProvider;
+
+    @Value("frontend URL 추가 예정")
+    private String frontBaseUrl;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+
+        httpSecurity
+                .csrf().disable()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .cors(getCorsConfigurerCustomizer());
+
+        httpSecurity
+                .apply(new CustomFilterConfigurer());
+
+//        httpSecurity.oauth2Login();
+
+        httpSecurity.exceptionHandling()
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint());
+
+        httpSecurity.authorizeRequests(getAuthorizeRequestsCustomizer());
+
+        return httpSecurity.build();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    public DefaultOAuth2UserService defaultOAuth2UserService() {
+        return new DefaultOAuth2UserService();
+    }
+
+    private Customizer<ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry> getAuthorizeRequestsCustomizer() {
+        return (requests) -> requests
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/member/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/member/email/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/thread/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/tag/**").permitAll()
+                .anyRequest().authenticated();
+    }
+
+    @Bean
+    public Customizer<CorsConfigurer<HttpSecurity>> getCorsConfigurerCustomizer() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin(frontBaseUrl);
+        configuration.addAllowedOrigin("기본 URL 추가 예정");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of(AUTHORIZATION, REFRESH, LOCATION));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return corsConfigurer -> corsConfigurer.configurationSource(source);
+    }
+
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity builder) {
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, tokenProvider);
+            jwtAuthenticationFilter.setFilterProcessesUrl(AUTH_LOGIN_URL);
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
+
+            JwtRefreshFilter jwtRefreshFilter = new JwtRefreshFilter(tokenProvider, new MemberRefreshFailureHandler());
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(tokenProvider);
+
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtRefreshFilter, JwtAuthenticationFilter.class)
+                    .addFilterAfter(jwtVerificationFilter, JwtRefreshFilter.class);
+        }
+    }
+
+}
