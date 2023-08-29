@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -24,6 +25,8 @@ public class MemberDto {
         @Email
         private String email;
         private String password;
+        private String introduce;
+        //프로필 이미지 추가 예정
 
         public void setMemberId(long memberId) {
             this.memberId = memberId;
@@ -34,5 +37,6 @@ public class MemberDto {
         private String name;
         private String email;
 //        private String profileImageUrl;
+        private String introduce;
     }
 }
