@@ -2,25 +2,43 @@ package com.pathfinder.server.member.service;
 
 import com.pathfinder.server.exception.BusinessLogicException;
 import com.pathfinder.server.exception.ExceptionCode;
+import com.pathfinder.server.member.dto.MemberDto;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.repository.MemberRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository,
+                         PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+    @Transactional
+    public Long signup(MemberDto.Post request) {
+
+        verifyExistsEmail(request.getEmail());
+
+        //TODO email인증 로직 추가
+
+        Member member = createMember(request);
+
+        return memberRepository.save(member).getMemberId();
     }
 
-    public Member createMember(Member member) {
-        if (!verifyExistsName((member.getName())) && !verifyExistsEmail(member.getEmail())) {
-            // todo 회원가입
-        }
-        return null;
+    public Member createMember(MemberDto.Post request) {
+        return Member.createMember(
+                request.getEmail(),
+                request.getName(),
+                passwordEncoder.encode(request.getPassword())
+        );
     }
 
     public Member updateMember(Member member) {

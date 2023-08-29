@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @AllArgsConstructor
 public class MemberDto {
+    @Getter
     public static class Post {
         @NotNull
         private String name;

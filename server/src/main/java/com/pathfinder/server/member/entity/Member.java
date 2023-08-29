@@ -2,18 +2,18 @@ package com.pathfinder.server.member.entity;
 
 import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.thread.entity.Thread;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
+@Builder
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,12 +59,12 @@ public class Member {
         }
     }
 
-//    public static Member createMember(String email, String name, String password) {
-//        return Member.builder()
-//                .email(email)
-//                .name(name)
-//                .password(password)
-//                .authority(Authority.ROLE_USER)
-//                .build();
-//    }
+    public static Member createMember(String email, String name, String password) {
+        return Member.builder()
+                .email(email)
+                .name(name)
+                .password(password)
+                .authority(Authority.ROLE_USER)
+                .build();
+    }
 }
