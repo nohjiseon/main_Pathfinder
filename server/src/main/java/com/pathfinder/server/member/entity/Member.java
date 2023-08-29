@@ -2,18 +2,18 @@ package com.pathfinder.server.member.entity;
 
 import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.thread.entity.Thread;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
+@Builder
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +26,19 @@ public class Member {
     private String email;
 
     @Column(length = 100, nullable = false)
+
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Authority authority;
 
     @Column(nullable = false)
     private String introduce = "안녕하세요.";
 
 //    @Column(nullable = false)
 //    private String profileImageUrl = "http://localhost:8080/images/sample.jpg";
-//
+
 //    @ElementCollection(fetch = FetchType.EAGER) // 인가
 //    private List<String> roles = new ArrayList<>();
 
@@ -55,5 +60,14 @@ public class Member {
         if (thread.getMember() != this) {
             thread.setMember(this);
         }
+    }
+
+    public static Member createMember(String email, String name, String password) {
+        return Member.builder()
+                .email(email)
+                .name(name)
+                .password(password)
+                .authority(Authority.ROLE_USER)
+                .build();
     }
 }

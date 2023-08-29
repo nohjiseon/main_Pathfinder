@@ -1,4 +1,8 @@
 spring:
+  config:
+    import:
+      - classpath:/application-secret.yml
+
   h2:
     console:
       enabled: true
@@ -7,21 +11,31 @@ spring:
     url: jdbc:h2:mem:test
   jpa:
     hibernate:
-      ddl-auto: create  # (1) ??? ?? ??
-    show-sql: true      # (2) SQL ?? ??
+      ddl-auto: create
+    show-sql: true
     properties:
       hibernate:
-        format_sql: true  # (3) SQL pretty print
+        format_sql: true
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
-logging:
-  level:
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
-server:
-  servlet:
-    encoding:
-      force-response: true
+  logging:
+    level:
+      org:
+        springframework:
+          orm:
+            jpa: DEBUG
+  server:
+    servlet:
+      encoding:
+        force-response: true
+
+backend:
+  base-url: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+
+frontend:
+  base-url: https://web-seb45-main-020-fe-54ouz2lllpv0a22.sel3.cloudtype.app
+
+jwt:
+  access-token-expire-time: 7200000
+  refresh-token-expire-time: 604800000
