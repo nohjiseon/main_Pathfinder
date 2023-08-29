@@ -28,6 +28,15 @@ public class Thread extends Auditable {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String area1; // 도
+
+    @Column(nullable = false)
+    private String area2; // 시
+
     @Column
     private int recommendedCount;
 
