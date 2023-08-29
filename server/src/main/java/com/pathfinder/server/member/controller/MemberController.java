@@ -5,7 +5,6 @@ import com.pathfinder.server.member.dto.MemberDto;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.mapper.MemberMapper;
 import com.pathfinder.server.member.service.MemberService;
-import com.pathfinder.server.utils.UriCreator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 
 @RestController
 @RequestMapping("/member")

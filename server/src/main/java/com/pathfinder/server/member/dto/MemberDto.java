@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @AllArgsConstructor
 public class MemberDto {
     public static class Post {
-        @NotBlank
+        @NotNull
         private String name;
-        @NotBlank
+        @NotNull
         private String password;
-        @NotBlank
+        @NotNull
         @Email
         private String email;
     }
