@@ -25,14 +25,6 @@ public class MemberController {
         this.mapper = mapper;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity memberSignup(@Valid @RequestBody MemberDto.Post requestBody) {
-        Member member = memberService.createMember(mapper.memberPostToMember(requestBody));
-
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
-
-    // todo 로그인 시큐리티에서 처리
 
     @PatchMapping("/mypage/{member-id}")
     public ResponseEntity memberPatch(@PathVariable("member-id") @Positive long memberId,
