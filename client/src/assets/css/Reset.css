@@ -144,3 +144,9 @@ pre {
   color: #444;
   line-height: 30px;
 }
+
+#root {
+  padding-top: 70px;
+  max-width: 1920px;
+  margin: 0 auto;
+}

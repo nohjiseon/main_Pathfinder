@@ -5,4 +5,7 @@ const Main = () => {
 };
 export default Main;
 
-const MainCon = styled.footer``;
+const MainCon = styled.main`
+  min-height: calc(100vh - 120px);
+  padding: 0 20px;
+`;
