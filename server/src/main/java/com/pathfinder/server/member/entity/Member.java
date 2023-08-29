@@ -26,12 +26,14 @@ public class Member {
     private String email;
 
     @Column(length = 100, nullable = false)
-
     private String password;
+
+    @Column(nullable = false)
+    private String introduce = "안녕하세요.";
 
 //    @Column(nullable = false)
 //    private String profileImageUrl = "http://localhost:8080/images/sample.jpg";
-
+//
 //    @ElementCollection(fetch = FetchType.EAGER) // 인가
 //    private List<String> roles = new ArrayList<>();
 
