@@ -34,8 +34,11 @@ public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
 
-    @Value("frontend URL 추가 예정")
+    @Value("${frontend.base-url}")
     private String frontBaseUrl;
+
+    @Value("${backend.base-url}")
+    private String backBaseUrl;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,7 +59,7 @@ public class SecurityConfig {
         httpSecurity
                 .apply(new CustomFilterConfigurer());
 
-//        httpSecurity.oauth2Login();
+        httpSecurity.oauth2Login();
 
         httpSecurity.exceptionHandling()
                 .accessDeniedHandler(new MemberAccessDeniedHandler())
@@ -93,7 +96,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(frontBaseUrl);
-        configuration.addAllowedOrigin("기본 URL 추가 예정");
+        configuration.addAllowedOrigin(backBaseUrl);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
