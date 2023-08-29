@@ -8,6 +8,8 @@ import com.pathfinder.server.thread.mapper.ThreadMapper;
 import com.pathfinder.server.thread.service.ThreadService;
 import com.pathfinder.server.utils.UriCreator;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +31,7 @@ public class ThreadController {
 
     @PostMapping("/registration") // 게시글 생성
     public ResponseEntity postQuestion(@RequestBody ThreadDto.Post threadPostDto) {
-        Thread thread = threadService.createQuestion(mapper.threadPostDtoToThread(threadPostDto));
+        Thread thread = threadService.createThread(mapper.threadPostDtoToThread(threadPostDto));
 
         URI location = UriCreator.createUri(THREAD_DEFAULT_URL, thread.getThreadId());
 
@@ -48,6 +50,18 @@ public class ThreadController {
     @GetMapping // 전체 게시글 조회
     public ResponseEntity getThreads(@RequestParam int page) {
         Page<Thread> pageThreads = threadService.getThreads(page - 1);
+
+        List<Thread> threads = pageThreads.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.threadsToThreadResponseDtos(threads),
+                        pageThreads),
+                HttpStatus.OK);
+    }
+    @GetMapping("/area/{area1}") // area1을 갖는 게시글 조회
+    public ResponseEntity getThreadsByRegion(@PathVariable("area1") String area1,
+                                             @RequestParam int page) {
+        Page<Thread> pageThreads = threadService.getThreadsByRegion(area1, page);
 
         List<Thread> threads = pageThreads.getContent();
 

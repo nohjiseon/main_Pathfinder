@@ -11,16 +11,19 @@ import java.time.LocalDateTime;
 public class ThreadDto {
     @Getter
     public static class Post {
-
+        private Long memberId;
         private String title;
         private String content;
-
+        private String area1;
+        private String area2;
     }
     @Getter
     public static class Patch {
         private Long threadId;
         private String title;
         private String content;
+        private String area1;
+        private String area2;
 
         public void setThreadId(Long threadId) {
             this.threadId = threadId;
@@ -31,11 +34,12 @@ public class ThreadDto {
     @AllArgsConstructor
     public static class Response {
         private Long threadId;
-        // 작성자 name 가져오기
         private String name;
         private String title;
         private String content;
-        private Integer recommendedCount;
+        private String area1;
+        private String area2;
+        private Long recommendedCount;
         private Integer views;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
