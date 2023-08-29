@@ -10,7 +10,7 @@ public enum ExceptionCode {
     USER_CREDENTIALS_INVALID(401, "Invalid user credentials"),
 
     // Thread 관련 예외
-    THREAD_NOT_FOUND(404, "Question not found"),
+    THREAD_NOT_FOUND(404, "Thread not found"),
     QUESTION_EDIT_UNAUTHORIZED(403, "Unauthorized Quesiton edit"),
 
     ANSWER_NOT_FOUND(404, "Answer not found"),
