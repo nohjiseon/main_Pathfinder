@@ -71,7 +71,7 @@ public class ThreadController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{member-id}") // member가 작성한 게시글 조회
+    @GetMapping("/member/{member-id}") // member가 작성한 게시글 조회
     public ResponseEntity getThreadsByRegion(@PathVariable("member-id") Long memberId,
                                              @RequestParam int page) {
         Page<Thread> pageThreads = threadService.getThreadsByMember(memberId, page);
