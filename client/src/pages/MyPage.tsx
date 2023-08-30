@@ -150,7 +150,8 @@ const MyPageBg = styled.main`
   justify-content: center;
   align-items: center;
   background-color: #f3f3f3;
-  padding-top: 50px;
+  margin-top: -70px;
+  padding-top: 120px;
 `;
 
 const MyPageContainer = styled.div`
