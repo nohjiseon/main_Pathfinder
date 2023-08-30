@@ -59,6 +59,10 @@ public class ThreadService {
         return threadRepository.findByArea1(area1, PageRequest.of(page - 1,10, Sort.by("threadId").descending()));
     }
 
+    public Page<Thread> getThreadsByMember(Long memberId, int page){
+        return threadRepository.findByMemberMemberId(memberId, PageRequest.of(page - 1,10, Sort.by("threadId").descending()));
+    }
+
     public void deleteThread(Long threadId) {
         Thread findThread = findVerifiedThread(threadId);
 
