@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import Profile from "../assets/images/profile.png";
 import IcMenu from "../assets/images/menu.png";
+import IcMenuOpen from "../assets/images/menu_open.png";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -29,7 +30,7 @@ const Header = () => {
           <ProfileImg>
             <img src={Profile} />
           </ProfileImg>
-          <MenuBtn onClick={MenuHandeler}></MenuBtn>
+          <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
 
           <Menu className={isOpen ? "active" : ""}>
             <Link to="" onClick={MenuHandeler}>
@@ -129,6 +130,10 @@ const MenuBtn = styled.button`
   width: 32px;
   height: 32px;
   background: url(${IcMenu}) no-repeat center / 32px;
+  transition: 0.3s;
+  &.active {
+    background-image: url(${IcMenuOpen});
+  }
 `;
 
 const Menu = styled.div`
