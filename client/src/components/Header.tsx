@@ -79,6 +79,7 @@ const HeaderCon = styled.header`
   border-radius: 8px;
   max-width: 1920px;
   margin: 0 auto;
+  background-color: #fff;
 `;
 
 const Logo = styled.h1`
