@@ -27,10 +27,12 @@ const Header = () => {
       {isLogin ? (
         <BtnBox>
           <ProfileInfo>반갑습니다! ㅇㅇㅇ님</ProfileInfo>
-          <ProfileImg>
-            <img src={Profile} />
-          </ProfileImg>
-          <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
+          <Link to="/mypage">
+            <ProfileImg>
+              <img src={Profile} />
+            </ProfileImg>
+          </Link>
+          <MenuBtn onClick={MenuHandeler}></MenuBtn>
 
           <Menu className={isOpen ? "active" : ""}>
             <Link to="" onClick={MenuHandeler}>
@@ -39,7 +41,7 @@ const Header = () => {
             <Link to="" onClick={MenuHandeler}>
               지역별 글 모아보기
             </Link>
-            <Link to="" onClick={MenuHandeler}>
+            <Link to="/mypage" onClick={MenuHandeler}>
               마이페이지
             </Link>
             <Link to="" onClick={MenuHandeler}>
