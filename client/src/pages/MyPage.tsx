@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Card from "../components/common/Card";
+import Pagination from "../components/common/Pagenation";
+import { usePagination } from "../hooks/usePagination";
 import styled from "styled-components";
 import myCharacter1 from "../assets/images/my_character1.png";
 import myCharacter2 from "../assets/images/my_character2.png";
@@ -16,6 +19,20 @@ const MyPage = (): JSX.Element => {
   const [password, setPassword] = useState("");
   const [intro, setIntro] = useState("안녕하세요, [아이디]입니다.");
   const [photoSrc, setPhotoSrc] = useState(myCharacter1);
+  const {
+    currentPage,
+    totalPages,
+    setTotalPages,
+    onPageChangeHandler,
+    onPrevPageHandler,
+    onNextPageHandler,
+  } = usePagination();
+
+  useEffect(() => {
+    setTotalPages(10); // 총 페이지 몇개인지 임의로 정한거라 수정 필요함
+  }, []);
+
+  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   function handleEditBtnClick(): void {
     setPassword("");
@@ -188,6 +205,20 @@ const MyPage = (): JSX.Element => {
           ) : (
             <MyPageContent>
               <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
+              <MyPageBlogList>
+                {data.map(() => (
+                  <Card></Card>
+                ))}
+              </MyPageBlogList>
+              <MyPagePaginationContainer>
+                <Pagination
+                  currentPage={currentPage}
+                  onPrevPage={onPrevPageHandler}
+                  totalPages={totalPages}
+                  onPageChange={onPageChangeHandler}
+                  onNextPage={onNextPageHandler}
+                />
+              </MyPagePaginationContainer>
             </MyPageContent>
           )}
         </MyPageBottom>
@@ -457,4 +488,19 @@ const CharacterSquare = styled.img`
 const CharacterWideRectangle = styled.img`
   width: 135px;
   height: 100px;
+`;
+
+const MyPageBlogList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 30px;
+  gap: 20px 0;
+`;
+
+const MyPagePaginationContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 `;

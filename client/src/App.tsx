@@ -5,10 +5,7 @@ import Main from "./pages/Main";
 import RootLayout from "./pages/Root";
 import List from "./components/List";
 import MyPage from "./pages/MyPage";
-<<<<<<< HEAD
-=======
 
->>>>>>> 73b6389 (feat: 마이페이지 파일 생성 및 라우터 설정)
 function App() {
   const routes: RouteObject[] = [
     {
