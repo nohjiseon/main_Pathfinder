@@ -1,20 +1,47 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { RecoilRoot } from "recoil";
+import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import Main from "./pages/Main";
+import RootLayout from "./pages/Root";
+import List from "./components/List";
 import MyPage from "./pages/MyPage";
-
 function App() {
+  const routes: RouteObject[] = [
+    {
+      path: "/",
+      element: <RootLayout />,
+      children: [
+        {
+          path: "/",
+          element: <Main />,
+        },
+        {
+          path: "/alllist",
+          element: <List />,
+        },
+        {
+          path: "/mypage",
+          element: <MyPage />,
+        },
+      ],
+    },
+    // {
+    //   path: "/login",
+    //   element: <LogIn />,
+    // },
+    // {
+    //   path: "/sign",
+    //   element: <SignUp />,
+    // },
+    // { path: "*", element: <Error /> },
+  ];
+
+  const router = createBrowserRouter(routes);
+
   return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/mypage" element={<MyPage />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <RecoilRoot>
+      <RouterProvider router={router} />
+    </RecoilRoot>
   );
 }
 
