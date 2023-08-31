@@ -1,6 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 import myCharacter1 from "../assets/images/my_character1.png";
+import myCharacter2 from "../assets/images/my_character2.png";
+import myCharacter3 from "../assets/images/my_character3.png";
+import myCharacter4 from "../assets/images/my_character4.png";
+import myCharacter5 from "../assets/images/my_character5.png";
 import editWhite from "../assets/images/edit-white.png";
 import lock from "../assets/images/lock.png";
 
@@ -11,6 +15,7 @@ const MyPage = (): JSX.Element => {
   const [validEmail, setValidEmail] = useState(true);
   const [password, setPassword] = useState("");
   const [intro, setIntro] = useState("안녕하세요, [아이디]입니다.");
+  const [photoSrc, setPhotoSrc] = useState(myCharacter1);
 
   function handleEditBtnClick(): void {
     setPassword("");
@@ -46,7 +51,7 @@ const MyPage = (): JSX.Element => {
       <MyPageContainer>
         <MyPageTop>
           <MyPageImgContainer>
-            <img src={myCharacter1} />
+            <MyPageProfileImg src={photoSrc} />
           </MyPageImgContainer>
           <MyPageIdContainer>
             <MyPageId>[아이디]</MyPageId>
@@ -134,7 +139,57 @@ const MyPage = (): JSX.Element => {
                 </MyPageEditBtnContainer>
               ) : null}
             </MyPageContent>
-          ) : null}
+          ) : curMenu === "character" ? (
+            <MyPageContent>
+              <MyPageContentTitle>내 캐릭터</MyPageContentTitle>
+              <MyPageCharacterContainer>
+                <MyPageCharacter onClick={() => setPhotoSrc(myCharacter1)}>
+                  <CharacterLongRectangle src={myCharacter1} />
+                  <div>여유로운 해달</div>
+                </MyPageCharacter>
+                <MyPageCharacter onClick={() => setPhotoSrc(myCharacter2)}>
+                  <CharacterSquare src={myCharacter2} />
+                  <div>궁금한 물범</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterLongRectangle src={myCharacter3} />
+                  <div>???</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterLongRectangle src={myCharacter4} />
+                  <div>???</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterWideRectangle src={myCharacter5} />
+                  <div>???</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterWideRectangle src={myCharacter5} />
+                  <div>???</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterWideRectangle src={myCharacter5} />
+                  <div>???</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterWideRectangle src={myCharacter5} />
+                  <div>???</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterWideRectangle src={myCharacter5} />
+                  <div>???</div>
+                </MyPageCharacter>
+                <MyPageCharacter>
+                  <CharacterWideRectangle src={myCharacter5} />
+                  <div>???</div>
+                </MyPageCharacter>
+              </MyPageCharacterContainer>
+            </MyPageContent>
+          ) : (
+            <MyPageContent>
+              <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
+            </MyPageContent>
+          )}
         </MyPageBottom>
       </MyPageContainer>
     </MyPageBg>
@@ -179,6 +234,11 @@ const MyPageImgContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const MyPageProfileImg = styled.img`
+  width: 60px;
+  height: 60px;
 `;
 
 const MyPageIdContainer = styled.div`
@@ -238,20 +298,20 @@ const MyPageContentTitle = styled.div`
 `;
 
 const MyPageProfileEdit = styled.div`
-  width: 244px;
-  height: 40px;
+  width: 190px;
+  height: 30px;
   border-radius: 4px;
   background-color: #ffc03f;
   color: #ffffff;
-  font-size: 20px;
+  font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
 
   img {
-    width: 21px;
-    height: 19px;
+    width: 18px;
+    height: 16px;
   }
 `;
 
@@ -351,4 +411,50 @@ const MyPageCancelBtn = styled(MyPageEditBtn)`
   color: #444444;
   background-color: #ffffff;
   box-shadow: 0 0 0 1px #bebebe inset;
+`;
+
+const MyPageCharacterContainer = styled.div`
+  width: 100%;
+  margin-top: 30px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+`;
+
+const MyPageCharacter = styled.div`
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 20px;
+
+  &:hover {
+    background-color: #f3f3f3;
+    border-radius: 4px;
+  }
+
+  div {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+`;
+
+const CharacterLongRectangle = styled.img`
+  width: 110px;
+  height: 125px;
+`;
+
+const CharacterSquare = styled.img`
+  width: 130px;
+  height: 115px;
+`;
+
+const CharacterWideRectangle = styled.img`
+  width: 135px;
+  height: 100px;
 `;
