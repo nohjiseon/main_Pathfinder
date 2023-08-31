@@ -1,4 +1,8 @@
 spring:
+  config:
+    import:
+      - classpath:/application-secret.yml
+
   h2:
     console:
       enabled: true
@@ -20,16 +24,16 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-logging:
-  level:
-    org:
-      springframework:
-        orm:
-          jpa: DEBUG
-server:
-  servlet:
-    encoding:
-      force-response: true
+  logging:
+    level:
+      org:
+        springframework:
+          orm:
+            jpa: DEBUG
+  server:
+    servlet:
+      encoding:
+        force-response: true
 cloud:
   aws:
     s3:
@@ -42,3 +46,39 @@ cloud:
       auto: false
     stack:
       auto: false
+
+backend:
+  base-url: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+
+frontend:
+  base-url: https://web-seb45-main-020-fe-54ouz2lllpv0a22.sel3.cloudtype.app
+
+jwt:
+  access-token-expire-time: 7200000
+  refresh-token-expire-time: 604800000
+
+---
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            scope: email
+            redirect-uri: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+          github:
+            scope: user:email, read:user
+            redirect-uri: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+          kakao:
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: profile_nickname, account_email
+            client-name: Kakao
+            redirect-uri: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
