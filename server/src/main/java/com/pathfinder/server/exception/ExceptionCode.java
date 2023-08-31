@@ -9,8 +9,8 @@ public enum ExceptionCode {
     NAME_EXISTS(409, "Name already exists"),
     USER_CREDENTIALS_INVALID(401, "Invalid user credentials"),
 
-    // Thread 관련 예외
-    THREAD_NOT_FOUND(404, "Thread not found"),
+    // Diary 관련 예외
+    DIARY_NOT_FOUND(404, "Diary not found"),
     QUESTION_EDIT_UNAUTHORIZED(403, "Unauthorized Quesiton edit"),
 
     ANSWER_NOT_FOUND(404, "Answer not found"),

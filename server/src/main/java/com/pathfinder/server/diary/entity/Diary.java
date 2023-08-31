@@ -1,4 +1,4 @@
-package com.pathfinder.server.thread.entity;
+package com.pathfinder.server.diary.entity;
 
 
 import com.pathfinder.server.audit.Auditable;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +16,10 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Thread extends Auditable {
+public class Diary extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long threadId;
+    private Long diaryId;
 
     @Column(length = 100, nullable = false)
     private String title;
@@ -47,7 +46,7 @@ public class Thread extends Auditable {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
 
     public void setMember(Member member) {
@@ -56,8 +55,8 @@ public class Thread extends Auditable {
 
     public void setRecommend(Recommend recommend) {
         recommends.add(recommend);
-        if (recommend.getThread() != this) {
-            recommend.setThread(this);
+        if (recommend.getDiary() != this) {
+            recommend.setDiary(this);
         }
     }
     

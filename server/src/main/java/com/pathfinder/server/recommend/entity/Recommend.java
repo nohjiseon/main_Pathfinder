@@ -1,7 +1,7 @@
 package com.pathfinder.server.recommend.entity;
 
 import com.pathfinder.server.member.entity.Member;
-import com.pathfinder.server.thread.entity.Thread;
+import com.pathfinder.server.diary.entity.Diary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,14 +22,14 @@ public class Recommend {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "THREAD_ID")
-    private Thread thread;
+    @JoinColumn(name = "DIARY_ID")
+    private Diary diary;
 
     public void setMember(Member member) {
         this.member = member;
     }
 
-    public void setThread(Thread thread) {
-        this.thread = thread;
+    public void setDiary(Diary diary) {
+        this.diary = diary;
     }
 }

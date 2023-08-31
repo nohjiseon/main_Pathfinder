@@ -1,7 +1,7 @@
 package com.pathfinder.server.member.entity;
 
 import com.pathfinder.server.recommend.entity.Recommend;
-import com.pathfinder.server.thread.entity.Thread;
+import com.pathfinder.server.diary.entity.Diary;
 import lombok.*;
 
 import javax.persistence.*;
@@ -46,7 +46,7 @@ public class Member {
     private List<Recommend> recommends = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Thread> threads = new ArrayList<>();
+    private List<Diary> diaries = new ArrayList<>();
 
     public void setRecommend(Recommend recommend) {
         recommends.add(recommend);
@@ -55,10 +55,10 @@ public class Member {
         }
     }
 
-    public void setThread(Thread thread) {
-        threads.add(thread);
-        if (thread.getMember() != this) {
-            thread.setMember(this);
+    public void setDiary(Diary diary) {
+        diaries.add(diary);
+        if (diary.getMember() != this) {
+            diary.setMember(this);
         }
     }
 

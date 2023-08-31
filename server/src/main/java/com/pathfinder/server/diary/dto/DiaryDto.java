@@ -1,14 +1,13 @@
-package com.pathfinder.server.thread.dto;
+package com.pathfinder.server.diary.dto;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-public class ThreadDto {
+public class DiaryDto {
     @Getter
     public static class Post {
         private Long memberId;
@@ -19,21 +18,21 @@ public class ThreadDto {
     }
     @Getter
     public static class Patch {
-        private Long threadId;
+        private Long diaryId;
         private String title;
         private String content;
         private String area1;
         private String area2;
 
-        public void setThreadId(Long threadId) {
-            this.threadId = threadId;
+        public void setDiaryId(Long diaryId) {
+            this.diaryId = diaryId;
         }
     }
     @Getter
     @Builder
     @AllArgsConstructor
     public static class Response {
-        private Long threadId;
+        private Long diaryId;
         private String name;
         private String title;
         private String content;
