@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Profile from "../assets/images/profile.png";
-import IcMenu from "../assets/images/menu.png";
+import Profile from "../../assets/images/profile.png";
+import IcMenu from "../../assets/images/menu.png";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -74,10 +74,12 @@ const HeaderCon = styled.header`
   align-items: center;
   height: 60px;
   padding: 0 20px;
+  background-color: #ffffff;
   box-shadow: 3px 8px 10px #e7e7e7;
   border-radius: 8px;
   max-width: 1920px;
   margin: 0 auto;
+  margin-bottom: 10px;
 `;
 
 const Logo = styled.h1`
