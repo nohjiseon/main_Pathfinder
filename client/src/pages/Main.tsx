@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import Wave from "../components/common/Wave";
+import Wave from "../components/Wave";
 
 import ImgSun from "../assets/images/img_sun.png";
 import ImgTxt from "../assets/images/main_txt.png";
