@@ -5,7 +5,7 @@ import Main from "./pages/Main";
 import RootLayout from "./pages/Root";
 import List from "./components/List";
 import MyPage from "./pages/MyPage";
-import DetailPage from "./pages/DetailPage";
+import Detail from "./pages/Detail";
 
 function App() {
   const routes: RouteObject[] = [
@@ -27,7 +27,7 @@ function App() {
         },
         {
           path: "/:id",
-          element: <DetailPage />,
+          element: <Detail />,
         },
       ],
     },

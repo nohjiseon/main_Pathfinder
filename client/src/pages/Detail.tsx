@@ -7,7 +7,7 @@ import thumbUp from "../assets/images/thumb-up-icon.png";
 import eye from "../assets/images/eye-icon.png";
 import thumbUpWhite from "../assets/images/thumb-up-icon-white.png";
 
-const DetailPage = (): JSX.Element => {
+const Detail = (): JSX.Element => {
   const [isRecommended, setIsRecommended] = useState(false);
   const navigate = useNavigate();
 
@@ -75,7 +75,7 @@ const DetailPage = (): JSX.Element => {
   );
 };
 
-export default DetailPage;
+export default Detail;
 
 const DetailBg = styled.div`
   min-height: calc(100vh - 120px);
