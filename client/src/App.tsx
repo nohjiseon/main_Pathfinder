@@ -5,6 +5,7 @@ import Main from "./pages/Main";
 import RootLayout from "./pages/Root";
 import List from "./components/List";
 import MyPage from "./pages/MyPage";
+import DetailPage from "./pages/DetailPage";
 
 function App() {
   const routes: RouteObject[] = [
@@ -23,6 +24,10 @@ function App() {
         {
           path: "/mypage",
           element: <MyPage />,
+        },
+        {
+          path: "/:id",
+          element: <DetailPage />,
         },
       ],
     },
