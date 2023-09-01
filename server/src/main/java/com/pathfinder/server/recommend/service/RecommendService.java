@@ -4,8 +4,8 @@ import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.service.MemberService;
 import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.recommend.repository.RecommendRepository;
-import com.pathfinder.server.thread.entity.Thread;
-import com.pathfinder.server.thread.service.ThreadService;
+import com.pathfinder.server.diary.entity.Diary;
+import com.pathfinder.server.diary.service.DiaryService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,25 +14,25 @@ import java.util.Optional;
 public class RecommendService {
     private final RecommendRepository recommendRepository;
     private final MemberService memberService;
-    private final ThreadService threadService;
+    private final DiaryService diaryService;
 
-    public RecommendService(RecommendRepository recommendRepository, MemberService memberService, ThreadService threadService) {
+    public RecommendService(RecommendRepository recommendRepository, MemberService memberService, DiaryService diaryService) {
         this.recommendRepository = recommendRepository;
         this.memberService = memberService;
-        this.threadService = threadService;
+        this.diaryService = diaryService;
     }
 
-    public void toggleRecommend(Long memberId, Long threadId) {
-        Optional<Recommend> optionalRecommend = recommendRepository.findByMemberMemberIdAndThreadThreadId(memberId, threadId);
+    public void toggleRecommend(Long memberId, Long diaryId) {
+        Optional<Recommend> optionalRecommend = recommendRepository.findByMemberMemberIdAndDiaryDiaryId(memberId, diaryId);
 
         if (optionalRecommend.isPresent()) {
             recommendRepository.delete(optionalRecommend.get());
         } else {
             Member member = memberService.findVerifiedMember(memberId);
-            Thread thread = threadService.findVerifiedThread(threadId);
+            Diary diary = diaryService.findVerifiedDiary(diaryId);
             Recommend recommend = new Recommend();
             recommend.setMember(member);
-            recommend.setThread(thread);
+            recommend.setDiary(diary);
             recommendRepository.save(recommend);
         }
     }
