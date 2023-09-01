@@ -49,6 +49,10 @@ cloud:
       auto: false
     stack:
       auto: false
+open-api:
+  tour-api:
+    credentials:
+      service-key: ${TOURAPI_SERVICEKEY}
 backend:
   base-url: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
 

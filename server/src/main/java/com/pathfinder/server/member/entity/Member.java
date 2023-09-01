@@ -25,8 +25,7 @@ public class Member {
     @Column(length = 30, nullable = false)
     private String email;
 
-    @Column(length = 100, nullable = false)
-
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -36,8 +35,9 @@ public class Member {
     @Column(nullable = false)
     private String introduce;
 
-//    @Column(nullable = false)
-//    private String profileImageUrl = "http://localhost:8080/images/sample.jpg";
+    @Column(nullable = false)
+    private String profileImageUrl =
+            "https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png";   // 기본 이미지
 
 //    @ElementCollection(fetch = FetchType.EAGER) // 인가
 //    private List<String> roles = new ArrayList<>();
