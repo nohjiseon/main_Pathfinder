@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 
 import Profile from "../../assets/images/profile.png";
 import IcMenu from "../../assets/images/menu.png";
+<<<<<<< HEAD
 import IcMenuOpen from "../../assets/images/menu_open.png";
+=======
+>>>>>>> 5c2b98c (fix: feat/list pull 진행중 파일 충돌 해결)
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -75,11 +78,16 @@ const HeaderCon = styled.header`
   align-items: center;
   height: 60px;
   padding: 0 20px;
+  background-color: #ffffff;
   box-shadow: 3px 8px 10px #e7e7e7;
   border-radius: 8px;
   max-width: 1920px;
   margin: 0 auto;
+<<<<<<< HEAD
   background-color: #fff;
+=======
+  margin-bottom: 10px;
+>>>>>>> 5c2b98c (fix: feat/list pull 진행중 파일 충돌 해결)
 `;
 
 const Logo = styled.h1`

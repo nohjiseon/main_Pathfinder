@@ -5,6 +5,8 @@ import Main from "./pages/Main";
 import RootLayout from "./pages/Root";
 import List from "./components/List";
 import MyPage from "./pages/MyPage";
+import Detail from "./pages/Detail";
+import Login from "./pages/Login";
 
 function App() {
   const routes: RouteObject[] = [
@@ -23,6 +25,14 @@ function App() {
         {
           path: "/mypage",
           element: <MyPage />,
+        },
+        {
+          path: "/:id",
+          element: <Detail />,
+        },
+        {
+          path: "/:login",
+          element: <Login />,
         },
       ],
     },
