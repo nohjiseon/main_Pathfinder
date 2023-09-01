@@ -33,7 +33,7 @@ public class Member {
     private Authority authority;
 
     @Column(nullable = false)
-    private String introduce = "안녕하세요.";
+    private String introduce;
 
     @Column(nullable = false)
     private String profileImageUrl =
@@ -67,6 +67,7 @@ public class Member {
                 .email(email)
                 .name(name)
                 .password(password)
+                .introduce("안녕하세요")
                 .authority(Authority.ROLE_USER)
                 .build();
     }
