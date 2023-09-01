@@ -53,7 +53,7 @@ backend:
   base-url: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
 
 frontend:
-  base-url: https://web-seb45-main-020-fe-54ouz2lllpv0a22.sel3.cloudtype.app
+  base-url: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
 
 jwt:
   access-token-expire-time: 7200000
