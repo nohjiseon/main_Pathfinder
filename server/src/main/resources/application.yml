@@ -1,8 +1,10 @@
 spring:
+  profiles:
+    #active: local
   config:
     import:
       - classpath:/application-secret.yml
-
+    #domain: {프론트 s3 엔드포인트 입력}
   h2:
     console:
       enabled: true
@@ -10,8 +12,9 @@ spring:
   datasource:
     url: jdbc:h2:mem:test
   jpa:
+    #database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: create #update로 수정
     show-sql: true
     properties:
       hibernate:
@@ -19,7 +22,8 @@ spring:
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
-  servlet:
+      #data-locations: classpath*:db/mysql/data.sql
+  servlet:  # 이미지 업로드 제한
     multipart:
       enabled: true
       max-file-size: 10MB
