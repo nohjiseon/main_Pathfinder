@@ -31,7 +31,7 @@ function App() {
           element: <Detail />,
         },
         {
-          path: "/:login",
+          path: "/login",
           element: <Login />,
         },
       ],
