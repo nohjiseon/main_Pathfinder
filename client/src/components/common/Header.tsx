@@ -82,6 +82,7 @@ const HeaderCon = styled.header`
   max-width: 1920px;
   margin: 0 auto;
   margin-bottom: 10px;
+  z-index: 10000000;
 `;
 
 const Logo = styled.h1`
