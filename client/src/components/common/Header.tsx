@@ -96,7 +96,11 @@ const HeaderCon = styled.header`
   background-color: #fff;
 =======
   margin-bottom: 10px;
+<<<<<<< HEAD
 >>>>>>> 5c2b98c (fix: feat/list pull 진행중 파일 충돌 해결)
+=======
+  z-index: 10000000;
+>>>>>>> 0eff637 (feat: 글 상세 페이지 구현 완료)
 `;
 
 const Logo = styled.h1`
