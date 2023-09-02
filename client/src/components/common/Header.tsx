@@ -1,13 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import Profile from "../../assets/images/profile.png";
 import IcMenu from "../../assets/images/menu.png";
-<<<<<<< HEAD
 import IcMenuOpen from "../../assets/images/menu_open.png";
-=======
->>>>>>> 5c2b98c (fix: feat/list pull 진행중 파일 충돌 해결)
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -30,19 +26,10 @@ const Header = () => {
       {isLogin ? (
         <BtnBox>
           <ProfileInfo>반갑습니다! ㅇㅇㅇ님</ProfileInfo>
-<<<<<<< HEAD
           <ProfileImg>
             <img src={Profile} />
           </ProfileImg>
           <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
-=======
-          <Link to="/mypage">
-            <ProfileImg>
-              <img src={Profile} />
-            </ProfileImg>
-          </Link>
-          <MenuBtn onClick={MenuHandeler}></MenuBtn>
->>>>>>> 3bc3b5e (feat: 마이페이지 내가 쓴 글 기능 구현 완료)
 
           <Menu className={isOpen ? "active" : ""}>
             <Link to="" onClick={MenuHandeler}>
@@ -92,15 +79,9 @@ const HeaderCon = styled.header`
   border-radius: 8px;
   max-width: 1920px;
   margin: 0 auto;
-<<<<<<< HEAD
   background-color: #fff;
-=======
   margin-bottom: 10px;
-<<<<<<< HEAD
->>>>>>> 5c2b98c (fix: feat/list pull 진행중 파일 충돌 해결)
-=======
   z-index: 10000000;
->>>>>>> 0eff637 (feat: 글 상세 페이지 구현 완료)
 `;
 
 const Logo = styled.h1`

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import styled, { keyframes } from "styled-components";
 import Wave from "../components/Wave";
 
@@ -32,18 +31,12 @@ const Main = () => {
       </Bubbles>
     </MainCon>
   );
-=======
-import styled from "styled-components";
-const Main = () => {
-  return <MainCon>ㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁㄴㅇ</MainCon>;
->>>>>>> 5c2b98c (fix: feat/list pull 진행중 파일 충돌 해결)
 };
 export default Main;
 
 const MainCon = styled.main`
   position: relative;
   min-height: calc(100vh - 120px);
-<<<<<<< HEAD
 `;
 
 const Gelatine = keyframes`
@@ -176,7 +169,4 @@ const Bubble = styled.div`
     animation-duration: 6s;
     animation-delay: 1s;
   }
-=======
-  padding: 10px 20px; // 그림자 때문에 위 아래 padding 값 10px 줌
->>>>>>> 5c2b98c (fix: feat/list pull 진행중 파일 충돌 해결)
 `;
