@@ -26,9 +26,11 @@ const Header = () => {
       {isLogin ? (
         <BtnBox>
           <ProfileInfo>반갑습니다! ㅇㅇㅇ님</ProfileInfo>
-          <ProfileImg>
-            <img src={Profile} />
-          </ProfileImg>
+          <Link to="/mypage">
+            <ProfileImg>
+              <img src={Profile} />
+            </ProfileImg>
+          </Link>
           <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
 
           <Menu className={isOpen ? "active" : ""}>
@@ -79,9 +81,8 @@ const HeaderCon = styled.header`
   border-radius: 8px;
   max-width: 1920px;
   margin: 0 auto;
-  background-color: #fff;
   margin-bottom: 10px;
-  z-index: 10000000;
+  z-index: 100;
 `;
 
 const Logo = styled.h1`

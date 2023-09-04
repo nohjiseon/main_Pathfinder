@@ -1,4 +1,3 @@
-
 import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
 
@@ -38,6 +37,7 @@ export default Main;
 const MainCon = styled.main`
   position: relative;
   min-height: calc(100vh - 120px);
+  padding: 10px 20px;
 `;
 
 const Gelatine = keyframes`

@@ -24,6 +24,10 @@ function App() {
           element: <AllList />,
         },
         {
+          path: "/mypage",
+          element: <MyPage />,
+        },
+        {
           path: "/write",
           element: <WritePage />,
         },
@@ -37,15 +41,6 @@ function App() {
         },
       ],
     },
-    // {
-    //   path: "/login",
-    //   element: <LogIn />,
-    // },
-    // {
-    //   path: "/sign",
-    //   element: <SignUp />,
-    // },
-    // { path: "*", element: <Error /> },
   ];
 
   const router = createBrowserRouter(routes);
