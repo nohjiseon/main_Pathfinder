@@ -6,6 +6,7 @@ import RootLayout from "./pages/Root";
 import MyPage from "./pages/MyPage";
 import Detail from "./pages/Detail";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import AllList from "./pages/AllList";
 import WritePage from "./pages/WritePage";
 
@@ -38,6 +39,10 @@ function App() {
         {
           path: "/login",
           element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
         },
       ],
     },
