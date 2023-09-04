@@ -3,8 +3,11 @@ import { RecoilRoot } from "recoil";
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import Main from "./pages/Main";
 import RootLayout from "./pages/Root";
-import List from "./components/List";
 import MyPage from "./pages/MyPage";
+import Detail from "./pages/Detail";
+import Login from "./pages/Login";
+import AllList from "./pages/AllList";
+import WritePage from "./pages/WritePage";
 
 function App() {
   const routes: RouteObject[] = [
@@ -18,23 +21,26 @@ function App() {
         },
         {
           path: "/alllist",
-          element: <List />,
+          element: <AllList />,
         },
         {
           path: "/mypage",
           element: <MyPage />,
         },
+        {
+          path: "/write",
+          element: <WritePage />,
+        },
+        {
+          path: "/:id",
+          element: <Detail />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
       ],
     },
-    // {
-    //   path: "/login",
-    //   element: <LogIn />,
-    // },
-    // {
-    //   path: "/sign",
-    //   element: <SignUp />,
-    // },
-    // { path: "*", element: <Error /> },
   ];
 
   const router = createBrowserRouter(routes);
