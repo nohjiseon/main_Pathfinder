@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Profile from "../assets/images/profile.png";
-import IcMenu from "../assets/images/menu.png";
-import IcMenuOpen from "../assets/images/menu_open.png";
+import Profile from "../../assets/images/profile.png";
+import IcMenu from "../../assets/images/menu.png";
+import IcMenuOpen from "../../assets/images/menu_open.png";
 
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -79,6 +79,7 @@ const HeaderCon = styled.header`
   border-radius: 8px;
   max-width: 1920px;
   margin: 0 auto;
+  background-color: #fff;
 `;
 
 const Logo = styled.h1`
