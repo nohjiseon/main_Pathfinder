@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import Wave from "../components/Wave";
+import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
 import ImgCharacter from "../assets/images/character.png";
 import Google from "../assets/images/google.png";

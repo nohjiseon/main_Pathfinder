@@ -36,7 +36,7 @@ const List = () => {
   useEffect(() => {
     setTotalPages(10); // 총 페이지 몇개인지 임의로 정한거라 수정 필요함
   }, []);
-  
+
   const data = [1, 2, 3, 4, 4, 4, 4, 4, 5, 3];
   return (
     <Listbox>
