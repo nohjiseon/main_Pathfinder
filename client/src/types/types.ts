@@ -1,3 +1,4 @@
+
 export interface Diary {
   data: DiaryData[];
   pageInfo: PageInfo;

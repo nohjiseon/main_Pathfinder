@@ -10,7 +10,6 @@ const Listbox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   ul {
     width: 1135px;
     height: 640px;
