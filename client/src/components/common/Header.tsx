@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import Profile from "../../assets/images/profile.png";
 import IcMenu from "../../assets/images/menu.png";
 import IcMenuOpen from "../../assets/images/menu_open.png";
@@ -39,7 +38,7 @@ const Header = () => {
             <Link to="" onClick={MenuHandeler}>
               지역별 글 모아보기
             </Link>
-            <Link to="" onClick={MenuHandeler}>
+            <Link to="/mypage" onClick={MenuHandeler}>
               마이페이지
             </Link>
             <Link to="" onClick={MenuHandeler}>
@@ -75,11 +74,14 @@ const HeaderCon = styled.header`
   align-items: center;
   height: 60px;
   padding: 0 20px;
+  background-color: #ffffff;
   box-shadow: 3px 8px 10px #e7e7e7;
   border-radius: 8px;
   max-width: 1920px;
   margin: 0 auto;
   background-color: #fff;
+  margin-bottom: 10px;
+  z-index: 10000000;
 `;
 
 const Logo = styled.h1`
