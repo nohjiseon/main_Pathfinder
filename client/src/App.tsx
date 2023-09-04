@@ -7,6 +7,7 @@ import List from "./components/List";
 import MyPage from "./pages/MyPage";
 import Detail from "./pages/Detail";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 function App() {
   const routes: RouteObject[] = [
@@ -33,6 +34,10 @@ function App() {
         {
           path: "/login",
           element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
         },
       ],
     },
