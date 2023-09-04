@@ -3,9 +3,8 @@ import { RecoilRoot } from "recoil";
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import Main from "./pages/Main";
 import RootLayout from "./pages/Root";
-import List from "./components/List";
-import MyPage from "./pages/MyPage";
-
+import AllList from "./pages/AllList";
+import WritePage from "./pages/WritePage";
 function App() {
   const routes: RouteObject[] = [
     {
@@ -18,11 +17,11 @@ function App() {
         },
         {
           path: "/alllist",
-          element: <List />,
+          element: <AllList />,
         },
         {
-          path: "/mypage",
-          element: <MyPage />,
+          path: "/write",
+          element: <WritePage />,
         },
       ],
     },
