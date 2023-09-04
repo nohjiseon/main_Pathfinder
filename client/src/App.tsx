@@ -4,6 +4,7 @@ import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-d
 import Main from "./pages/Main";
 import RootLayout from "./pages/Root";
 import AllList from "./pages/AllList";
+import WritePage from "./pages/WritePage";
 function App() {
   const routes: RouteObject[] = [
     {
@@ -17,6 +18,10 @@ function App() {
         {
           path: "/alllist",
           element: <AllList />,
+        },
+        {
+          path: "/write",
+          element: <WritePage />,
         },
       ],
     },

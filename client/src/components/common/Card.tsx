@@ -7,7 +7,7 @@ const CardBox = styled.li`
     width: 550px;
     height: 125px;
     background-color: rgba(255, 255, 255, 0.7);
-    border: 0.5px solid rgba(243, 243, 243, 1);
+    border: 0.5008px solid rgba(243, 243, 243, 1);
     border-radius: 4px;
     margin: 0 5px;
     padding: 15px 21px 10px 21px;
