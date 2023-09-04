@@ -1,28 +1,13 @@
 spring:
   profiles:
-    #active: local
-  config:
-    import:
-      - classpath:/application-secret.yml
-  h2: # 삭제
-    console:
-      enabled: true
-      path: /h2
-  datasource:
-    url: jdbc:h2:mem:test
+    include: secret
+    active: local # 배포시 prod로 변환
   jpa:
-    #database-platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: create #update로 수정
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-  sql:
-    init:
-      data-locations: classpath*:db/h2/data.sql
-      #data-locations: classpath*:db/mysql/data.sql
-  servlet:  # 이미지 업로드 제한
+  servlet:  # S3 이미지 업로드 제한
     multipart:
       enabled: true
       max-file-size: 10MB
@@ -37,6 +22,24 @@ spring:
     servlet:
       encoding:
         force-response: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${G_CLIENT_ID}
+            clientSecret: ${G_CLIENT_SECRET}
+            redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
+          github:
+            clientId: ${GIT_CLIENT_ID}
+            clientSecret: ${GIT_CLIENT_SECRET}
+            redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
+          kakao:
+            clientId: ${K_CLIENT_ID}
+            clientSecret: ${K_CLIENT_SECRET}
+            redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
 cloud:
   aws:
     s3:
@@ -54,10 +57,10 @@ open-api:
     credentials:
       service-key: ${TOURAPI_SERVICEKEY}
 backend:
-  base-url: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+  base-url: ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080
 
 frontend:
-  base-url: https://web-seb45-main-020-fe-54ouz2lllpv0a22.sel3.cloudtype.app
+  base-url: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
 
 jwt:
   access-token-expire-time: 7200000
@@ -72,16 +75,16 @@ spring:
         registration:
           google:
             scope: email
-            redirect-uri: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+            redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
           github:
             scope: user:email, read:user
-            redirect-uri: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+            redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
           kakao:
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             scope: profile_nickname, account_email
             client-name: Kakao
-            redirect-uri: https://port-0-seb45-main-020-54ouz2lllpv0a22.sel3.cloudtype.app
+            redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
