@@ -83,7 +83,7 @@ public class DiaryController {
     }
 
     @GetMapping("/recommend") // 추천순으로 상위 3개 게시글 리스트 조회
-    public ResponseEntity getDiariesByRegion() {
+    public ResponseEntity getDiariesByRecommendedCount() {
         List<Diary> top3Diaries = diaryService.getTop3DiariesByRecommendedCount();
 
         return new ResponseEntity<>(
