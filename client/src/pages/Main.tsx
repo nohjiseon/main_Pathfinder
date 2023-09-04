@@ -1,12 +1,12 @@
 import styled, { keyframes } from "styled-components";
-import Wave from "../components/Wave";
+import Wave from "../components/common/Wave";
 
 import ImgSun from "../assets/images/img_sun.png";
 import ImgTxt from "../assets/images/main_txt.png";
 import ImgCharacter from "../assets/images/character.png";
 import ImgTree from "../assets/images/img_tree.png";
 
-const Main = () => {
+const Main = (): JSX.Element => {
   return (
     <MainCon>
       <Wave />
@@ -37,6 +37,7 @@ export default Main;
 const MainCon = styled.main`
   position: relative;
   min-height: calc(100vh - 120px);
+  padding: 10px 20px;
 `;
 
 const Gelatine = keyframes`
