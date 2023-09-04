@@ -7,8 +7,9 @@ import MyPage from "./pages/MyPage";
 import Detail from "./pages/Detail";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import AllList from "./pages/AllList";
 import WritePage from "./pages/WritePage";
+import AreaMap from "./pages/AreaMap";
+import Recommend from "./pages/Recommend";
 
 function App() {
   const routes: RouteObject[] = [
@@ -19,10 +20,6 @@ function App() {
         {
           path: "/",
           element: <Main />,
-        },
-        {
-          path: "/alllist",
-          element: <AllList />,
         },
         {
           path: "/mypage",
@@ -43,6 +40,14 @@ function App() {
         {
           path: "/signup",
           element: <SignUp />,
+        },
+        {
+          path: "/areamap",
+          element: <AreaMap />,
+        },
+        {
+          path: "/recommend",
+          element: <Recommend />,
         },
       ],
     },

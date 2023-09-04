@@ -120,7 +120,7 @@ const WriteForm = () => {
         action=""
         onSubmit={handleSubmit(async (data) => {
           await new Promise((r) => setTimeout(r, 1000));
-          const content = editorRef.current?.getInstance().getMarkdown();
+          const content = editorRef.current?.getInstance().getHTML();
           data.content = content; // 에디터의 내용을 폼 데이터에 추가
           data.area1 = selectedRegion; // 선택된 지역을 폼 데이터에 추가
           data.area2 = selectedCity; // 선택된 도시를 폼 데이터에 추가

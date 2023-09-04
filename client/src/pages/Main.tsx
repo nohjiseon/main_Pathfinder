@@ -37,7 +37,6 @@ export default Main;
 const MainCon = styled.main`
   position: relative;
   min-height: calc(100vh - 120px);
-  padding: 10px 20px;
 `;
 
 const Gelatine = keyframes`
@@ -97,7 +96,7 @@ const Tree = styled.div`
   position: absolute;
   right: 0;
   bottom: -10px;
-  z-index: -1;
+  z-index: 1;
   text-align: right;
   > img {
     width: 13vw;
@@ -110,7 +109,7 @@ const Bubbles = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
   top: 0;
   left: 0;

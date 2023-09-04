@@ -19,7 +19,7 @@ const Header = () => {
 
   return (
     <HeaderCon>
-      <Logo>
+      <Logo to="/">
         <img src="logo.png" />
         <img src="logo_txt.png" />
       </Logo>
@@ -34,19 +34,16 @@ const Header = () => {
           <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
 
           <Menu className={isOpen ? "active" : ""}>
-            <Link to="" onClick={MenuHandeler}>
-              전체 글 모아보기
-            </Link>
-            <Link to="" onClick={MenuHandeler}>
-              지역별 글 모아보기
+            <Link to="/areamap" onClick={MenuHandeler}>
+              여행기록 모아보기
             </Link>
             <Link to="/mypage" onClick={MenuHandeler}>
               마이페이지
             </Link>
-            <Link to="" onClick={MenuHandeler}>
+            <Link to="/write" onClick={MenuHandeler}>
               글 작성하기
             </Link>
-            <Link to="" onClick={MenuHandeler}>
+            <Link to="/recommend" onClick={MenuHandeler}>
               여행지 추천
             </Link>
             <Link to="/" onClick={MenuHandeler}>
@@ -85,7 +82,7 @@ const HeaderCon = styled.header`
   z-index: 100;
 `;
 
-const Logo = styled.h1`
+const Logo = styled(Link)`
   display: flex;
   align-items: center;
   > img:first-child {
