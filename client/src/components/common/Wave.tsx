@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
-const Wave = () => {
+const Wave = (): JSX.Element => {
   return (
     <WaveCon>
       <Waves
