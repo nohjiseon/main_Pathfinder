@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,6 +60,10 @@ public class DiaryService {
 
     public Page<Diary> getDiariesByMember(Long memberId, int page){
         return diaryRepository.findByMemberMemberId(memberId, PageRequest.of(page - 1,10, Sort.by("diaryId").descending()));
+    }
+
+    public List<Diary> getTop3DiariesByRecommendedCount() {
+        return diaryRepository.findByTop3ByOrderedByRecommendedCountDesc();
     }
 
     public void deleteDiary(Long diaryId) {
