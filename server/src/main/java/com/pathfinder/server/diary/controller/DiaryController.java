@@ -82,6 +82,15 @@ public class DiaryController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/recommend") // 추천순으로 상위 3개 게시글 리스트 조회
+    public ResponseEntity getDiariesByRegion() {
+        List<Diary> top3Diaries = diaryService.getTop3DiariesByRecommendedCount();
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.DiariesToDiaryResponseDtos(top3Diaries)),
+                HttpStatus.OK);
+    }
+
     @PatchMapping("/edit/{diary-id}")
     public ResponseEntity patchDiary(@PathVariable("diary-id") long diaryId,
                                       @RequestBody DiaryDto.Patch diaryPatchDto) {
