@@ -26,6 +26,8 @@ public class MemberService {
 
         verifyExistsEmail(request.getEmail());
 
+        verifyExistsName(request.getName());
+
         //TODO email인증 로직 추가
 
         Member member = createMember(request);
@@ -35,8 +37,8 @@ public class MemberService {
 
     public Member createMember(MemberDto.Post request) {
         return Member.createMember(
-                request.getEmail(),
                 request.getName(),
+                request.getEmail(),
                 passwordEncoder.encode(request.getPassword())
         );
     }
