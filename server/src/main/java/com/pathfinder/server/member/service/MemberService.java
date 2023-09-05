@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+@Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -23,11 +23,11 @@ public class MemberService {
     }
     @Transactional
     public Long signup(MemberDto.Post request) {
+        String mail = request.getEmail();
+        String name = request.getName();
 
-        verifyExistsEmail(request.getEmail());
-        verifyExistsName(request.getName());
-
-        verifyExistsName(request.getName());
+        verifyExistsEmail(mail);
+        verifyExistsName(name);
 
         //TODO email인증 로직 추가
 
@@ -38,8 +38,8 @@ public class MemberService {
 
     public Member createMember(MemberDto.Post request) {
         return Member.createMember(
-                request.getName(),
                 request.getEmail(),
+                request.getName(),
                 passwordEncoder.encode(request.getPassword())
         );
     }
@@ -78,20 +78,18 @@ public class MemberService {
         return findMember;
     }
 
-    private boolean verifyExistsName(String name) {
+    private void verifyExistsName(String name) {
         Optional<Member> member = memberRepository.findByName(name);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
         }
-        return false;
     }
 
-    private boolean verifyExistsEmail(String email) {
+    private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
-        return false;
     }
 
 }
