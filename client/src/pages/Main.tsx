@@ -95,7 +95,7 @@ const Character = styled.div`
 const Tree = styled.div`
   position: absolute;
   right: 0;
-  bottom: -10px;
+  bottom: 0;
   z-index: 1;
   text-align: right;
   > img {
