@@ -8,15 +8,24 @@ import ImgCharacter from "../assets/images/character.png";
 const SignUp = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
   const [isHidePasswordCheck, setIsHidePasswordCheck] = useState<boolean>(true);
+
+  interface Form {
+    email: string;
+    nickname: string;
+    password: string;
+    passwordCheck: string;
+  }
+
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm<Form>();
 
   function SignUpSubmit(data: object): void {
     console.log(data);
+    console.log("Link!");
   }
 
   return (
@@ -31,20 +40,20 @@ const SignUp = (): JSX.Element => {
       <SignUpCon onSubmit={handleSubmit(SignUpSubmit)}>
         <SignUpTitle>회원가입</SignUpTitle>
         <SignUpInputCon>
-          <span>아이디</span>
-          <input type="text" {...register("id", { required: "아이디를 입력해주세요." })} />
-          {errors.email?.message ? <SignUpWarning>아이디를 입력해주세요.</SignUpWarning> : null}
-        </SignUpInputCon>
-        <SignUpInputCon>
           <span>이메일</span>
           <input
-            type="email"
+            type="text"
             {...register("email", {
               required: "이메일을 입력해주세요.",
               pattern: { value: /\S+@\S+\.\S+/, message: "올바른 이메일 주소를 입력해주세요." },
             })}
           />
-          <SignUpWarning>이메일 주소를 확인해주세요.</SignUpWarning>
+          {errors?.email ? <SignUpWarning>{errors.email.message}</SignUpWarning> : null}
+        </SignUpInputCon>
+        <SignUpInputCon>
+          <span>닉네임</span>
+          <input type="text" {...register("nickname", { required: "닉네임을 입력해주세요." })} />
+          {errors?.nickname ? <SignUpWarning>{errors.nickname.message}</SignUpWarning> : null}
         </SignUpInputCon>
         <SignUpInputCon>
           <span>비밀번호</span>
@@ -91,7 +100,7 @@ const SignUp = (): JSX.Element => {
               </svg>
             )}
           </SignUpInputPasswordCon>
-          <SignUpWarning>비밀번호를 입력해주세요.</SignUpWarning>
+          {errors?.password ? <SignUpWarning>{errors.password.message}</SignUpWarning> : null}
         </SignUpInputCon>
         <SignUpInputCon>
           <span>비밀번호 확인</span>
@@ -144,7 +153,9 @@ const SignUp = (): JSX.Element => {
               </svg>
             )}
           </SignUpInputPasswordCon>
-          <SignUpWarning>비밀번호가 일치하지 않습니다.</SignUpWarning>
+          {errors?.passwordCheck ? (
+            <SignUpWarning>{errors.passwordCheck.message}</SignUpWarning>
+          ) : null}
         </SignUpInputCon>
         <SignUpBtn>회원가입</SignUpBtn>
       </SignUpCon>
@@ -234,7 +245,7 @@ const SignUpInputCon = styled.div`
   }
 `;
 
-const SignUpWarning = styled.span`
+const SignUpWarning = styled.p`
   font-size: 12px;
   color: #e23636;
 `;
