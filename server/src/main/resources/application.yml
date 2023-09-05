@@ -38,8 +38,10 @@ spring:
             clientId: ${K_CLIENT_ID}
             clientSecret: ${K_CLIENT_SECRET}
             redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
-  jwt:
-    secret-key: ${JWT_SECRET_KEY}
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expire-time: 7200000
+  refresh-token-expire-time: 604800000
 cloud:
   aws:
     s3:
@@ -61,10 +63,6 @@ backend:
 
 frontend:
   base-url: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
-
-jwt:
-  access-token-expire-time: 7200000
-  refresh-token-expire-time: 604800000
 
 ---
 
