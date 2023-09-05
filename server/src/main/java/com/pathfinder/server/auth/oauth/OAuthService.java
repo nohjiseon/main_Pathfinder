@@ -182,7 +182,7 @@ public class OAuthService {
     private Token createToken(Member member) {
         CustomUserDetails userDetails = new CustomUserDetails(
                 member.getMemberId(),
-                member.getEmail(),
+                member.getName(),
                 member.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority(member.getAuthority().toString())));
 

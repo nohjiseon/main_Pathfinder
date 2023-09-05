@@ -25,6 +25,7 @@ public class MemberService {
     public Long signup(MemberDto.Post request) {
 
         verifyExistsEmail(request.getEmail());
+        verifyExistsName(request.getName());
 
         //TODO email인증 로직 추가
 
@@ -44,14 +45,12 @@ public class MemberService {
     public Member updateMember(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
 
-        Optional.ofNullable(member.getEmail())
-                .ifPresent(email -> findMember.setEmail(email));
-//        Optional.ofNullable(member.getPassword())
-//                .ifPresent(password -> todo 비밀번호 변경);
-        // 이미지 변경
-//        Optional.ofNullable(member.getProfileImageUrl())
-//                .ifPresent(image -> findMember.setProfileImageUrl(image));
-//         자기소개 변경
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
+        Optional.ofNullable(member.getPassword())
+                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
+        Optional.ofNullable(member.getProfileImageUrl())
+                .ifPresent(image -> findMember.setProfileImageUrl(image));
         Optional.ofNullable(member.getIntroduce())
                 .ifPresent(introduce -> findMember.setIntroduce(introduce));
 

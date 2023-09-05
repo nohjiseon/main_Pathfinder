@@ -20,10 +20,10 @@ public class Member {
     private Long memberId;
 
     @Column(length = 30, nullable = false, updatable = false)
-    private String name;
+    private String email;
 
     @Column(length = 30, nullable = false)
-    private String email;
+    private String name;
 
     @Column(nullable = false)
     private String password;
@@ -38,9 +38,6 @@ public class Member {
     @Column(nullable = false)
     private String profileImageUrl =
             "https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png";   // 기본 이미지
-
-//    @ElementCollection(fetch = FetchType.EAGER) // 인가
-//    private List<String> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
@@ -69,6 +66,7 @@ public class Member {
                 .password(password)
                 .introduce("안녕하세요")
                 .authority(Authority.ROLE_USER)
+                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png")
                 .build();
     }
 }
