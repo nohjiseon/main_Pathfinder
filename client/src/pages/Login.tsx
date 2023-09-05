@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
@@ -10,46 +11,23 @@ import Kakao from "../assets/images/kakao.png";
 
 const Login = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
-  const [id, setId] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [isIdEmpty, setIsIdEmpty] = useState<boolean>(false);
-  const [isPasswordEmpty, setIsPasswordEmpty] = useState<boolean>(false);
-  const [idWarning, setIdWarning] = useState<boolean>(false);
-  const [passwordWarning, setPasswordWarning] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  function handleIdChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    setId(e.target.value);
-    if (id !== "") setIdWarning(false);
+  interface Form {
+    email: string;
+    password: string;
   }
 
-  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    setPassword(e.target.value);
-    if (password !== "") setPasswordWarning(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Form>();
+
+  function handleLoginSubmit(data: object): void {
+    console.log(data);
+    navigate("/");
   }
-
-  function handleLoginSubmit(): void {
-    if (isIdEmpty) setIdWarning(true);
-    if (isPasswordEmpty) setPasswordWarning(true);
-
-    if (!isIdEmpty && !isPasswordEmpty) {
-      navigate("/");
-    }
-  }
-
-  useEffect(() => {
-    if (id === "") {
-      setIsIdEmpty(true);
-    } else {
-      setIsIdEmpty(false);
-    }
-
-    if (password === "") {
-      setIsPasswordEmpty(true);
-    } else {
-      setIsPasswordEmpty(false);
-    }
-  }, [id, password]);
 
   return (
     <MainCon>
@@ -60,19 +38,28 @@ const Login = (): JSX.Element => {
       <Character>
         <img src={ImgCharacter} alt="" />
       </Character>
-      <LoginCon>
+      <LoginCon onSubmit={handleSubmit(handleLoginSubmit)}>
         <LoginTitle>로그인</LoginTitle>
         <LoginInputCon>
-          <span>아이디</span>
-          <input type="text" onChange={(e) => handleIdChange(e)} />
-          {idWarning ? <LoginWarning>아이디를 입력해주세요.</LoginWarning> : null}
+          <span>이메일</span>
+          <input
+            type="text"
+            {...register("email", {
+              required: "이메일을 입력해주세요.",
+              pattern: { value: /\S+@\S+\.\S+/, message: "올바른 이메일 주소를 입력해주세요." },
+            })}
+          />
+          {errors?.email ? <LoginWarning>{errors.email.message}</LoginWarning> : null}
         </LoginInputCon>
         <LoginInputCon>
           <span>비밀번호</span>
           <LoginInputPasswordCon>
             <input
               type={isHidePassword ? "password" : "text"}
-              onChange={(e) => handlePasswordChange(e)}
+              {...register("password", {
+                required: "비밀번호를 입력해주세요.",
+                minLength: { value: 8, message: "8자리 이상의 비밀번호를 사용해주세요." },
+              })}
             ></input>
             {isHidePassword ? (
               <svg
@@ -109,7 +96,7 @@ const Login = (): JSX.Element => {
               </svg>
             )}
           </LoginInputPasswordCon>
-          {passwordWarning ? <LoginWarning>비밀번호를 입력해주세요.</LoginWarning> : null}
+          {errors?.password ? <LoginWarning>{errors.password.message}</LoginWarning> : null}
         </LoginInputCon>
         <LoginLinkCon>
           <Link to="/">
@@ -120,7 +107,7 @@ const Login = (): JSX.Element => {
             <span>비밀번호 찾기</span>
           </Link>
         </LoginLinkCon>
-        <LoginBtn onClick={handleLoginSubmit}>로그인</LoginBtn>
+        <LoginBtn>로그인</LoginBtn>
         <LoginLine
           width="402"
           height="24"
@@ -197,7 +184,7 @@ const Character = styled.div`
   }
 `;
 
-const LoginCon = styled.div`
+const LoginCon = styled.form`
   min-height: calc(100vh - 120px);
   width: 550px;
   background-color: rgba(255, 255, 255, 0.8);
