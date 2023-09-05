@@ -78,7 +78,7 @@ public class DiaryService {
         return findDiary;
     }
     private void verifyDiaryGetMemberName(Diary diary){
-        diary.setName(diary.getMember().getName());
+        diary.setName(diary.getMember().getEmail());
     }
 
 
