@@ -52,6 +52,4 @@ public class MemberController {
                 , HttpStatus.OK
         );
     }
-
-    // todo 멤버 게시글 불러오기
 }

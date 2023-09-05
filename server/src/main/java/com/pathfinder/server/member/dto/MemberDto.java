@@ -12,12 +12,13 @@ public class MemberDto {
     @Getter
     public static class Post {
         @NotNull
+        @Email
+        private String email;
+        @NotNull
         private String name;
         @NotNull
         private String password;
-        @NotNull
-        @Email
-        private String email;
+        // todo 패스워드 vaild추가
     }
 
     public static class Patch {
@@ -25,8 +26,9 @@ public class MemberDto {
         @Email
         private String email;
         private String password;
+        // todo 패스워드 vaild추가
         private String introduce;
-        //프로필 이미지 추가 예정
+        private String profileImageUrl;
 
         public void setMemberId(long memberId) {
             this.memberId = memberId;
@@ -36,7 +38,7 @@ public class MemberDto {
     public static class Response {
         private String name;
         private String email;
-//        private String profileImageUrl;
         private String introduce;
+        private String profileImageUrl;
     }
 }
