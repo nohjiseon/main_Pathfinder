@@ -14,10 +14,10 @@ import lock from "../assets/images/lock.png";
 const MyPage = (): JSX.Element => {
   const [curMenu, setCurMenu] = useState("profile");
   const [isEdit, setIsEdit] = useState(false);
-  const [email, setEmail] = useState("example@gmail.com");
-  const [validEmail, setValidEmail] = useState(true);
+  const [nickname, setNickname] = useState("닉네임");
+  const [validNickname, setValidNickname] = useState(true);
   const [password, setPassword] = useState("");
-  const [intro, setIntro] = useState("안녕하세요, [아이디]입니다.");
+  const [intro, setIntro] = useState("안녕하세요, [닉네임]입니다.");
   const [photoSrc, setPhotoSrc] = useState(myCharacter1);
   const {
     currentPage,
@@ -39,27 +39,26 @@ const MyPage = (): JSX.Element => {
     setIsEdit(true);
   }
 
-  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    setEmail(e.target.value);
-    setValidEmail(true);
+  function handleNicknameChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    setNickname(e.target.value);
+    setValidNickname(true);
   }
 
   function handleEditClick(): void {
-    setValidEmail(true);
-    const validEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+    setValidNickname(true);
 
-    if (validEmail.test(email) === false) {
-      setValidEmail(false);
+    if (nickname === "") {
+      setValidNickname(false);
     } else {
       setIsEdit(false);
     }
   }
 
   function handleCancleClick(): void {
-    setValidEmail(true);
-    setEmail("example@gmail.com");
+    setValidNickname(true);
+    setNickname("닉네임");
     setPassword("");
-    setIntro("안녕하세요, [아이디]입니다.");
+    setIntro("안녕하세요, [닉네임]입니다.");
     setIsEdit(false);
   }
 
@@ -71,7 +70,7 @@ const MyPage = (): JSX.Element => {
             <MyPageProfileImg src={photoSrc} />
           </MyPageImgContainer>
           <MyPageIdContainer>
-            <MyPageId>[아이디]</MyPageId>
+            <MyPageId>[닉네임]</MyPageId>
             <MyPageEmail>[이메일]</MyPageEmail>
           </MyPageIdContainer>
         </MyPageTop>
@@ -105,29 +104,27 @@ const MyPage = (): JSX.Element => {
                 ) : null}
               </MyPageContentTitleContainer>
               <div>
-                <MyPageProfileInfo>
-                  <div>아이디</div>
-                  <div>아이디</div>
-                </MyPageProfileInfo>
-                <MyPageProfileEmailInfo>
-                  <MyPageEmailContainer>
-                    <div>이메일</div>
+                <MyPageProfileNicknameInfo>
+                  <MyPageNicknameContainer>
+                    <div>닉네임</div>
                     {!isEdit ? (
-                      <div>{email}</div>
+                      <div>{nickname}</div>
                     ) : (
                       <div>
                         <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => handleEmailChange(e)}
+                          type="text"
+                          value={nickname}
+                          onChange={(e) => handleNicknameChange(e)}
                         ></input>
                       </div>
                     )}
-                  </MyPageEmailContainer>
-                  {!validEmail ? (
-                    <MyPageWarning>유효한 이메일 주소를 입력해주세요.</MyPageWarning>
-                  ) : null}
-                </MyPageProfileEmailInfo>
+                  </MyPageNicknameContainer>
+                  {!validNickname ? <MyPageWarning>닉네임을 입력해주세요.</MyPageWarning> : null}
+                </MyPageProfileNicknameInfo>
+                <MyPageProfileInfo>
+                  <div>이메일</div>
+                  <div>example@gmail.com</div>
+                </MyPageProfileInfo>
                 <MyPageProfileInfo>
                   <div>비밀번호</div>
                   {!isEdit ? (
@@ -373,7 +370,7 @@ const MyPageProfileInfo = styled.div`
   }
 `;
 
-const MyPageProfileEmailInfo = styled.div`
+const MyPageProfileNicknameInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -382,7 +379,7 @@ const MyPageProfileEmailInfo = styled.div`
   border-bottom: 1px solid #cfcfcf;
 `;
 
-const MyPageEmailContainer = styled(MyPageProfileInfo)`
+const MyPageNicknameContainer = styled(MyPageProfileInfo)`
   border-bottom: none;
   padding: 0;
   margin: 0;
