@@ -10,8 +10,8 @@ const SignUp = (): JSX.Element => {
   const [isHidePasswordCheck, setIsHidePasswordCheck] = useState<boolean>(true);
 
   interface Form {
-    id: string;
     email: string;
+    nickname: string;
     password: string;
     passwordCheck: string;
   }
@@ -40,11 +40,6 @@ const SignUp = (): JSX.Element => {
       <SignUpCon onSubmit={handleSubmit(SignUpSubmit)}>
         <SignUpTitle>회원가입</SignUpTitle>
         <SignUpInputCon>
-          <span>아이디</span>
-          <input type="text" {...register("id", { required: "아이디를 입력해주세요." })} />
-          {errors?.id ? <SignUpWarning>{errors.id.message}</SignUpWarning> : null}
-        </SignUpInputCon>
-        <SignUpInputCon>
           <span>이메일</span>
           <input
             type="text"
@@ -54,6 +49,11 @@ const SignUp = (): JSX.Element => {
             })}
           />
           {errors?.email ? <SignUpWarning>{errors.email.message}</SignUpWarning> : null}
+        </SignUpInputCon>
+        <SignUpInputCon>
+          <span>닉네임</span>
+          <input type="text" {...register("nickname", { required: "닉네임을 입력해주세요." })} />
+          {errors?.nickname ? <SignUpWarning>{errors.nickname.message}</SignUpWarning> : null}
         </SignUpInputCon>
         <SignUpInputCon>
           <span>비밀번호</span>
