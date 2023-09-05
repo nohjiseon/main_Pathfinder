@@ -1,7 +1,7 @@
 package com.pathfinder.server.auth.jwt.handler;
 
 import com.pathfinder.server.auth.utils.AuthUtil;
-import com.pathfinder.server.global.exception.memberexception.MemberAccessDeniedException;
+import com.pathfinder.server.global.exception.memberexception. MemberAccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
