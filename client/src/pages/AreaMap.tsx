@@ -1,5 +1,6 @@
 import { keyframes, styled } from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import SubWave from "../components/common/SubWave";
 
 import MapGuide from "../assets/images/map_guide.png";
@@ -21,6 +22,7 @@ import Area06Acive from "../assets/images/area_06Active.png";
 
 const AreaMap = (): JSX.Element => {
   const [activeArea, setActiveArea] = useState<string | null>(null);
+  const [weather, setWeather] = useState("");
 
   // 클릭한 지역을 활성화하고 지역 리스트를 불러오는 함수
   const handleAreaClick = (area: string) => {
@@ -29,6 +31,60 @@ const AreaMap = (): JSX.Element => {
 
     // 해당 지역에 대한 리스트를 불러오는 작업
   };
+
+  function geoSuccess(position: GeolocationPosition): void {
+    axios
+      .get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=27306e0d72080c1e89bb4b2a519e6a55&units=metric`,
+      )
+      .then((res) => {
+        console.log(res.data.weather[0].main);
+        setWeather(res.data.weather[0].main);
+      });
+  }
+
+  function geoError(): void {
+    console.log("위치 정보를 불러오는 데 실패하였습니다.");
+  }
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+  }, []);
+
+  function getAreaWeather(): void {
+    if (activeArea === null || activeArea === "전체 지역") {
+      navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+    } else {
+      let pos: number[] = [0, 0];
+
+      if (activeArea === "경기도") {
+        pos = [37.567167, 127.190292];
+      } else if (activeArea === "강원도") {
+        pos = [37.555837, 128.209315];
+      } else if (activeArea === "충청도") {
+        pos = [36.628503, 127.929344];
+      } else if (activeArea === "경상도") {
+        pos = [36.248647, 128.664734];
+      } else if (activeArea === "전라도") {
+        pos = [35.716705, 127.144185];
+      } else if (activeArea === "제주도") {
+        pos = [33.364805, 126.542671];
+      }
+
+      axios
+        .get(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${pos[0]}&lon=${pos[1]}&appid=27306e0d72080c1e89bb4b2a519e6a55&units=metric`,
+        )
+        .then((res) => {
+          console.log(res.data.weather[0].main);
+          setWeather(res.data.weather[0].main);
+        });
+    }
+  }
+
+  useEffect(() => {
+    getAreaWeather();
+  }, [activeArea]);
 
   return (
     <MainCon>
