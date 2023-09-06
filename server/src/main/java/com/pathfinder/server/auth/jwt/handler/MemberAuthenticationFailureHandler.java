@@ -3,14 +3,14 @@ package com.pathfinder.server.auth.jwt.handler;
 import com.pathfinder.server.auth.utils.AuthUtil;
 import com.pathfinder.server.global.exception.commonexception.UnknownException;
 import com.pathfinder.server.global.exception.memberexception.MemberBadCredentialsException;
-import com.pathfinder.server.global.exception.memberexception.MemberDisabledException;
+import com.pathfinder.server.global.exception.memberexception.MemberNotFoundException;
 import com.pathfinder.server.global.exception.requestiexception.RequestNotAllowedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.servlet.ServletException;
@@ -29,8 +29,8 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
             AuthUtil.sendErrorResponse(response, new MemberBadCredentialsException());
             return;
         }
-        if(exception.getCause() instanceof DisabledException){
-            AuthUtil.sendErrorResponse(response, new MemberDisabledException());
+        if(exception.getCause() instanceof UsernameNotFoundException){
+            AuthUtil.sendErrorResponse(response, new MemberNotFoundException());
             return;
         }
         if(exception instanceof InternalAuthenticationServiceException){

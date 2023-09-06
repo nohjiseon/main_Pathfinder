@@ -54,7 +54,7 @@ open-api:
     credentials:
       service-key: ${TOURAPI_SERVICEKEY}
 backend:
-  base-url: ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080
+  base-url: ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com
 
 frontend:
   base-url: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com
