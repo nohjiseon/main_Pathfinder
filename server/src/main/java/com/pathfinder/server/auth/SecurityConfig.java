@@ -86,7 +86,7 @@ public class SecurityConfig {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/member/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/member/email/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/thread/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/diary/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/tag/**").permitAll()
                 .anyRequest().authenticated();
     }
