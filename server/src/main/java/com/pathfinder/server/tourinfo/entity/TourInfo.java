@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @NoArgsConstructor
@@ -17,8 +15,7 @@ import javax.persistence.Id;
 @Entity
 public class TourInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tourInfoId;
+    private Long contentid;
     private String title;
     private String addr1;           // 주소
     private String addr2;           // 상세주소

@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -15,26 +16,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class TourInfoService {
-    @Value("${service-key}")
-    private static String API_KEY;
+    private final String API_KEY;
     private final TourInfoRepository tourInfoRepository;
     private final RestTemplate restTemplate;
 
-    public TourInfoService(TourInfoRepository tourInfoRepository, RestTemplate restTemplate) {
+    public TourInfoService(@Value("${open-api.tour-api.credentials.service-key}") String apiKey, TourInfoRepository tourInfoRepository, RestTemplate restTemplate) {
+        API_KEY = apiKey;
         this.tourInfoRepository = tourInfoRepository;
         this.restTemplate = restTemplate;
     }
 
-    public void saveTourInfo(String keyword) {
-        String url = "http://apis.data.go.kr/B551011/KorService1/searchKeyword1";
+    public void fetchAndSaveTourInfo() {
+        String url = "http://apis.data.go.kr/B551011/KorService1/areaBasedSyncList1";
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-                .queryParam("numOfRows", "10000")
+                .queryParam("numOfRows", "55000")
                 .queryParam("MobileOS", "ETC")
                 .queryParam("MobileApp", "pathfinder")
                 .queryParam("_type", "json")
-                .queryParam("keyword", keyword)
                 .queryParam("serviceKey", API_KEY);
 
         ResponseEntity<TourInfoDto> response = restTemplate.exchange(
@@ -48,6 +49,7 @@ public class TourInfoService {
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             List<TourInfo> tourInfos = response.getBody().getResponse().getBody().getItems().getItem().stream().map(item -> {
                 TourInfo tourInfo = new TourInfo();
+                tourInfo.setContentid(item.getContentid());
                 tourInfo.setTitle(item.getTitle());
                 tourInfo.setAddr1(item.getAddr1());
                 tourInfo.setAddr2(item.getAddr2());
