@@ -37,9 +37,6 @@ public class SecurityConfig {
     @Value("${frontend.base-url}")
     private String frontBaseUrl;
 
-    @Value("${backend.base-url}")
-    private String backBaseUrl;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -96,7 +93,7 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(frontBaseUrl);
-        configuration.addAllowedOrigin(backBaseUrl);
+        configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
