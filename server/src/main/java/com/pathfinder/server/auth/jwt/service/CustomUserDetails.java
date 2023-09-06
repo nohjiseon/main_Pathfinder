@@ -12,7 +12,7 @@ public class CustomUserDetails extends User {
     private final Long memberId;
 
     public CustomUserDetails(Long memberId, String email, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(email, password, authorities);;
+        super(email, password, authorities);
         this.memberId = memberId;
     }
 }

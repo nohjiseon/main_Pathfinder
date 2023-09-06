@@ -1,4 +1,4 @@
-package com.pathfinder.server.config;
+package com.pathfinder.server.image.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

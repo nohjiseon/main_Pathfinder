@@ -6,10 +6,9 @@ import lombok.Getter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@AllArgsConstructor
 public class MemberDto {
     @Getter
+    @AllArgsConstructor
     public static class Post {
         @NotNull
         @Email
@@ -21,10 +20,11 @@ public class MemberDto {
         // todo 패스워드 vaild추가
     }
 
+    @Getter
+    @AllArgsConstructor
     public static class Patch {
         private long memberId;
-        @Email
-        private String email;
+        private String name;
         private String password;
         // todo 패스워드 vaild추가
         private String introduce;
@@ -35,6 +35,8 @@ public class MemberDto {
         }
     }
 
+    @Getter
+    @AllArgsConstructor
     public static class Response {
         private String name;
         private String email;

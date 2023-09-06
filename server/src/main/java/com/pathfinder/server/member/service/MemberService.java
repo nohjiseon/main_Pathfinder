@@ -7,10 +7,12 @@ import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+@Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -23,11 +25,11 @@ public class MemberService {
     }
     @Transactional
     public Long signup(MemberDto.Post request) {
+        String mail = request.getEmail();
+        String name = request.getName();
 
-        verifyExistsEmail(request.getEmail());
-        verifyExistsName(request.getName());
-
-        verifyExistsName(request.getName());
+        verifyExistsEmail(mail);
+        verifyExistsName(name);
 
         //TODO email인증 로직 추가
 
@@ -38,12 +40,13 @@ public class MemberService {
 
     public Member createMember(MemberDto.Post request) {
         return Member.createMember(
-                request.getName(),
                 request.getEmail(),
+                request.getName(),
                 passwordEncoder.encode(request.getPassword())
         );
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Member updateMember(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
 
@@ -59,6 +62,7 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+    @Transactional(readOnly = true)
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
     }
@@ -69,6 +73,7 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
+    @Transactional(readOnly = true)
     public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
@@ -78,20 +83,18 @@ public class MemberService {
         return findMember;
     }
 
-    private boolean verifyExistsName(String name) {
+    private void verifyExistsName(String name) {
         Optional<Member> member = memberRepository.findByName(name);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
         }
-        return false;
     }
 
-    private boolean verifyExistsEmail(String email) {
+    private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
-        return false;
     }
 
 }
