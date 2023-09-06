@@ -25,18 +25,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Member member = findByEmail(email);
 
-        checkWithdrawMember(member);
-
         return createUserDetails(member);
     }
 
     private Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("이메일이 존재하지 않습니다."));
-    }
-
-    private void checkWithdrawMember(Member member) {
-        if(memberRepository.existsById(member.getMemberId())) throw new UsernameNotFoundException("존재하지 않는 회원입니다.");
+                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 이메일입니다."));
     }
 
     private UserDetails createUserDetails(Member member) {
@@ -44,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return new CustomUserDetails(
                 member.getMemberId(),
-                member.getName(),
+                member.getEmail(),
                 member.getPassword(),
                 Collections.singleton(grantedAuthority)
         );
