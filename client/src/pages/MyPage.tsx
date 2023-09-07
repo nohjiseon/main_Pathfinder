@@ -3,22 +3,41 @@ import Card from "../components/common/Card";
 import Pagination from "../components/common/Pagenation";
 import { usePagination } from "../hooks/usePagination";
 import styled from "styled-components";
-import myCharacter1 from "../assets/images/my_character1.png";
-import myCharacter2 from "../assets/images/my_character2.png";
-import myCharacter3 from "../assets/images/my_character3.png";
-import myCharacter4 from "../assets/images/my_character4.png";
-import myCharacter5 from "../assets/images/my_character5.png";
+import questionMark from "../assets/images/character/question-mark.png";
+import chrOn1 from "../assets/images/character/chr1-on.png";
+import chrOn2 from "../assets/images/character/chr2-on.png";
+import chrOn3 from "../assets/images/character/chr3-on.png";
+import chrOn4 from "../assets/images/character/chr4-on.png";
+import chrOn5 from "../assets/images/character/chr5-on.png";
+import chrOn6 from "../assets/images/character/chr6-on.png";
+import chrOn7 from "../assets/images/character/chr7-on.png";
+import chrOn8 from "../assets/images/character/chr8-on.png";
+import chrOn9 from "../assets/images/character/chr9-on.png";
+import chrOn10 from "../assets/images/character/chr10-on.png";
+import chrOff1 from "../assets/images/character/chr1-off.png";
+import chrOff2 from "../assets/images/character/chr2-off.png";
+import chrOff3 from "../assets/images/character/chr3-off.png";
+import chrOff4 from "../assets/images/character/chr4-off.png";
+import chrOff5 from "../assets/images/character/chr5-off.png";
+import chrOff6 from "../assets/images/character/chr6-off.png";
+import chrOff7 from "../assets/images/character/chr7-off.png";
+import chrOff8 from "../assets/images/character/chr8-off.png";
+import chrOff9 from "../assets/images/character/chr9-off.png";
+import chrOff10 from "../assets/images/character/chr10-off.png";
+import changeIcon from "../assets/images/change-icon.png";
 import editWhite from "../assets/images/edit-white.png";
 import lock from "../assets/images/lock.png";
 
 const MyPage = (): JSX.Element => {
-  const [curMenu, setCurMenu] = useState("profile");
-  const [isEdit, setIsEdit] = useState(false);
-  const [nickname, setNickname] = useState("닉네임");
-  const [validNickname, setValidNickname] = useState(true);
-  const [password, setPassword] = useState("");
-  const [intro, setIntro] = useState("안녕하세요, [닉네임]입니다.");
-  const [photoSrc, setPhotoSrc] = useState(myCharacter1);
+  const [curMenu, setCurMenu] = useState<string>("profile");
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [nickname, setNickname] = useState<string>("닉네임");
+  const [validNickname, setValidNickname] = useState<boolean>(true);
+  const [password, setPassword] = useState<string>("");
+  const [intro, setIntro] = useState<string>("안녕하세요, [닉네임]입니다.");
+  const [photo, setPhoto] = useState<string>(questionMark);
+  const [photoSrc, setPhotoSrc] = useState<string>(chrOn1);
+  const [isPhotoEdit, setIsPhotoEdit] = useState<boolean>(false);
   const {
     currentPage,
     totalPages,
@@ -27,6 +46,8 @@ const MyPage = (): JSX.Element => {
     onPrevPageHandler,
     onNextPageHandler,
   } = usePagination();
+
+  const blogNum = 10;
 
   useEffect(() => {
     setTotalPages(10); // 총 페이지 몇개인지 임의로 정한거라 수정 필요함
@@ -62,12 +83,26 @@ const MyPage = (): JSX.Element => {
     setIsEdit(false);
   }
 
+  function handlePhotoEditBtn(): void {
+    setPhotoSrc(photo);
+    setIsPhotoEdit(true);
+  }
+
+  function handlePhotoEdit(): void {
+    setPhoto(photoSrc);
+    setIsPhotoEdit(false);
+  }
+
+  function handlePhotoCancel(): void {
+    setIsPhotoEdit(false);
+  }
+
   return (
     <MyPageBg>
       <MyPageContainer>
         <MyPageTop>
           <MyPageImgContainer>
-            <MyPageProfileImg src={photoSrc} />
+            {isPhotoEdit ? <MyPageProfileImg src={photoSrc} /> : <MyPageProfileImg src={photo} />}
           </MyPageImgContainer>
           <MyPageIdContainer>
             <MyPageId>[닉네임]</MyPageId>
@@ -155,49 +190,123 @@ const MyPage = (): JSX.Element => {
             </MyPageContent>
           ) : curMenu === "character" ? (
             <MyPageContent>
-              <MyPageContentTitle>내 캐릭터</MyPageContentTitle>
+              <MyPageContentTitleContainer>
+                <MyPageContentTitle>내 캐릭터</MyPageContentTitle>
+                {!isPhotoEdit ? (
+                  <MyPageProfileEdit onClick={handlePhotoEditBtn}>
+                    <img src={changeIcon} />
+                    <div>캐릭터 변경하기</div>
+                  </MyPageProfileEdit>
+                ) : null}
+              </MyPageContentTitleContainer>
               <MyPageCharacterContainer>
-                <MyPageCharacter onClick={() => setPhotoSrc(myCharacter1)}>
-                  <CharacterLongRectangle src={myCharacter1} />
-                  <div>여유로운 해달</div>
-                </MyPageCharacter>
-                <MyPageCharacter onClick={() => setPhotoSrc(myCharacter2)}>
-                  <CharacterSquare src={myCharacter2} />
-                  <div>궁금한 물범</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterLongRectangle src={myCharacter3} />
-                  <div>???</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterLongRectangle src={myCharacter4} />
-                  <div>???</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterWideRectangle src={myCharacter5} />
-                  <div>???</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterWideRectangle src={myCharacter5} />
-                  <div>???</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterWideRectangle src={myCharacter5} />
-                  <div>???</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterWideRectangle src={myCharacter5} />
-                  <div>???</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterWideRectangle src={myCharacter5} />
-                  <div>???</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterWideRectangle src={myCharacter5} />
-                  <div>???</div>
-                </MyPageCharacter>
+                {blogNum > 1 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn1)}>
+                    <CharacterSquare src={chrOn1} />
+                    <div>그냥 꽁치</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff1} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 3 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn2)}>
+                    <CharacterSquare src={chrOn2} />
+                    <div>횟집사장 참치</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff2} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 5 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn3)}>
+                    <CharacterSquare src={chrOn3} />
+                    <div>디자이너 흰동가리</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff3} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 10 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn4)}>
+                    <CharacterSquare src={chrOn4} />
+                    <div>자원봉사자 개복치</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff4} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 20 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn5)}>
+                    <CharacterSquare src={chrOn5} />
+                    <div>음악가 고래</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff5} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 30 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn6)}>
+                    <CharacterSquare src={chrOn6} />
+                    <div>미용사 소라게</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff6} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 50 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn7)}>
+                    <CharacterSquare src={chrOn7} />
+                    <div>골목대장 범고래</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff7} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 100 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn8)}>
+                    <CharacterSquare src={chrOn8} />
+                    <div>탐험가 펭귄</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff8} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 200 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn9)}>
+                    <CharacterSquare src={chrOn9} />
+                    <div>백수 물범</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff9} />
+                  </MyPageCharacter>
+                )}
+                {blogNum > 365 ? (
+                  <MyPageCharacter onClick={() => setPhotoSrc(chrOn10)}>
+                    <CharacterSquare src={chrOn10} />
+                    <div>수영강사 해달</div>
+                  </MyPageCharacter>
+                ) : (
+                  <MyPageCharacter>
+                    <CharacterSquare src={chrOff10} />
+                  </MyPageCharacter>
+                )}
               </MyPageCharacterContainer>
+              {isPhotoEdit ? (
+                <MyPageEditBtnContainer>
+                  <MyPageEditBtn onClick={handlePhotoEdit}>변경하기</MyPageEditBtn>
+                  <MyPageCancelBtn onClick={handlePhotoCancel}>취소</MyPageCancelBtn>
+                </MyPageEditBtnContainer>
+              ) : null}
             </MyPageContent>
           ) : (
             <MyPageContent>
@@ -326,8 +435,7 @@ const MyPageContentTitle = styled.div`
 `;
 
 const MyPageProfileEdit = styled.div`
-  width: 190px;
-  height: 30px;
+  padding: 5px 20px;
   border-radius: 4px;
   background-color: #ffc03f;
   color: #ffffff;
@@ -338,7 +446,7 @@ const MyPageProfileEdit = styled.div`
   gap: 10px;
 
   img {
-    width: 18px;
+    width: 16px;
     height: 16px;
   }
 `;
@@ -472,19 +580,9 @@ const MyPageCharacter = styled.div`
   }
 `;
 
-const CharacterLongRectangle = styled.img`
-  width: 110px;
-  height: 125px;
-`;
-
 const CharacterSquare = styled.img`
   width: 130px;
-  height: 115px;
-`;
-
-const CharacterWideRectangle = styled.img`
-  width: 135px;
-  height: 100px;
+  height: 130px;
 `;
 
 const MyPageBlogList = styled.ul`
