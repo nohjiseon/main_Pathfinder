@@ -1,5 +1,6 @@
 package com.pathfinder.server.diary.service;
 
+import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.service.MemberService;
 import com.pathfinder.server.diary.entity.Diary;
 import com.pathfinder.server.exception.BusinessLogicException;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,6 +63,10 @@ public class DiaryService {
         return diaryRepository.findByMemberMemberId(memberId, PageRequest.of(page - 1,10, Sort.by("diaryId").descending()));
     }
 
+    public Page<Diary> getTop3DiariesByRecommendedCount() {
+        return diaryRepository.findByTop3ByOrderedByRecommendedCount(PageRequest.of(0,3,Sort.by("recommendedCount").descending()));
+    }
+
     public void deleteDiary(Long diaryId) {
         Diary findDiary = findVerifiedDiary(diaryId);
 
@@ -73,7 +79,8 @@ public class DiaryService {
         return findDiary;
     }
     private void verifyDiaryGetMemberName(Diary diary){
-        diary.setName(diary.getMember().getName());
+        Member findUser = memberService.findMember(diary.getMember().getMemberId());
+        diary.setName(findUser.getName());
     }
 
 

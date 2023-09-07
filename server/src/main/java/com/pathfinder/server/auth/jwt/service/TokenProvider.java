@@ -51,7 +51,7 @@ public class TokenProvider {
                 .claim(CLAIM_AUTHORITY, authorities)
                 .claim(CLAIM_ID, id)
                 .setExpiration(AccessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -68,7 +68,7 @@ public class TokenProvider {
                 .setSubject(authentication.getName())
                 .claim(CLAIM_ID, id)
                 .setExpiration(refreshTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

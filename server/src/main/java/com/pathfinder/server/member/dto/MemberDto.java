@@ -6,37 +6,41 @@ import lombok.Getter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@AllArgsConstructor
 public class MemberDto {
     @Getter
+    @AllArgsConstructor
     public static class Post {
+        @NotNull
+        @Email
+        private String email;
         @NotNull
         private String name;
         @NotNull
         private String password;
-        @NotNull
-        @Email
-        private String email;
+        // todo 패스워드 vaild추가
     }
 
+    @Getter
+    @AllArgsConstructor
     public static class Patch {
         private long memberId;
-        @Email
-        private String email;
+        private String name;
         private String password;
+        // todo 패스워드 vaild추가
         private String introduce;
-        //프로필 이미지 추가 예정
+        private String profileImageUrl;
 
         public void setMemberId(long memberId) {
             this.memberId = memberId;
         }
     }
 
+    @Getter
+    @AllArgsConstructor
     public static class Response {
         private String name;
         private String email;
-//        private String profileImageUrl;
         private String introduce;
+        private String profileImageUrl;
     }
 }

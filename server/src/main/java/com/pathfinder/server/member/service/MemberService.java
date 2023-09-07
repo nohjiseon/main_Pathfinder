@@ -7,10 +7,12 @@ import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+@Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -23,8 +25,11 @@ public class MemberService {
     }
     @Transactional
     public Long signup(MemberDto.Post request) {
+        String mail = request.getEmail();
+        String name = request.getName();
 
-        verifyExistsEmail(request.getEmail());
+        verifyExistsEmail(mail);
+        verifyExistsName(name);
 
         //TODO email인증 로직 추가
 
@@ -41,23 +46,23 @@ public class MemberService {
         );
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Member updateMember(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
 
-        Optional.ofNullable(member.getEmail())
-                .ifPresent(email -> findMember.setEmail(email));
-//        Optional.ofNullable(member.getPassword())
-//                .ifPresent(password -> todo 비밀번호 변경);
-        // 이미지 변경
-//        Optional.ofNullable(member.getProfileImageUrl())
-//                .ifPresent(image -> findMember.setProfileImageUrl(image));
-//         자기소개 변경
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
+        Optional.ofNullable(member.getPassword())
+                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
+        Optional.ofNullable(member.getProfileImageUrl())
+                .ifPresent(image -> findMember.setProfileImageUrl(image));
         Optional.ofNullable(member.getIntroduce())
                 .ifPresent(introduce -> findMember.setIntroduce(introduce));
 
         return memberRepository.save(findMember);
     }
 
+    @Transactional(readOnly = true)
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
     }
@@ -68,6 +73,7 @@ public class MemberService {
         memberRepository.delete(findMember);
     }
 
+    @Transactional(readOnly = true)
     public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
@@ -77,20 +83,18 @@ public class MemberService {
         return findMember;
     }
 
-    private boolean verifyExistsName(String name) {
+    private void verifyExistsName(String name) {
         Optional<Member> member = memberRepository.findByName(name);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
         }
-        return false;
     }
 
-    private boolean verifyExistsEmail(String email) {
+    private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
         }
-        return false;
     }
 
 }
