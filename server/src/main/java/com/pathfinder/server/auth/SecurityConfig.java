@@ -84,10 +84,10 @@ public class SecurityConfig {
         return (requests) -> requests
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/member/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/member/email/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/diary/**").permitAll()
+                .antMatchers("/member/**").permitAll()
+                .antMatchers("/diary/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/tag/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/recommend/**").permitAll()
                 .anyRequest().authenticated();
     }
 
