@@ -18,8 +18,8 @@ public class RecommendController {
 
     @PostMapping()
     public ResponseEntity memberSignup(@RequestParam @Positive Long memberId,
-                                       @RequestParam @Positive Long threadId) {
-        recommendService.toggleRecommend(memberId, threadId);
+                                       @RequestParam @Positive Long diaryId) {
+        recommendService.toggleRecommend(memberId, diaryId);
 
         return new ResponseEntity(HttpStatus.OK);
     }
