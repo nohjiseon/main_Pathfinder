@@ -86,6 +86,9 @@ public class SecurityConfig {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/member/**").permitAll()
                 .antMatchers("/diary/**").permitAll()
+                .antMatchers("/reward/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/image/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/tag/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/recommend/**").permitAll()
                 .anyRequest().authenticated();
