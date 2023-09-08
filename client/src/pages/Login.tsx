@@ -7,12 +7,14 @@ import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
 import ImgCharacter from "../assets/images/character.png";
+import loading from "../assets/images/loading.gif";
 import Google from "../assets/images/google.png";
 import Github from "../assets/images/github.png";
 import Kakao from "../assets/images/kakao.png";
 
 const Login = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [throttle, setThrottle] = useState<boolean>(false);
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -32,6 +34,7 @@ const Login = (): JSX.Element => {
     if (throttle) return;
     if (!throttle) {
       setThrottle(true);
+      setIsLoading(true);
       setTimeout(async () => {
         axios
           .post(
@@ -49,11 +52,11 @@ const Login = (): JSX.Element => {
             localStorage.setItem("memberId", res.data.memberId);
 
             navigate("/");
-            // location.reload();
           })
           .catch((err) => {
             console.log(err);
           });
+        setIsLoading(false);
         setThrottle(false);
       }, 3000);
     }
@@ -137,7 +140,7 @@ const Login = (): JSX.Element => {
             <span>비밀번호 찾기</span>
           </Link>
         </LoginLinkCon>
-        <LoginBtn>로그인</LoginBtn>
+        {isLoading ? <LoadingImg src={loading} /> : <LoginBtn>로그인</LoginBtn>}
         <LoginLine
           width="402"
           height="24"
@@ -295,6 +298,12 @@ const LoginLinkCon = styled.div`
   span:nth-child(2) {
     color: #bebebe;
   }
+`;
+
+const LoadingImg = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-top: 70px;
 `;
 
 const LoginBtn = styled.button`
