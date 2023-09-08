@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
@@ -8,6 +10,8 @@ import ImgCharacter from "../assets/images/character.png";
 const SignUp = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
   const [isHidePasswordCheck, setIsHidePasswordCheck] = useState<boolean>(true);
+  const [throttle, setThrottle] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   interface Form {
     email: string;
@@ -23,9 +27,31 @@ const SignUp = (): JSX.Element => {
     formState: { errors },
   } = useForm<Form>();
 
-  function SignUpSubmit(data: object): void {
-    console.log(data);
-    console.log("Link!");
+  function SignUpSubmit(data: Form): void {
+    if (throttle) return;
+    if (!throttle) {
+      setThrottle(true);
+      setTimeout(async () => {
+        axios
+          .post(
+            `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/signup`,
+            {
+              name: data.nickname,
+              email: data.email,
+              password: data.password,
+            },
+            { headers: { "Content-Type": "application/json" } },
+          )
+          .then(() => {
+            window.alert("회원가입이 완료되었습니다. 로그인 해주세요.");
+            navigate("/login");
+          })
+          .catch((err) => {
+            window.alert(err);
+          });
+        setThrottle(false);
+      }, 3000);
+    }
   }
 
   return (
