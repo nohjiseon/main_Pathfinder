@@ -129,7 +129,7 @@ const Login = (): JSX.Element => {
           {errors?.password ? <LoginWarning>{errors.password.message}</LoginWarning> : null}
         </LoginInputCon>
         <LoginLinkCon>
-          <Link to="/">
+          <Link to="/signup">
             <span>회원가입</span>
           </Link>
           <span>|</span>
