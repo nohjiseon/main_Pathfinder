@@ -6,10 +6,12 @@ import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
 import ImgCharacter from "../assets/images/character.png";
+import loading from "../assets/images/loading.gif";
 
 const SignUp = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
   const [isHidePasswordCheck, setIsHidePasswordCheck] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [throttle, setThrottle] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -31,6 +33,7 @@ const SignUp = (): JSX.Element => {
     if (throttle) return;
     if (!throttle) {
       setThrottle(true);
+      setIsLoading(true);
       setTimeout(async () => {
         axios
           .post(
@@ -49,6 +52,7 @@ const SignUp = (): JSX.Element => {
           .catch((err) => {
             window.alert(err);
           });
+        setIsLoading(true);
         setThrottle(false);
       }, 3000);
     }
@@ -183,7 +187,7 @@ const SignUp = (): JSX.Element => {
             <SignUpWarning>{errors.passwordCheck.message}</SignUpWarning>
           ) : null}
         </SignUpInputCon>
-        <SignUpBtn>회원가입</SignUpBtn>
+        {isLoading ? <LoadingImg src={loading} /> : <SignUpBtn>회원가입</SignUpBtn>}
       </SignUpCon>
     </MainCon>
   );
@@ -305,6 +309,12 @@ const SignUpInputPasswordCon = styled.div`
     height: 21px;
     transform: translate(-4%, -50%);
   }
+`;
+
+const LoadingImg = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-top: 60px;
 `;
 
 const SignUpBtn = styled.button`
