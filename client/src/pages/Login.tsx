@@ -45,9 +45,11 @@ const Login = (): JSX.Element => {
           .then((res) => {
             const accessToken = res.headers.authorization;
             cookies.set("is_login", `${accessToken}`);
+            localStorage.setItem("token", accessToken);
             localStorage.setItem("memberId", res.data.memberId);
 
             navigate("/");
+            // location.reload();
           })
           .catch((err) => {
             console.log(err);
