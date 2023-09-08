@@ -47,7 +47,7 @@ const MyPage = (): JSX.Element => {
     onNextPageHandler,
   } = usePagination();
 
-  const blogNum = 10;
+  const blogNum = 365;
 
   useEffect(() => {
     setTotalPages(10); // 총 페이지 몇개인지 임의로 정한거라 수정 필요함
@@ -200,7 +200,7 @@ const MyPage = (): JSX.Element => {
                 ) : null}
               </MyPageContentTitleContainer>
               <MyPageCharacterContainer>
-                {blogNum > 1 ? (
+                {blogNum >= 1 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn1)}>
                     <CharacterSquare src={chrOn1} />
                     <div>그냥 꽁치</div>
@@ -210,7 +210,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff1} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 3 ? (
+                {blogNum >= 3 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn2)}>
                     <CharacterSquare src={chrOn2} />
                     <div>횟집사장 참치</div>
@@ -220,7 +220,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff2} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 5 ? (
+                {blogNum >= 5 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn3)}>
                     <CharacterSquare src={chrOn3} />
                     <div>디자이너 흰동가리</div>
@@ -230,7 +230,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff3} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 10 ? (
+                {blogNum >= 10 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn4)}>
                     <CharacterSquare src={chrOn4} />
                     <div>자원봉사자 개복치</div>
@@ -240,7 +240,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff4} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 20 ? (
+                {blogNum >= 20 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn5)}>
                     <CharacterSquare src={chrOn5} />
                     <div>음악가 고래</div>
@@ -250,7 +250,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff5} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 30 ? (
+                {blogNum >= 30 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn6)}>
                     <CharacterSquare src={chrOn6} />
                     <div>미용사 소라게</div>
@@ -260,7 +260,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff6} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 50 ? (
+                {blogNum >= 50 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn7)}>
                     <CharacterSquare src={chrOn7} />
                     <div>골목대장 범고래</div>
@@ -270,7 +270,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff7} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 100 ? (
+                {blogNum >= 100 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn8)}>
                     <CharacterSquare src={chrOn8} />
                     <div>탐험가 펭귄</div>
@@ -280,7 +280,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff8} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 200 ? (
+                {blogNum >= 200 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn9)}>
                     <CharacterSquare src={chrOn9} />
                     <div>백수 물범</div>
@@ -290,7 +290,7 @@ const MyPage = (): JSX.Element => {
                     <CharacterSquare src={chrOff9} />
                   </MyPageCharacter>
                 )}
-                {blogNum > 365 ? (
+                {blogNum >= 365 ? (
                   <MyPageCharacter onClick={() => setPhotoSrc(chrOn10)}>
                     <CharacterSquare src={chrOn10} />
                     <div>수영강사 해달</div>

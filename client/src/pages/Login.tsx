@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { Cookies } from "react-cookie";
 import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
@@ -11,7 +13,9 @@ import Kakao from "../assets/images/kakao.png";
 
 const Login = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
+  const [throttle, setThrottle] = useState<boolean>(false);
   const navigate = useNavigate();
+  const cookies = new Cookies();
 
   interface Form {
     email: string;
@@ -24,9 +28,35 @@ const Login = (): JSX.Element => {
     formState: { errors },
   } = useForm<Form>();
 
-  function handleLoginSubmit(data: object): void {
-    console.log(data);
-    navigate("/");
+  function handleLoginSubmit(data: Form): void {
+    if (throttle) return;
+    if (!throttle) {
+      setThrottle(true);
+      setTimeout(async () => {
+        axios
+          .post(
+            `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
+            {
+              email: data.email,
+              password: data.password,
+            },
+            { headers: { "Content-Type": "application/json" } },
+          )
+          .then((res) => {
+            const accessToken = res.headers.authorization;
+            cookies.set("is_login", `${accessToken}`);
+            localStorage.setItem("token", accessToken);
+            localStorage.setItem("memberId", res.data.memberId);
+
+            navigate("/");
+            // location.reload();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        setThrottle(false);
+      }, 3000);
+    }
   }
 
   return (
@@ -99,7 +129,7 @@ const Login = (): JSX.Element => {
           {errors?.password ? <LoginWarning>{errors.password.message}</LoginWarning> : null}
         </LoginInputCon>
         <LoginLinkCon>
-          <Link to="/">
+          <Link to="/signup">
             <span>회원가입</span>
           </Link>
           <span>|</span>

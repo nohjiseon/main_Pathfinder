@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Cookies } from "react-cookie";
 import Profile from "../../assets/images/profile.png";
 import IcMenu from "../../assets/images/menu.png";
 import IcMenuOpen from "../../assets/images/menu_open.png";
@@ -8,13 +9,31 @@ import IcMenuOpen from "../../assets/images/menu_open.png";
 const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
-  const LogInHandeler = () => {
-    setIsLogin(true);
-  };
+  const navigate = useNavigate();
+  const cookies = new Cookies();
+  const getCookie = cookies.get("is_login");
+  const token = localStorage.getItem("token");
 
   const MenuHandeler = () => {
     setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    if (getCookie && token) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [getCookie, token]);
+
+  const handleLogoutClick = () => {
+    MenuHandeler();
+    cookies.remove("is_login");
+    localStorage.removeItem("token");
+    localStorage.removeItem("memberId");
+    setIsLogin(false);
+    navigate("/");
+    alert("성공적으로 로그아웃 되었습니다.");
   };
 
   return (
@@ -46,15 +65,19 @@ const Header = () => {
             <Link to="/recommend" onClick={MenuHandeler}>
               여행지 추천
             </Link>
-            <Link to="/" onClick={MenuHandeler}>
+            <Link to="/" onClick={handleLogoutClick}>
               로그아웃
             </Link>
           </Menu>
         </BtnBox>
       ) : (
         <BtnBox>
-          <Button onClick={LogInHandeler}>로그인</Button>
-          <Button $signup>회원가입</Button>
+          <Link to="/login">
+            <Button>로그인</Button>
+          </Link>
+          <Link to="/signup">
+            <Button $signup>회원가입</Button>
+          </Link>
         </BtnBox>
       )}
     </HeaderCon>
