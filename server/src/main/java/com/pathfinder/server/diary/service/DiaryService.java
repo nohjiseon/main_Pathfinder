@@ -6,22 +6,24 @@ import com.pathfinder.server.diary.entity.Diary;
 import com.pathfinder.server.exception.BusinessLogicException;
 import com.pathfinder.server.exception.ExceptionCode;
 import com.pathfinder.server.diary.repository.DiaryRepository;
+import com.pathfinder.server.reward.service.RewardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final MemberService memberService;
+    private final RewardService rewardService;
 
-    public DiaryService(DiaryRepository diaryRepository, MemberService memberService) {
+    public DiaryService(DiaryRepository diaryRepository, MemberService memberService, RewardService rewardService) {
         this.diaryRepository = diaryRepository;
         this.memberService = memberService;
+        this.rewardService = rewardService;
     }
 
     public Diary createDiary(Diary diary) {
@@ -81,7 +83,7 @@ public class DiaryService {
     private void verifyDiaryGetMemberName(Diary diary){
         Member findUser = memberService.findMember(diary.getMember().getMemberId());
         diary.setName(findUser.getName());
+        findUser.setDiaryCount(findUser.getDiaryCount() + 1);
+        rewardService.unlockRewards(findUser,findUser.getRewards());
     }
-
-
 }
