@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { useEffect, useState } from "react";
 
 import Ic_1st from "../../assets/images/ic_1st.png";
 import Ic_2st from "../../assets/images/ic_2st.png";
@@ -6,24 +7,54 @@ import Ic_3st from "../../assets/images/ic_3st.png";
 import IcPin from "../../assets/images/ic_pin.png";
 import EmptyImg from "../../assets/images/img_empty.png";
 
-const RecommentCard = (): JSX.Element => {
+import { DiaryData } from "../../types/types";
+
+const RecommentCard = ({ data }: { data: DiaryData }): JSX.Element => {
+  const [imageUrl, setImageUrl] = useState(""); // 이미지 url 상태 관리
+  const [altText, setAltText] = useState(""); // 이미지 alt 상태 관리
+  const [textContent, setTextContent] = useState(""); // 텍스트 내용 상태 관리
+
+  // 썸네일
+  useEffect(() => {
+    if (!data || !data.content) {
+      return;
+    }
+
+    // data.content에서 첫 번째 이미지 URL을 추출
+    const imgPattern = /<img\s+[^>]*src="([^"]*)"[^>]*alt="([^"]*)"[^>]*>/i;
+    const match = data.content.match(imgPattern);
+
+    if (match) {
+      const firstImageUrl = match[1];
+      const imgAltText = match[2];
+
+      setImageUrl(firstImageUrl);
+      setAltText(imgAltText);
+    }
+  }, [data]);
+
+  // html 태그 제거 & 이미지 제거
+  useEffect(() => {
+    const htmlContent = data.content;
+    const div = document.createElement("div");
+    div.innerHTML = htmlContent;
+    const textContent = div.textContent || div.innerText;
+    setTextContent(textContent);
+  }, [data]);
+
   return (
     <CardBox>
       <ImgBox>
-        <img src="img2.jpeg" alt="" />
+        <img src={imageUrl} alt={altText} />
       </ImgBox>
       <Content>
         <TxtBox>
-          <strong>
-            나는 긴 제목이야 말줄임처리를 한줄에서 할거야
-            제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목
-          </strong>
-          <p>
-            나는 긴 내용이야 두줄에서 말줄임 처리를 할거야
-            내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
-          </p>
+          <strong>{data.title}</strong>
+          <p>{textContent}</p>
         </TxtBox>
-        <Information>여행 장소: 부산</Information>
+        <Information>
+          여행 장소: {data.area1} {data.area2}
+        </Information>
       </Content>
     </CardBox>
   );
@@ -58,7 +89,7 @@ const CardBox = styled.li`
   &:nth-child(2):before {
     background-image: url(${Ic_2st});
   }
-  &:last-child:before {
+  &:nth-child(3):before {
     background-image: url(${Ic_3st});
   }
 `;
@@ -104,6 +135,7 @@ const TxtBox = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     line-height: 24px;
+    max-height: 48px;
   }
 `;
 
