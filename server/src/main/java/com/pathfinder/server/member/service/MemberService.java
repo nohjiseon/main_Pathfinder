@@ -90,7 +90,6 @@ public class MemberService {
     public Member updateProfileImage(Long memberId, Long rewardId) {
         Member findMember = findVerifiedMember(memberId);
         Reward chooseReward = rewardService.findReward(rewardId);
-g
         String imageUrl = chooseReward.getImageUrl();
         Optional.ofNullable(findMember.getProfileImageUrl())
                 .ifPresent(image -> findMember.setProfileImageUrl(imageUrl));
