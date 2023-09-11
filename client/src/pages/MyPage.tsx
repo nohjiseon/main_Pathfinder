@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 import Card from "../components/common/Card";
 import Pagination from "../components/common/Pagenation";
 import { usePagination } from "../hooks/usePagination";
@@ -34,10 +35,9 @@ const MyPage = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [nickname, setNickname] = useState<string>("");
-  const [validNickname, setValidNickname] = useState<boolean>(true);
-  const [password, setPassword] = useState<string>("");
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
-  const [intro, setIntro] = useState<string>("안녕하세요, [닉네임]입니다.");
+  const [intro, setIntro] = useState<string>("");
+  const [throttle, setThrottle] = useState<boolean>(false);
   const [photo, setPhoto] = useState<string>(questionMark);
   const [photoSrc, setPhotoSrc] = useState<string>(questionMark);
   const [isPhotoEdit, setIsPhotoEdit] = useState<boolean>(false);
@@ -59,31 +59,62 @@ const MyPage = (): JSX.Element => {
 
   const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+  interface Form {
+    nickname: string;
+    password: string;
+    intro: string;
+  }
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Form>();
+
   function handleEditBtnClick(): void {
-    setPassword("");
     setIsEdit(true);
   }
 
-  function handleNicknameChange(e: React.ChangeEvent<HTMLInputElement>): void {
-    setNickname(e.target.value);
-    setValidNickname(true);
-  }
-
-  function handleEditClick(): void {
-    setValidNickname(true);
-
-    if (nickname === "") {
-      setValidNickname(false);
-    } else {
-      setIsEdit(false);
+  function handleEditClick(data: Form): void {
+    if (throttle) return;
+    if (!throttle) {
+      setThrottle(true);
+      setTimeout(async () => {
+        axios
+          .patch(
+            `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
+            {
+              name: data.nickname,
+              password: data.password,
+              introduce: data.intro,
+            },
+            { headers: { "Content-Type": "application/json" } },
+          )
+          .then(() => {
+            setNickname(data.nickname);
+            setIntro(data.intro);
+            setIsEdit(false);
+            reset({
+              nickname: "",
+              password: "",
+              intro: "",
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        setThrottle(false);
+      }, 3000);
     }
   }
 
   function handleCancleClick(): void {
-    setValidNickname(true);
-    setNickname("닉네임");
-    setPassword("");
-    setIntro("안녕하세요, [닉네임]입니다.");
+    reset({
+      nickname: "",
+      password: "",
+      intro: "",
+    });
     setIsEdit(false);
   }
 
@@ -120,7 +151,7 @@ const MyPage = (): JSX.Element => {
       .catch(() => {
         console.log("데이터 로딩에 실패하였습니다.");
       });
-  }, []);
+  }, [nickname, intro]);
 
   return (
     <MyPageBg>
@@ -163,7 +194,7 @@ const MyPage = (): JSX.Element => {
                   </MyPageProfileEdit>
                 ) : null}
               </MyPageContentTitleContainer>
-              <div>
+              <form onSubmit={handleSubmit(handleEditClick)}>
                 <MyPageProfileNicknameInfo>
                   <MyPageNicknameContainer>
                     <div>닉네임</div>
@@ -173,13 +204,14 @@ const MyPage = (): JSX.Element => {
                       <div>
                         <input
                           type="text"
-                          value={nickname}
-                          onChange={(e) => handleNicknameChange(e)}
+                          {...register("nickname", { required: "닉네임을 입력해주세요." })}
                         ></input>
                       </div>
                     )}
                   </MyPageNicknameContainer>
-                  {!validNickname ? <MyPageWarning>닉네임을 입력해주세요.</MyPageWarning> : null}
+                  {errors?.nickname ? (
+                    <MyPageWarning>{errors.nickname.message}</MyPageWarning>
+                  ) : null}
                 </MyPageProfileNicknameInfo>
                 <MyPageProfileInfo>
                   <div>이메일</div>
@@ -190,47 +222,57 @@ const MyPage = (): JSX.Element => {
                   {!isEdit ? (
                     <img src={lock} />
                   ) : (
-                    <MyPageInputPasswordCon>
-                      <input
-                        type={isHidePassword ? "password" : "text"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      ></input>
-                      {isHidePassword ? (
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="passwordShow"
-                          onClick={() => setIsHidePassword(false)}
-                        >
-                          <path
-                            d="M12 5C15.679 5 20.162 7.417 21.73 10.901C21.876 11.229 22 11.611 22 12C22 12.388 21.877 12.771 21.73 13.099C20.161 16.583 15.678 19 12 19C8.321 19 3.838 16.583 2.27 13.099C2.124 12.77 2 12.389 2 12C2 11.612 2.123 11.229 2.27 10.901C3.839 7.417 8.322 5 12 5ZM12 8C10.9391 8 9.92172 8.42143 9.17157 9.17157C8.42143 9.92172 8 10.9391 8 12C8 13.0609 8.42143 14.0783 9.17157 14.8284C9.92172 15.5786 10.9391 16 12 16C13.0609 16 14.0783 15.5786 14.8284 14.8284C15.5786 14.0783 16 13.0609 16 12C16 10.9391 15.5786 9.92172 14.8284 9.17157C14.0783 8.42143 13.0609 8 12 8ZM12 10C12.5304 10 13.0391 10.2107 13.4142 10.5858C13.7893 10.9609 14 11.4696 14 12C14 12.5304 13.7893 13.0391 13.4142 13.4142C13.0391 13.7893 12.5304 14 12 14C11.4696 14 10.9609 13.7893 10.5858 13.4142C10.2107 13.0391 10 12.5304 10 12C10 11.4696 10.2107 10.9609 10.5858 10.5858C10.9609 10.2107 11.4696 10 12 10Z"
-                            fill="black"
-                          />
-                        </svg>
-                      ) : (
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="passwordHide"
-                          onClick={() => setIsHidePassword(true)}
-                        >
-                          <path
-                            d="M6.99951 6.362C8.51195 5.46328 10.2402 4.99251 11.9995 5C18.3065 5 21.3665 10.683 21.9095 11.808C21.9695 11.931 21.9695 12.069 21.9095 12.193C21.5575 12.921 20.1535 15.555 17.4995 17.324M13.9995 18.8C13.3413 18.9341 12.6712 19.0012 11.9995 19C5.69251 19 2.63251 13.317 2.08951 12.192C2.06017 12.1319 2.04492 12.0659 2.04492 11.999C2.04492 11.9321 2.06017 11.8661 2.08951 11.806C2.30851 11.354 2.92951 10.174 3.99951 8.921M9.99951 9.764C10.571 9.2531 11.3165 8.98037 12.0828 9.00182C12.8491 9.02326 13.5781 9.33725 14.1202 9.87932C14.6623 10.4214 14.9762 11.1504 14.9977 11.9167C15.0191 12.683 14.7464 13.4285 14.2355 14M2.99951 3L20.9995 21"
-                            stroke="black"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </MyPageInputPasswordCon>
+                    <MyPagePasswordFlexBox>
+                      <MyPageInputPasswordCon>
+                        <input
+                          type={isHidePassword ? "password" : "text"}
+                          {...register("password", {
+                            required: "비밀번호를 입력해주세요.",
+                            minLength: {
+                              value: 8,
+                              message: "8자리 이상의 비밀번호를 사용해주세요.",
+                            },
+                          })}
+                        ></input>
+                        {isHidePassword ? (
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="passwordShow"
+                            onClick={() => setIsHidePassword(false)}
+                          >
+                            <path
+                              d="M12 5C15.679 5 20.162 7.417 21.73 10.901C21.876 11.229 22 11.611 22 12C22 12.388 21.877 12.771 21.73 13.099C20.161 16.583 15.678 19 12 19C8.321 19 3.838 16.583 2.27 13.099C2.124 12.77 2 12.389 2 12C2 11.612 2.123 11.229 2.27 10.901C3.839 7.417 8.322 5 12 5ZM12 8C10.9391 8 9.92172 8.42143 9.17157 9.17157C8.42143 9.92172 8 10.9391 8 12C8 13.0609 8.42143 14.0783 9.17157 14.8284C9.92172 15.5786 10.9391 16 12 16C13.0609 16 14.0783 15.5786 14.8284 14.8284C15.5786 14.0783 16 13.0609 16 12C16 10.9391 15.5786 9.92172 14.8284 9.17157C14.0783 8.42143 13.0609 8 12 8ZM12 10C12.5304 10 13.0391 10.2107 13.4142 10.5858C13.7893 10.9609 14 11.4696 14 12C14 12.5304 13.7893 13.0391 13.4142 13.4142C13.0391 13.7893 12.5304 14 12 14C11.4696 14 10.9609 13.7893 10.5858 13.4142C10.2107 13.0391 10 12.5304 10 12C10 11.4696 10.2107 10.9609 10.5858 10.5858C10.9609 10.2107 11.4696 10 12 10Z"
+                              fill="black"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="passwordHide"
+                            onClick={() => setIsHidePassword(true)}
+                          >
+                            <path
+                              d="M6.99951 6.362C8.51195 5.46328 10.2402 4.99251 11.9995 5C18.3065 5 21.3665 10.683 21.9095 11.808C21.9695 11.931 21.9695 12.069 21.9095 12.193C21.5575 12.921 20.1535 15.555 17.4995 17.324M13.9995 18.8C13.3413 18.9341 12.6712 19.0012 11.9995 19C5.69251 19 2.63251 13.317 2.08951 12.192C2.06017 12.1319 2.04492 12.0659 2.04492 11.999C2.04492 11.9321 2.06017 11.8661 2.08951 11.806C2.30851 11.354 2.92951 10.174 3.99951 8.921M9.99951 9.764C10.571 9.2531 11.3165 8.98037 12.0828 9.00182C12.8491 9.02326 13.5781 9.33725 14.1202 9.87932C14.6623 10.4214 14.9762 11.1504 14.9977 11.9167C15.0191 12.683 14.7464 13.4285 14.2355 14M2.99951 3L20.9995 21"
+                              stroke="black"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        )}
+                      </MyPageInputPasswordCon>
+                      {errors?.password ? (
+                        <MyPageWarning>{errors.password.message}</MyPageWarning>
+                      ) : null}
+                    </MyPagePasswordFlexBox>
                   )}
                 </MyPageProfileInfo>
                 <MyPageProfileIntro>
@@ -238,16 +280,19 @@ const MyPage = (): JSX.Element => {
                   {!isEdit ? (
                     <div>{intro}</div>
                   ) : (
-                    <textarea value={intro} onChange={(e) => setIntro(e.target.value)}></textarea>
+                    <textarea
+                      {...register("intro", { required: "자기소개를 입력해주세요." })}
+                    ></textarea>
                   )}
+                  {errors?.intro ? <MyPageWarning>{errors.intro.message}</MyPageWarning> : null}
                 </MyPageProfileIntro>
-              </div>
-              {isEdit ? (
-                <MyPageEditBtnContainer>
-                  <MyPageEditBtn onClick={handleEditClick}>수정</MyPageEditBtn>
-                  <MyPageCancelBtn onClick={handleCancleClick}>취소</MyPageCancelBtn>
-                </MyPageEditBtnContainer>
-              ) : null}
+                {isEdit ? (
+                  <MyPageEditBtnContainer>
+                    <MyPageEditBtn>수정</MyPageEditBtn>
+                    <MyPageCancelBtn onClick={handleCancleClick}>취소</MyPageCancelBtn>
+                  </MyPageEditBtnContainer>
+                ) : null}
+              </form>
             </MyPageContent>
           ) : curMenu === "character" ? (
             <MyPageContent>
@@ -561,6 +606,12 @@ const MyPageWarning = styled.span`
   margin-top: 7px;
 `;
 
+const MyPagePasswordFlexBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
 const MyPageInputPasswordCon = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -602,10 +653,10 @@ const MyPageProfileIntro = styled.div`
   align-items: flex-start;
   margin-top: 30px;
   padding: 0 20px 20px 20px;
-  gap: 20px;
 
   div:first-child {
     font-size: 20px;
+    margin-bottom: 20px;
   }
 
   div:nth-child(2) {
@@ -639,9 +690,11 @@ const MyPageEditBtn = styled.button`
   padding: 10px 35px;
 `;
 
-const MyPageCancelBtn = styled(MyPageEditBtn)`
-  color: #444444;
+const MyPageCancelBtn = styled.div`
+  font-size: 20px;
   background-color: #ffffff;
+  border-radius: 4px;
+  padding: 10px 35px;
   box-shadow: 0 0 0 1px #bebebe inset;
 `;
 

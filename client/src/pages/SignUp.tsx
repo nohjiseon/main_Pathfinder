@@ -12,7 +12,6 @@ const SignUp = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
   const [isHidePasswordCheck, setIsHidePasswordCheck] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [throttle, setThrottle] = useState<boolean>(false);
   const navigate = useNavigate();
 
   interface Form {
@@ -30,32 +29,26 @@ const SignUp = (): JSX.Element => {
   } = useForm<Form>();
 
   function SignUpSubmit(data: Form): void {
-    if (throttle) return;
-    if (!throttle) {
-      setThrottle(true);
-      setIsLoading(true);
-      setTimeout(async () => {
-        axios
-          .post(
-            `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/signup`,
-            {
-              name: data.nickname,
-              email: data.email,
-              password: data.password,
-            },
-            { headers: { "Content-Type": "application/json" } },
-          )
-          .then(() => {
-            window.alert("회원가입이 완료되었습니다. 로그인 해주세요.");
-            navigate("/login");
-          })
-          .catch((err) => {
-            window.alert(err);
-          });
-        setIsLoading(true);
-        setThrottle(false);
-      }, 3000);
-    }
+    setIsLoading(true);
+    axios
+      .post(
+        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/signup`,
+        {
+          name: data.nickname,
+          email: data.email,
+          password: data.password,
+        },
+        { headers: { "Content-Type": "application/json" } },
+      )
+      .then(() => {
+        window.alert("회원가입이 완료되었습니다. 로그인 해주세요.");
+        setIsLoading(false);
+        navigate("/login");
+      })
+      .catch((err) => {
+        window.alert(err);
+        setIsLoading(false);
+      });
   }
 
   return (

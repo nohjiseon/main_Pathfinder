@@ -15,7 +15,6 @@ import Kakao from "../assets/images/kakao.png";
 const Login = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [throttle, setThrottle] = useState<boolean>(false);
   const navigate = useNavigate();
   const cookies = new Cookies();
 
@@ -31,35 +30,29 @@ const Login = (): JSX.Element => {
   } = useForm<Form>();
 
   function handleLoginSubmit(data: Form): void {
-    if (throttle) return;
-    if (!throttle) {
-      setThrottle(true);
-      setIsLoading(true);
-      setTimeout(async () => {
-        axios
-          .post(
-            `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
-            {
-              email: data.email,
-              password: data.password,
-            },
-            { headers: { "Content-Type": "application/json" } },
-          )
-          .then((res) => {
-            const accessToken = res.headers.authorization;
-            cookies.set("is_login", `${accessToken}`);
-            localStorage.setItem("token", accessToken);
-            localStorage.setItem("memberId", res.data.memberId);
+    setIsLoading(true);
+    axios
+      .post(
+        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
+        {
+          email: data.email,
+          password: data.password,
+        },
+        { headers: { "Content-Type": "application/json" } },
+      )
+      .then((res) => {
+        const accessToken = res.headers.authorization;
+        cookies.set("is_login", `${accessToken}`);
+        localStorage.setItem("token", accessToken);
+        localStorage.setItem("memberId", res.data.memberId);
 
-            navigate("/");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
         setIsLoading(false);
-        setThrottle(false);
-      }, 3000);
-    }
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   }
 
   return (
