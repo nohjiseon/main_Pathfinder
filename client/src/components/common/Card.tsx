@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import { DiaryData } from "../../types/types";
+import { getFormattedDate } from "../../util/date";
 
 const CardBox = styled.li`
   .cardContent {
@@ -17,10 +18,19 @@ const CardBox = styled.li`
     justify-content: space-between;
     box-shadow: 2px 4px 4px rgba(185, 185, 185, 0.25);
   }
-  img {
+  .img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 156px;
     height: 95px;
+    overflow: hidden;
     margin: 21px 15px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .content {
     width: 60%;
@@ -37,20 +47,33 @@ const CardBox = styled.li`
 `;
 
 const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
+  const resultContent = diaryData.content.replace(/<img\b[^>]*>/gi, "");
+  const imgRegex = /<img *?src=["'](.*?)["'].*?>/g;
+  const matches = diaryData.content.match(imgRegex);
+  let firstThumbnail = null;
+  if (matches && matches.length > 0) {
+    const firstMatch = matches[0];
+    const srcMatch = firstMatch.match(/src=["'](.*?)["']/);
+    if (srcMatch) {
+      firstThumbnail = srcMatch[1];
+    }
+  }
   return (
     <CardBox>
       <li>
         <Link to={`/${diaryData.diaryId}`}>
           <div className="cardContent">
-            <img className="image" src="" alt="" />
+            <div className="img-container">
+              <img className="image" src={firstThumbnail ? firstThumbnail : ""} alt="" />
+            </div>
             <div className="content">
               <h2>{diaryData.title}</h2>
-              <div>{diaryData.content}</div>
+              <div dangerouslySetInnerHTML={{ __html: resultContent }}></div>
               <div className="information">
                 <div>{diaryData.name}</div>
                 <div>{diaryData.recommendedCount}</div>
                 <div>{diaryData.views}</div>
-                <div>{diaryData.modifiedAt}</div>
+                <div>{getFormattedDate(diaryData.modifiedAt)}</div>
               </div>
             </div>
           </div>
