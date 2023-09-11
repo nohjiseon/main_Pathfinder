@@ -1,11 +1,11 @@
 package com.pathfinder.server.auth.oauth;
 
-import com.pathfinder.server.global.exception.authexception.OAuthCodeRequestException;
-import com.pathfinder.server.global.exception.authexception.OAuthGithubRequestException;
 import com.pathfinder.server.auth.jwt.dto.Token;
 import com.pathfinder.server.auth.jwt.service.CustomUserDetails;
 import com.pathfinder.server.auth.jwt.service.TokenProvider;
 import com.pathfinder.server.auth.utils.AuthConstant;
+import com.pathfinder.server.global.exception.authexception.OAuthCodeRequestException;
+import com.pathfinder.server.global.exception.authexception.OAuthGithubRequestException;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.repository.MemberRepository;
 import lombok.Getter;
@@ -25,19 +25,19 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.*;
-import static org.springframework.http.MediaType.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
 @Service
 @Transactional(readOnly = true)
