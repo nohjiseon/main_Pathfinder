@@ -19,6 +19,7 @@ const MyPage = (): JSX.Element => {
   const [throttle, setThrottle] = useState<boolean>(false);
   const [photo, setPhoto] = useState<string>("");
   const [photoSrc, setPhotoSrc] = useState<string>("");
+  const [photoNum, setPhotoNum] = useState<string>("");
 
   interface Reward {
     rewardId: string;
@@ -106,14 +107,33 @@ const MyPage = (): JSX.Element => {
     setIsEdit(false);
   }
 
+  function handlePhotoChange(photoEl: Reward): void {
+    setPhotoSrc(photoEl.imageUrl);
+    setPhotoNum(photoEl.rewardId);
+  }
+
   function handlePhotoEditBtn(): void {
     setPhotoSrc(photo);
+    setPhotoNum("");
     setIsPhotoEdit(true);
   }
 
   function handlePhotoEdit(): void {
-    setPhoto(photoSrc);
-    setIsPhotoEdit(false);
+    axios
+      .patch(
+        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/reward/${memberId}/${photoNum}`,
+      )
+      .then(() => {
+        setPhoto(photoSrc);
+        setIsPhotoEdit(false);
+      })
+      .catch((err) => {
+        if (err.response.status) {
+          alert("아직 오픈되지 않은 캐릭터입니다.");
+        } else {
+          console.log(err);
+        }
+      });
   }
 
   function handlePhotoCancel(): void {
@@ -153,7 +173,6 @@ const MyPage = (): JSX.Element => {
       )
       .then((res) => {
         setPhotoList(res.data.data);
-        console.log(photoList);
       })
       .catch(() => {
         console.log("캐릭터 이미지 로딩에 실패하였습니다.");
@@ -313,46 +332,14 @@ const MyPage = (): JSX.Element => {
                 ) : null}
               </MyPageContentTitleContainer>
               <MyPageCharacterContainer>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[0]?.imageUrl} />
-                  <div>{photoList[0]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[1]?.imageUrl} />
-                  <div>{photoList[1]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[2]?.imageUrl} />
-                  <div>{photoList[2]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[3]?.imageUrl} />
-                  <div>{photoList[3]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[4]?.imageUrl} />
-                  <div>{photoList[4]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[5]?.imageUrl} />
-                  <div>{photoList[5]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[6]?.imageUrl} />
-                  <div>{photoList[6]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[7]?.imageUrl} />
-                  <div>{photoList[7]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[8]?.imageUrl} />
-                  <div>{photoList[8]?.name}</div>
-                </MyPageCharacter>
-                <MyPageCharacter>
-                  <CharacterSquare src={photoList[9]?.imageUrl} />
-                  <div>{photoList[9]?.name}</div>
-                </MyPageCharacter>
+                {photoList.map((el) => {
+                  return (
+                    <MyPageCharacter onClick={() => handlePhotoChange(el)}>
+                      <CharacterSquare src={el?.imageUrl} />
+                      <div>{el?.name}</div>
+                    </MyPageCharacter>
+                  );
+                })}
               </MyPageCharacterContainer>
               {isPhotoEdit ? (
                 <MyPageEditBtnContainer>
