@@ -5,24 +5,32 @@ import com.pathfinder.server.exception.ExceptionCode;
 import com.pathfinder.server.member.dto.MemberDto;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.repository.MemberRepository;
+import com.pathfinder.server.reward.entity.Reward;
+import com.pathfinder.server.reward.repository.RewardRepository;
+import com.pathfinder.server.reward.service.RewardService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 @Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RewardRepository rewardRepository;
+    private final RewardService rewardService;
 
-    public MemberService(MemberRepository memberRepository,
-                         PasswordEncoder passwordEncoder) {
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, RewardRepository rewardRepository, RewardService rewardService) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
+        this.rewardRepository = rewardRepository;
+        this.rewardService = rewardService;
     }
+
     @Transactional
     public Long signup(MemberDto.Post request) {
         String mail = request.getEmail();
@@ -34,6 +42,12 @@ public class MemberService {
         //TODO email인증 로직 추가
 
         Member member = createMember(request);
+
+        List<Reward> initialRewards = rewardService.createInitRewards(); // 초기 보상 리스트 생성
+        for (Reward reward : initialRewards) {
+            reward.setMember(member); // 각 보상에 해당 멤버 연결
+        }
+        rewardRepository.saveAll(initialRewards);
 
         return memberRepository.save(member).getMemberId();
     }
@@ -71,6 +85,17 @@ public class MemberService {
         Member findMember = findVerifiedMember(memberId);
 
         memberRepository.delete(findMember);
+    }
+
+    public Member updateProfileImage(Long memberId, Long rewardId) {
+        Member findMember = findVerifiedMember(memberId);
+        Reward chooseReward = rewardService.findReward(rewardId);
+g
+        String imageUrl = chooseReward.getImageUrl();
+        Optional.ofNullable(findMember.getProfileImageUrl())
+                .ifPresent(image -> findMember.setProfileImageUrl(imageUrl));
+
+        return memberRepository.save(findMember);
     }
 
     @Transactional(readOnly = true)
