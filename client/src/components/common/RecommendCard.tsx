@@ -1,13 +1,14 @@
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
 
+import { DiaryData } from "../../types/types";
+import { Link } from "react-router-dom";
+
 import Ic_1st from "../../assets/images/ic_1st.png";
 import Ic_2st from "../../assets/images/ic_2st.png";
 import Ic_3st from "../../assets/images/ic_3st.png";
 import IcPin from "../../assets/images/ic_pin.png";
 import EmptyImg from "../../assets/images/img_empty.png";
-
-import { DiaryData } from "../../types/types";
 
 const RecommentCard = ({ data }: { data: DiaryData }): JSX.Element => {
   const [imageUrl, setImageUrl] = useState(""); // 이미지 url 상태 관리
@@ -44,18 +45,20 @@ const RecommentCard = ({ data }: { data: DiaryData }): JSX.Element => {
 
   return (
     <CardBox>
-      <ImgBox>
-        <img src={imageUrl} alt={altText} />
-      </ImgBox>
-      <Content>
-        <TxtBox>
-          <strong>{data.title}</strong>
-          <p>{textContent}</p>
-        </TxtBox>
-        <Information>
-          여행 장소: {data.area1} {data.area2}
-        </Information>
-      </Content>
+      <Link to={`/${data.diaryId}`}>
+        <ImgBox>
+          <img src={imageUrl} alt={altText} />
+        </ImgBox>
+        <Content>
+          <TxtBox>
+            <strong>{data.title}</strong>
+            <p>{textContent}</p>
+          </TxtBox>
+          <Information>
+            여행 장소: {data.area1} {data.area2}
+          </Information>
+        </Content>
+      </Link>
     </CardBox>
   );
 };
@@ -65,10 +68,12 @@ export default RecommentCard;
 const CardBox = styled.li`
   position: relative;
   padding-left: 70px;
-  display: flex;
-  align-items: center;
-  height: 150px;
   margin-bottom: 30px;
+  > a {
+    display: flex;
+    align-items: center;
+    height: 150px;
+  }
   &:last-child {
     margin-bottom: 0;
   }
