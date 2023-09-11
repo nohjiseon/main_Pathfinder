@@ -20,7 +20,7 @@ export const diaryState = atom<DiaryData>({
     name: "",
     title: "",
     content: "",
-    recommendCount: 0,
+    recommendedCount: 0,
     views: 0,
   },
 });
@@ -28,4 +28,9 @@ export const diaryState = atom<DiaryData>({
 export const modalState = atom<boolean>({
   key: "modalState",
   default: false,
+});
+
+export const areaState = atom<string | null>({
+  key: "areaState",
+  default: "",
 });

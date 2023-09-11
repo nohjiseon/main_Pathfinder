@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
+import { DiaryData } from "../../types/types";
 
 const CardBox = styled.li`
   .cardContent {
@@ -6,7 +8,7 @@ const CardBox = styled.li`
     flex-direction: row;
     width: 550px;
     height: 125px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.9);
     border: 0.5px solid rgba(243, 243, 243, 1);
     border-radius: 4px;
     margin: 0 5px;
@@ -34,25 +36,25 @@ const CardBox = styled.li`
   }
 `;
 
-const Card = (): JSX.Element => {
+const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
   return (
     <CardBox>
       <li>
-        <div className="cardContent">
-          <img className="image" src="" alt="" />
-          <div className="content">
-            <h2>제목</h2>
-            <div>
-              내용내용내용 <br />
-              내용내용
-            </div>
-            <div className="information">
-              <div>닉네임</div>
-              <div>추천, 조회수</div>
-              <div>날짜</div>
+        <Link to={`/${diaryData.diaryId}`}>
+          <div className="cardContent">
+            <img className="image" src="" alt="" />
+            <div className="content">
+              <h2>{diaryData.title}</h2>
+              <div>{diaryData.content}</div>
+              <div className="information">
+                <div>{diaryData.name}</div>
+                <div>{diaryData.recommendedCount}</div>
+                <div>{diaryData.views}</div>
+                <div>{diaryData.modifiedAt}</div>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       </li>
     </CardBox>
   );

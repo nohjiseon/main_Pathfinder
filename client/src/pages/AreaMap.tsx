@@ -19,16 +19,20 @@ import Area03Acive from "../assets/images/area_03Active.png";
 import Area04Acive from "../assets/images/area_04Active.png";
 import Area05Acive from "../assets/images/area_05Active.png";
 import Area06Acive from "../assets/images/area_06Active.png";
+import List from "../components/List";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { areaState } from "../atoms/atoms";
 
 const AreaMap = (): JSX.Element => {
-  const [activeArea, setActiveArea] = useState<string | null>(null);
   const [weather, setWeather] = useState("");
-
+  const setArea = useSetRecoilState(areaState);
+  const areaName = useRecoilValue(areaState);
+  useEffect(() => {
+    getAreaWeather();
+  }, [areaName]);
   // 클릭한 지역을 활성화하고 지역 리스트를 불러오는 함수
   const handleAreaClick = (area: string) => {
-    setActiveArea(area);
-    console.log(area);
-
+    setArea(area);
     // 해당 지역에 대한 리스트를 불러오는 작업
   };
 
@@ -52,22 +56,22 @@ const AreaMap = (): JSX.Element => {
   }, []);
 
   function getAreaWeather(): void {
-    if (activeArea === null || activeArea === "전체 지역") {
+    if (areaName === null || areaName === "전체 지역") {
       navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
     } else {
       let pos: number[] = [0, 0];
 
-      if (activeArea === "경기도") {
+      if (areaName === "경기도") {
         pos = [37.567167, 127.190292];
-      } else if (activeArea === "강원도") {
+      } else if (areaName === "강원도") {
         pos = [37.555837, 128.209315];
-      } else if (activeArea === "충청도") {
+      } else if (areaName === "충청도") {
         pos = [36.628503, 127.929344];
-      } else if (activeArea === "경상도") {
+      } else if (areaName === "경상도") {
         pos = [36.248647, 128.664734];
-      } else if (activeArea === "전라도") {
+      } else if (areaName === "전라도") {
         pos = [35.716705, 127.144185];
-      } else if (activeArea === "제주도") {
+      } else if (areaName === "제주도") {
         pos = [33.364805, 126.542671];
       }
 
@@ -82,16 +86,14 @@ const AreaMap = (): JSX.Element => {
     }
   }
 
-  useEffect(() => {
-    getAreaWeather();
-  }, [activeArea]);
-
   return (
     <MainCon>
+      {areaName && <List></List>}
+
       <SubWave />
       <ConGuide>
         <AlArea onClick={() => handleAreaClick("전체 지역")}>
-          {activeArea !== "전체 지역" ? (
+          {areaName !== "전체 지역" ? (
             <img src={AreaAll} alt="전체 지역" />
           ) : (
             <img src={AreaAllAcive} alt="전체 지역" />
@@ -99,42 +101,42 @@ const AreaMap = (): JSX.Element => {
         </AlArea>
         <AreaBox>
           <Area>
-            {activeArea !== "경기도" ? (
+            {areaName !== "경기도" ? (
               <img src={Area01} alt="경기도" />
             ) : (
               <img src={Area01Acive} alt="경기도 지역 활성화" />
             )}
           </Area>
           <Area>
-            {activeArea !== "강원도" ? (
+            {areaName !== "강원도" ? (
               <img src={Area02} alt="강원도" />
             ) : (
               <img src={Area02Acive} alt="강원도 지역 활성화" />
             )}
           </Area>
           <Area>
-            {activeArea !== "충청도" ? (
+            {areaName !== "충청도" ? (
               <img src={Area03} alt="충청도" />
             ) : (
               <img src={Area03Acive} alt="충청도 지역 활성화" />
             )}
           </Area>
           <Area>
-            {activeArea !== "경상도" ? (
+            {areaName !== "경상도" ? (
               <img src={Area04} alt="경상도" />
             ) : (
               <img src={Area04Acive} alt="경상도 지역 활성화" />
             )}
           </Area>
           <Area>
-            {activeArea !== "전라도" ? (
+            {areaName !== "전라도" ? (
               <img src={Area05} alt="전라도" />
             ) : (
               <img src={Area05Acive} alt="전라도 지역 활성화" />
             )}
           </Area>
           <Area>
-            {activeArea !== "제주도" ? (
+            {areaName !== "제주도" ? (
               <img src={Area06} alt="제주도" />
             ) : (
               <img src={Area06Acive} alt="제주도 지역 활성화" />
