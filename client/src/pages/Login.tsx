@@ -7,13 +7,14 @@ import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
 import ImgCharacter from "../assets/images/character.png";
+import loading from "../assets/images/loading.gif";
 import Google from "../assets/images/google.png";
 import Github from "../assets/images/github.png";
 import Kakao from "../assets/images/kakao.png";
 
 const Login = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
-  const [throttle, setThrottle] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const cookies = new Cookies();
 
@@ -29,34 +30,29 @@ const Login = (): JSX.Element => {
   } = useForm<Form>();
 
   function handleLoginSubmit(data: Form): void {
-    if (throttle) return;
-    if (!throttle) {
-      setThrottle(true);
-      setTimeout(async () => {
-        axios
-          .post(
-            `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
-            {
-              email: data.email,
-              password: data.password,
-            },
-            { headers: { "Content-Type": "application/json" } },
-          )
-          .then((res) => {
-            const accessToken = res.headers.authorization;
-            cookies.set("is_login", `${accessToken}`);
-            localStorage.setItem("token", accessToken);
-            localStorage.setItem("memberId", res.data.memberId);
+    setIsLoading(true);
+    axios
+      .post(
+        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
+        {
+          email: data.email,
+          password: data.password,
+        },
+        { headers: { "Content-Type": "application/json" } },
+      )
+      .then((res) => {
+        const accessToken = res.headers.authorization;
+        cookies.set("is_login", `${accessToken}`);
+        localStorage.setItem("token", accessToken);
+        localStorage.setItem("memberId", res.data.memberId);
 
-            navigate("/");
-            // location.reload();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        setThrottle(false);
-      }, 3000);
-    }
+        setIsLoading(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -137,7 +133,7 @@ const Login = (): JSX.Element => {
             <span>비밀번호 찾기</span>
           </Link>
         </LoginLinkCon>
-        <LoginBtn>로그인</LoginBtn>
+        {isLoading ? <LoadingImg src={loading} /> : <LoginBtn>로그인</LoginBtn>}
         <LoginLine
           width="402"
           height="24"
@@ -295,6 +291,12 @@ const LoginLinkCon = styled.div`
   span:nth-child(2) {
     color: #bebebe;
   }
+`;
+
+const LoadingImg = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-top: 70px;
 `;
 
 const LoginBtn = styled.button`
