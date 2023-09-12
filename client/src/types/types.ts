@@ -11,7 +11,7 @@ export interface DiaryData {
   name: string;
   title: string;
   content: string;
-  recommendCount: number;
+  recommendedCount: number;
   views: number;
 }
 

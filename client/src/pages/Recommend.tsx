@@ -1,24 +1,47 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { styled } from "styled-components";
-
+import { DiaryData } from "../types/types";
 import SubWave from "../components/common/SubWave";
 import RecommendCard from "../components/common/RecommendCard";
-
+import Loading from "../components/common/Loading";
 import AirPlane from "../assets/images/ic_air.png";
 
-const data = [1, 2, 3];
-
 const Recommend = (): JSX.Element => {
+  const [recommendData, setRecommendData] = useState<DiaryData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(
+        "http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/diary/recommend",
+      );
+      setRecommendData(res.data.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("데이터 불러오기 실패:", error);
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <MainCon>
       <SubWave />
       <RecommendCon>
         <Title>이번 여행지는 부산 어떠세요?</Title>
         <SubTitle>추천 수 가장 높은 게시물</SubTitle>
-        <ul>
-          {data.map((idx) => (
-            <RecommendCard key={idx}></RecommendCard>
-          ))}
-        </ul>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <ul>
+            {recommendData.map((item: DiaryData) => (
+              <RecommendCard key={item.diaryId} data={item}></RecommendCard>
+            ))}
+          </ul>
+        )}
       </RecommendCon>
     </MainCon>
   );
@@ -33,6 +56,7 @@ const MainCon = styled.main`
 
 const RecommendCon = styled.div`
   min-width: 600px;
+  min-height: 726px;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;

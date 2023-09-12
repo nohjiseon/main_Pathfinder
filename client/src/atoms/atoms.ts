@@ -20,7 +20,7 @@ export const diaryState = atom<DiaryData>({
     name: "",
     title: "",
     content: "",
-    recommendCount: 0,
+    recommendedCount: 0,
     views: 0,
   },
 });
