@@ -363,8 +363,8 @@ const MyPage = (): JSX.Element => {
                 {photoList.map((el) => {
                   return (
                     <MyPageCharacter onClick={() => handlePhotoChange(el)}>
-                      <CharacterSquare src={el?.imageUrl} />
-                      <div>{el?.name}</div>
+                      <CharacterSquare src={el.imageUrl} />
+                      {el.unlocked ? <div>{el.name}</div> : null}
                     </MyPageCharacter>
                   );
                 })}
