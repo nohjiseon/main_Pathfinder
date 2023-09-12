@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./assets/css/Reset.css";
-
+import axios from "axios";
+axios.defaults.baseURL = "http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080";
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>

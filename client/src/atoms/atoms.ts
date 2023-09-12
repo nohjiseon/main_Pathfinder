@@ -29,3 +29,8 @@ export const modalState = atom<boolean>({
   key: "modalState",
   default: false,
 });
+
+export const areaState = atom<string | null>({
+  key: "areaState",
+  default: "",
+});

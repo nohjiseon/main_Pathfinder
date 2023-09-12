@@ -4,6 +4,8 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { getUserId } from "../util/auth";
 const WriteCon = styled.div`
   display: flex;
   flex-direction: column;
@@ -124,7 +126,20 @@ const WriteForm = () => {
           data.content = content; // 에디터의 내용을 폼 데이터에 추가
           data.area1 = selectedRegion; // 선택된 지역을 폼 데이터에 추가
           data.area2 = selectedCity; // 선택된 도시를 폼 데이터에 추가
-          alert(JSON.stringify(data));
+          data.memberId = getUserId();
+          try {
+            const response = await axios.post("/diary/registration", data);
+
+            if (response.status === 201) {
+              console.log(data);
+            } else {
+              console.error(`${response.status} 실패`);
+            }
+          } catch (error) {
+            console.error("오류 발생:", error);
+          } finally {
+            navigate(-1);
+          }
         })}
       >
         <div className="writeBox">
@@ -168,34 +183,23 @@ const WriteForm = () => {
               usageStatistics={false}
               hooks={{
                 addImageBlobHook: async (blob, callback) => {
-                  //   console.log(blob); // File {name: '카레유.png', ... }
-
-                  // 1. 첨부된 이미지 파일을 서버로 전송후, 이미지 경로 url을 받아온다.
-                  // const imgUrl = await .... 서버 전송 / 경로 수신 코드 ...
                   const formData = new FormData();
                   formData.append("image", blob, "image.png"); // 이미지 파일 이름은 임의로 지정할 수 있습니다.
                   console.log(formData);
 
-                  // try {
-                  //   const response = await axios.post("/upload", formData, {
-                  //     headers: {
-                  //       "Content-Type": "multipart/form-data",
-                  //     },
-                  //   });
+                  try {
+                    const response = await axios.post("/image", formData);
+                    if (response.status === 200) {
+                      const imageUrl = response.data;
 
-                  //   if (response.status === 200) {
-                  //     const imageUrl = response.data.imageUrl;
-
-                  //     // 업로드된 이미지를 에디터에 표시합니다.
-                  //     callback(imageUrl, "이미지 설명"); // 이미지 설명은 원하는대로 지정합니다.
-                  //   } else {
-                  //     console.error("이미지 업로드 실패");
-                  //   }
-                  // } catch (error) {
-                  //   console.error("이미지 업로드 중 오류 발생:", error);
-                  // }
-                  // 2. 첨부된 이미지를 화면에 표시(경로는 임의로 넣었다.)
-                  callback("http://localhost:3000/img/카레유.png", "카레유");
+                      // 업로드된 이미지를 에디터에 표시합니다.
+                      callback(imageUrl, "이미지 설명"); // 이미지 설명은 원하는대로 지정합니다.
+                    } else {
+                      console.error("이미지 업로드 실패");
+                    }
+                  } catch (error) {
+                    console.error("이미지 업로드 중 오류 발생:", error);
+                  }
                 },
               }}
             />

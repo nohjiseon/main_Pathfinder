@@ -1,12 +1,15 @@
+import { Link } from "react-router-dom";
 import { styled } from "styled-components";
-
+import { DiaryData } from "../../types/types";
+import { getFormattedDate } from "../../util/date";
+import empty from "../../assets/images/img_empty.png";
 const CardBox = styled.li`
   .cardContent {
     display: flex;
     flex-direction: row;
     width: 550px;
     height: 125px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.9);
     border: 0.5px solid rgba(243, 243, 243, 1);
     border-radius: 4px;
     margin: 0 5px;
@@ -14,11 +17,20 @@ const CardBox = styled.li`
     align-items: center;
     justify-content: space-between;
     box-shadow: 2px 4px 4px rgba(185, 185, 185, 0.25);
+    overflow: hidden;
   }
-  img {
+  .img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 156px;
     height: 95px;
-    margin: 21px 15px;
+    overflow: hidden;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .content {
     width: 60%;
@@ -34,25 +46,38 @@ const CardBox = styled.li`
   }
 `;
 
-const Card = (): JSX.Element => {
+const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
+  const resultContent = diaryData.content.replace(/<img\b[^>]*>/gi, "");
+  const imgRegex = /<img *?src=["'](.*?)["'].*?>/g;
+  const matches = diaryData.content.match(imgRegex);
+  let firstThumbnail = null;
+  if (matches && matches.length > 0) {
+    const firstMatch = matches[0];
+    const srcMatch = firstMatch.match(/src=["'](.*?)["']/);
+    if (srcMatch) {
+      firstThumbnail = srcMatch[1];
+    }
+  }
   return (
     <CardBox>
       <li>
-        <div className="cardContent">
-          <img className="image" src="" alt="" />
-          <div className="content">
-            <h2>제목</h2>
-            <div>
-              내용내용내용 <br />
-              내용내용
+        <Link to={`/${diaryData.diaryId}`}>
+          <div className="cardContent">
+            <div className="img-container">
+              <img className="image" src={firstThumbnail ? firstThumbnail : empty} alt="" />
             </div>
-            <div className="information">
-              <div>닉네임</div>
-              <div>추천, 조회수</div>
-              <div>날짜</div>
+            <div className="content">
+              <h2>{diaryData.title}</h2>
+              <div dangerouslySetInnerHTML={{ __html: resultContent }}></div>
+              <div className="information">
+                <div>{diaryData.name}</div>
+                <div>{diaryData.recommendedCount}</div>
+                <div>{diaryData.views}</div>
+                <div>{getFormattedDate(diaryData.modifiedAt)}</div>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       </li>
     </CardBox>
   );

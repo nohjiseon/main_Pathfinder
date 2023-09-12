@@ -1,5 +1,5 @@
 export const getAccessToken = () => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("token");
 
   if (!token) {
     return null;
@@ -8,7 +8,7 @@ export const getAccessToken = () => {
   return token;
 };
 export const getUserId = () => {
-  const id = localStorage.getItem("member_id");
+  const id = Number(localStorage.getItem("memberId"));
 
   if (!id) {
     return null;

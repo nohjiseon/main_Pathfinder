@@ -50,7 +50,7 @@ const MyPage = (): JSX.Element => {
     setTotalPages(10); // 총 페이지 몇개인지 임의로 정한거라 수정 필요함
   }, []);
 
-  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  // const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   interface Form {
     nickname: string;
@@ -380,9 +380,9 @@ const MyPage = (): JSX.Element => {
             <MyPageContent>
               <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
               <MyPageBlogList>
-                {data.map(() => (
+                {/* {data.map(() => (
                   <Card></Card>
-                ))}
+                ))} */}
               </MyPageBlogList>
               <MyPagePaginationContainer>
                 <Pagination
