@@ -1,20 +1,23 @@
 package com.pathfinder.server.diary.service;
 
+import com.pathfinder.server.diary.entity.Diary;
+import com.pathfinder.server.diary.repository.DiaryRepository;
+import com.pathfinder.server.global.exception.diaryexception.DiaryNotFoundException;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.service.MemberService;
-import com.pathfinder.server.diary.entity.Diary;
-import com.pathfinder.server.exception.BusinessLogicException;
-import com.pathfinder.server.exception.ExceptionCode;
-import com.pathfinder.server.diary.repository.DiaryRepository;
 import com.pathfinder.server.reward.service.RewardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 public class DiaryService {
     private final DiaryRepository diaryRepository;
     private final MemberService memberService;
@@ -32,6 +35,7 @@ public class DiaryService {
         return diaryRepository.save(diary);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Diary updateDiary(Diary diary){
         Diary findDiary = findVerifiedDiary(diary.getDiaryId());
         Optional.ofNullable(diary.getTitle())
@@ -45,6 +49,7 @@ public class DiaryService {
         return diaryRepository.save(findDiary);
     }
 
+    @Transactional(readOnly = true)
     public Diary getDiary(Long diaryId){
         Diary findDiary = findVerifiedDiary(diaryId);
         findDiary.setViews(findDiary.getViews() + 1); // 조회수 증가
@@ -75,9 +80,10 @@ public class DiaryService {
         diaryRepository.delete(findDiary);
     }
 
+    @Transactional(readOnly = true)
     public Diary findVerifiedDiary(Long diaryId) {
         Optional<Diary> optionalQuestion = diaryRepository.findById(diaryId);
-        Diary findDiary = optionalQuestion.orElseThrow(()-> new BusinessLogicException(ExceptionCode.DIARY_NOT_FOUND));
+        Diary findDiary = optionalQuestion.orElseThrow(()-> new DiaryNotFoundException());
         return findDiary;
     }
     private void verifyDiaryGetMemberName(Diary diary){

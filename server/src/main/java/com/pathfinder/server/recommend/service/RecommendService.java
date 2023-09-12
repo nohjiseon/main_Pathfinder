@@ -1,11 +1,11 @@
 package com.pathfinder.server.recommend.service;
 
+import com.pathfinder.server.diary.entity.Diary;
+import com.pathfinder.server.diary.service.DiaryService;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.service.MemberService;
 import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.recommend.repository.RecommendRepository;
-import com.pathfinder.server.diary.entity.Diary;
-import com.pathfinder.server.diary.service.DiaryService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

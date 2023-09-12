@@ -1,7 +1,7 @@
 package com.pathfinder.server.reward.service;
 
-import com.pathfinder.server.exception.BusinessLogicException;
-import com.pathfinder.server.exception.ExceptionCode;
+import com.pathfinder.server.global.exception.rewardexception.RewardNotFoundException;
+import com.pathfinder.server.global.exception.rewardexception.RewardNotUnlockException;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.reward.entity.Reward;
 import com.pathfinder.server.reward.repository.RewardRepository;
@@ -108,9 +108,9 @@ public class RewardService {
 
     public Reward findReward(Long rewardId){
         Optional<Reward> optionalReward = rewardRepository.findById(rewardId);
-        Reward findReward = optionalReward.orElseThrow(()-> new BusinessLogicException(ExceptionCode.REWARD_NOT_FOUND));
+        Reward findReward = optionalReward.orElseThrow(()-> new RewardNotFoundException());
         if(!findReward.isUnlocked()){
-            throw new BusinessLogicException(ExceptionCode.REWARD_NOT_UNLOCK);
+            throw new RewardNotUnlockException();
         }
         return findReward;
     }
