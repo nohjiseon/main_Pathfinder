@@ -71,16 +71,20 @@ const List = () => {
   const handleAreaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newArea = event.target.value;
     setArea(newArea);
+    setTotalPages(data.pageInfo.totalPages);
   };
   const toggleList = () => {
     setArea(null);
   };
   useEffect(() => {
     // 컴포넌트가 처음 렌더링될 때와 areaName이 변경될 때 fetchData 호출
-    fetchData();
     setTotalPages(data.pageInfo.totalPages);
+    fetchData();
   }, [areaName, currentPage]); // areaName 또는 currentPage가 변경될 때 fetchData 호출
-
+  useEffect(() => {
+    // areaName 또는 currentPage가 변경될 때만 totalPages 업데이트
+    setTotalPages(data.pageInfo.totalPages);
+  }, [areaName, data.pageInfo.totalPages]);
   if (isLoading) {
     return <Listbox>Loading...</Listbox>;
   }

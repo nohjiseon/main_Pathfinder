@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import { DiaryData } from "../../types/types";
 import { getFormattedDate } from "../../util/date";
-
+import empty from "../../assets/images/img_empty.png";
 const CardBox = styled.li`
   .cardContent {
     display: flex;
@@ -17,6 +17,7 @@ const CardBox = styled.li`
     align-items: center;
     justify-content: space-between;
     box-shadow: 2px 4px 4px rgba(185, 185, 185, 0.25);
+    overflow: hidden;
   }
   .img-container {
     display: flex;
@@ -25,7 +26,6 @@ const CardBox = styled.li`
     width: 156px;
     height: 95px;
     overflow: hidden;
-    margin: 21px 15px;
   }
   img {
     width: 100%;
@@ -64,7 +64,7 @@ const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
         <Link to={`/${diaryData.diaryId}`}>
           <div className="cardContent">
             <div className="img-container">
-              <img className="image" src={firstThumbnail ? firstThumbnail : ""} alt="" />
+              <img className="image" src={firstThumbnail ? firstThumbnail : empty} alt="" />
             </div>
             <div className="content">
               <h2>{diaryData.title}</h2>
