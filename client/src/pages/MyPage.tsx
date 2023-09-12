@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { Cookies } from "react-cookie";
 import Card from "../components/common/Card";
 import Pagination from "../components/common/Pagenation";
 import { usePagination } from "../hooks/usePagination";
@@ -20,6 +22,8 @@ const MyPage = (): JSX.Element => {
   const [photo, setPhoto] = useState<string>("");
   const [photoSrc, setPhotoSrc] = useState<string>("");
   const [photoNum, setPhotoNum] = useState<string>("");
+  const navigate = useNavigate();
+  const cookies = new Cookies();
 
   interface Reward {
     rewardId: string;
@@ -179,6 +183,25 @@ const MyPage = (): JSX.Element => {
       });
   }, []);
 
+  function handleAccountDelete(): void {
+    if (window.confirm("모든 회원 정보를 삭제 하시겠습니까?")) {
+      axios
+        .delete(
+          `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
+        )
+        .then(() => {
+          cookies.remove("is_login");
+          localStorage.removeItem("token");
+          localStorage.removeItem("memberId");
+          alert("회원 탈퇴가 완료되었습니다.");
+          navigate("/");
+        })
+        .catch(() => {
+          alert("회원 탈퇴에 실패하였습니다. 잠시 후에 다시 시도해주세요.");
+        });
+    }
+  }
+
   return (
     <MyPageBg>
       <MyPageContainer>
@@ -207,6 +230,11 @@ const MyPage = (): JSX.Element => {
               <MyPageMenuBtnFocus>내가 쓴 글</MyPageMenuBtnFocus>
             ) : (
               <MyPageMenuBtn onClick={() => setCurMenu("blog")}>내가 쓴 글</MyPageMenuBtn>
+            )}
+            {curMenu === "delete" ? (
+              <MyPageMenuBtnFocus>회원 탈퇴</MyPageMenuBtnFocus>
+            ) : (
+              <MyPageMenuBtn onClick={() => setCurMenu("delete")}>회원 탈퇴</MyPageMenuBtn>
             )}
           </MyPageMenu>
           {curMenu === "profile" ? (
@@ -348,7 +376,7 @@ const MyPage = (): JSX.Element => {
                 </MyPageEditBtnContainer>
               ) : null}
             </MyPageContent>
-          ) : (
+          ) : curMenu === "blog" ? (
             <MyPageContent>
               <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
               <MyPageBlogList>
@@ -365,6 +393,17 @@ const MyPage = (): JSX.Element => {
                   onNextPage={onNextPageHandler}
                 />
               </MyPagePaginationContainer>
+            </MyPageContent>
+          ) : (
+            <MyPageContent>
+              <MyPageContentTitle>회원 탈퇴</MyPageContentTitle>
+              <MyPageAccountDeleteCon>
+                <button onClick={handleAccountDelete}>회원 탈퇴하기</button>
+              </MyPageAccountDeleteCon>
+              <MyPageAccountDeleteWarning>
+                * 회원 탈퇴 시, 모든 회원 정보는 서버로부터 삭제됩니다. 해당 작업은 되돌릴 수 없으니
+                주의해주세요.
+              </MyPageAccountDeleteWarning>
             </MyPageContent>
           )}
         </MyPageBottom>
@@ -681,4 +720,23 @@ const MyPagePaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
+`;
+
+const MyPageAccountDeleteCon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+
+  button {
+    background-color: #e23636;
+    padding: 15px 25px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+`;
+
+const MyPageAccountDeleteWarning = styled.span`
+  font-size: 14px;
 `;

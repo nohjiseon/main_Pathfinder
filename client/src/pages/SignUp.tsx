@@ -46,7 +46,11 @@ const SignUp = (): JSX.Element => {
         navigate("/login");
       })
       .catch((err) => {
-        window.alert(err);
+        if (err.response.data.message === "Email already exists") {
+          alert("이미 존재하는 이메일입니다.");
+        } else if (err.response.data.message === "Name already exists") {
+          alert("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+        }
         setIsLoading(false);
       });
   }
