@@ -221,7 +221,7 @@ const Menu = styled.div`
     border-radius: 4px;
     font-size: 14px;
     transition: 0.3s;
-    &:last-child {
+    &:nth-child(5) {
       color: #f36c68;
     }
     &:hover {
