@@ -1,19 +1,24 @@
 package com.pathfinder.server.diary.controller;
 
+import com.pathfinder.server.auth.utils.SecurityUtil;
 import com.pathfinder.server.diary.dto.DiaryDto;
 import com.pathfinder.server.diary.entity.Diary;
 import com.pathfinder.server.diary.mapper.DiaryMapper;
 import com.pathfinder.server.diary.service.DiaryService;
 import com.pathfinder.server.dto.MultiResponseDto;
 import com.pathfinder.server.dto.SingleResponseDto;
+import com.pathfinder.server.recommend.entity.Recommend;
+import com.pathfinder.server.recommend.repository.RecommendRepository;
 import com.pathfinder.server.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/diary")
@@ -21,10 +26,12 @@ public class DiaryController {
     private final static String DIARY_DEFAULT_URL = "/diary";
     private DiaryService diaryService;
     private DiaryMapper mapper;
+    private final RecommendRepository recommendRepository;
 
-    public DiaryController(DiaryService diaryService, DiaryMapper mapper) {
+    public DiaryController(DiaryService diaryService, DiaryMapper mapper, RecommendRepository recommendRepository) {
         this.diaryService = diaryService;
         this.mapper = mapper;
+        this.recommendRepository = recommendRepository;
     }
 
     @PostMapping("/registration") // 게시글 생성
@@ -36,12 +43,15 @@ public class DiaryController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/{diary-id}") //게시글 자세히 보기
-    public ResponseEntity getDiary(@PathVariable("diary-id") Long diaryId){
-        Diary diary = diaryService.getDiary(diaryId);
 
+    @GetMapping("/{diary-id}") //게시글 자세히 보기
+    public ResponseEntity getDiary(@PathVariable("diary-id") @Positive Long diaryId) {
+        Diary diary = diaryService.getDiary(diaryId);
+        DiaryDto.Response response = mapper.DiaryToDiaryResponseDto(diary);
+        Optional<Recommend> optionalRecommend = recommendRepository.findByMemberMemberIdAndDiaryDiaryId(SecurityUtil.getCurrentId(), diaryId);
+        response.setRecommend(optionalRecommend.isPresent());
         return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.DiaryToDiaryResponseDto(diary)),
+                new SingleResponseDto<>(response),
                 HttpStatus.OK);
     }
 
