@@ -16,15 +16,19 @@ const Header = () => {
   const navigate = useNavigate();
   const cookies = new Cookies();
   const getCookie = cookies.get("is_login");
-  const token = localStorage.getItem("token");
   const memberId = localStorage.getItem("memberId");
 
-  const MenuHandeler = () => {
+  const MenuHandeler = (): void => {
     setIsOpen(!isOpen);
   };
 
+  const LogoutMenuHandeler = (): boolean => {
+    alert("로그인 후 이용할 수 있는 서비스입니다.");
+    return false;
+  };
+
   useEffect(() => {
-    if (getCookie && token) {
+    if (getCookie) {
       axios
         .get(
           `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
@@ -45,7 +49,7 @@ const Header = () => {
     } else {
       setIsLogin(false);
     }
-  }, [getCookie, token]);
+  }, [getCookie]);
 
   const handleLogoutClick = () => {
     MenuHandeler();
@@ -99,6 +103,18 @@ const Header = () => {
           <Link to="/signup">
             <Button $signup>회원가입</Button>
           </Link>
+          <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
+
+          <Menu className={isOpen ? "active" : ""}>
+            <Link to="/areamap" onClick={MenuHandeler}>
+              여행기록 모아보기
+            </Link>
+            <div onClick={LogoutMenuHandeler}>마이페이지</div>
+            <div onClick={LogoutMenuHandeler}>글 작성하기</div>
+            <Link to="/recommend" onClick={MenuHandeler}>
+              여행지 추천
+            </Link>
+          </Menu>
         </BtnBox>
       )}
     </HeaderCon>
@@ -141,6 +157,7 @@ const Logo = styled(Link)`
 const BtnBox = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
 `;
 
 const Button = styled.button<{ $signup?: boolean }>`
@@ -149,7 +166,6 @@ const Button = styled.button<{ $signup?: boolean }>`
   line-height: 32px;
   border-radius: 4px;
   background-color: ${(props) => (props.$signup ? "#1A298E" : "#416DC9")};
-  margin-left: 10px;
 `;
 
 const ProfileInfo = styled.span`
@@ -165,7 +181,6 @@ const ProfileImg = styled.div`
   border-radius: 100%;
   box-shadow: 2px 2px 2px rgba(175, 175, 175, 0.25);
   border: 1px solid #d9d9d9;
-  margin: 0 10px;
   > img {
     width: 25px;
   }
@@ -197,7 +212,8 @@ const Menu = styled.div`
     opacity: 1;
     visibility: visible;
   }
-  > a {
+  > a,
+  div {
     display: block;
     height: 42px;
     line-height: 42px;
