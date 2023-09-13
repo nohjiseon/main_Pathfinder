@@ -1,7 +1,7 @@
 package com.pathfinder.server.member.entity;
 
-import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.diary.entity.Diary;
+import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.reward.entity.Reward;
 import lombok.*;
 

@@ -1,7 +1,8 @@
 package com.pathfinder.server.member.service;
 
-import com.pathfinder.server.exception.BusinessLogicException;
-import com.pathfinder.server.exception.ExceptionCode;
+import com.pathfinder.server.global.exception.memberexception.MemberEmailExistException;
+import com.pathfinder.server.global.exception.memberexception.MemberNameExistException;
+import com.pathfinder.server.global.exception.memberexception.MemberNotFoundException;
 import com.pathfinder.server.member.dto.MemberDto;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.repository.MemberRepository;
@@ -16,8 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-@Transactional
+
 @Service
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -90,7 +92,6 @@ public class MemberService {
     public Member updateProfileImage(Long memberId, Long rewardId) {
         Member findMember = findVerifiedMember(memberId);
         Reward chooseReward = rewardService.findReward(rewardId);
-g
         String imageUrl = chooseReward.getImageUrl();
         Optional.ofNullable(findMember.getProfileImageUrl())
                 .ifPresent(image -> findMember.setProfileImageUrl(imageUrl));
@@ -104,21 +105,21 @@ g
                 memberRepository.findById(memberId);
         Member findMember =
                 optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+                        new MemberNotFoundException());
         return findMember;
     }
 
     private void verifyExistsName(String name) {
         Optional<Member> member = memberRepository.findByName(name);
         if (member.isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.NAME_EXISTS);
+            throw new MemberNameExistException();
         }
     }
 
     private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
+            throw new MemberEmailExistException();
         }
     }
 

@@ -1,8 +1,8 @@
 package com.pathfinder.server.auth.jwt.handler;
 
+import com.pathfinder.server.auth.utils.AuthUtil;
 import com.pathfinder.server.global.exception.BusinessException;
 import com.pathfinder.server.global.exception.authexception.JwtExpiredAuthException;
-import com.pathfinder.server.auth.utils.AuthUtil;
 import com.pathfinder.server.global.exception.commonexception.UnknownException;
 import com.pathfinder.server.global.exception.memberexception.MemberAccessDeniedException;
 import lombok.extern.slf4j.Slf4j;

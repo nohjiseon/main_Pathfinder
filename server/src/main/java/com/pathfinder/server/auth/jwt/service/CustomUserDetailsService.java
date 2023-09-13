@@ -1,10 +1,8 @@
 package com.pathfinder.server.auth.jwt.service;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
