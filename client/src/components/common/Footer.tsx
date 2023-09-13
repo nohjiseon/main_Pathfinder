@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import logoWhite from "../../assets/images/logo_w.png";
 
 const Footer = () => {
   return (
     <FooterCon>
-      <img src="logo_w.png" />
+      <img src={logoWhite} />
       <span>by. Pathfinder</span>
     </FooterCon>
   );

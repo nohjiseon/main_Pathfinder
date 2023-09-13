@@ -130,6 +130,7 @@ const MyPage = (): JSX.Element => {
       .then(() => {
         setPhoto(photoSrc);
         setIsPhotoEdit(false);
+        location.reload();
       })
       .catch((err) => {
         if (err.response.status) {
@@ -201,6 +202,16 @@ const MyPage = (): JSX.Element => {
         });
     }
   }
+
+  useEffect(() => {
+    if (curMenu !== "profile") {
+      handleCancleClick();
+    }
+
+    if (curMenu !== "character") {
+      handlePhotoCancel();
+    }
+  }, [curMenu]);
 
   return (
     <MyPageBg>
@@ -362,7 +373,10 @@ const MyPage = (): JSX.Element => {
               <MyPageCharacterContainer>
                 {photoList.map((el) => {
                   return (
-                    <MyPageCharacter onClick={() => handlePhotoChange(el)}>
+                    <MyPageCharacter
+                      className={isPhotoEdit ? "focus" : ""}
+                      onClick={() => handlePhotoChange(el)}
+                    >
                       <CharacterSquare src={el.imageUrl} />
                       {el.unlocked ? <div>{el.name}</div> : null}
                     </MyPageCharacter>
@@ -680,6 +694,11 @@ const MyPageCharacterContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 40px;
+
+  .focus:hover {
+    background-color: #f3f3f3;
+    border-radius: 4px;
+  }
 `;
 
 const MyPageCharacter = styled.div`
@@ -690,11 +709,6 @@ const MyPageCharacter = styled.div`
   align-items: center;
   gap: 10px;
   padding: 15px 20px;
-
-  &:hover {
-    background-color: #f3f3f3;
-    border-radius: 4px;
-  }
 
   div {
     font-size: 16px;

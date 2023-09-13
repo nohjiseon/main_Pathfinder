@@ -1,18 +1,23 @@
 import styled from "styled-components";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Cookies } from "react-cookie";
-import Profile from "../../assets/images/profile.png";
 import IcMenu from "../../assets/images/menu.png";
 import IcMenuOpen from "../../assets/images/menu_open.png";
+import logo from "../../assets/images/logo.png";
+import logoTxt from "../../assets/images/logo_txt.png";
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [nickname, setNickname] = useState<string>("");
+  const [profilePhoto, setProfilePhoto] = useState<string>("");
   const navigate = useNavigate();
   const cookies = new Cookies();
   const getCookie = cookies.get("is_login");
   const token = localStorage.getItem("token");
+  const memberId = localStorage.getItem("memberId");
 
   const MenuHandeler = () => {
     setIsOpen(!isOpen);
@@ -20,7 +25,23 @@ const Header = () => {
 
   useEffect(() => {
     if (getCookie && token) {
-      setIsLogin(true);
+      axios
+        .get(
+          `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
+          {
+            headers: {
+              "Content-Type": `application/json`,
+            },
+          },
+        )
+        .then((res) => {
+          setNickname(res.data.data.name);
+          setProfilePhoto(res.data.data.profileImageUrl);
+          setIsLogin(true);
+        })
+        .catch(() => {
+          console.log("데이터 로딩에 실패하였습니다.");
+        });
     } else {
       setIsLogin(false);
     }
@@ -39,15 +60,15 @@ const Header = () => {
   return (
     <HeaderCon>
       <Logo to="/">
-        <img src="logo.png" />
-        <img src="logo_txt.png" />
+        <img src={logo} />
+        <img src={logoTxt} />
       </Logo>
       {isLogin ? (
         <BtnBox>
-          <ProfileInfo>반갑습니다! ㅇㅇㅇ님</ProfileInfo>
+          <ProfileInfo>반갑습니다! {nickname}님</ProfileInfo>
           <Link to="/mypage">
             <ProfileImg>
-              <img src={Profile} />
+              <img src={profilePhoto} />
             </ProfileImg>
           </Link>
           <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
