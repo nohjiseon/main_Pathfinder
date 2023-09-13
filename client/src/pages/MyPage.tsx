@@ -7,6 +7,7 @@ import Card from "../components/common/Card";
 import Pagination from "../components/common/Pagenation";
 import { usePagination } from "../hooks/usePagination";
 import styled from "styled-components";
+import loading from "../assets/images/loading.gif";
 import changeIcon from "../assets/images/change-icon.png";
 import editWhite from "../assets/images/edit-white.png";
 import lock from "../assets/images/lock.png";
@@ -18,10 +19,10 @@ const MyPage = (): JSX.Element => {
   const [nickname, setNickname] = useState<string>("");
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
   const [intro, setIntro] = useState<string>("");
-  const [throttle, setThrottle] = useState<boolean>(false);
   const [photo, setPhoto] = useState<string>("");
   const [photoSrc, setPhotoSrc] = useState<string>("");
   const [photoNum, setPhotoNum] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const cookies = new Cookies();
 
@@ -63,50 +64,48 @@ const MyPage = (): JSX.Element => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Form>();
+  } = useForm<Form>({
+    mode: "onChange",
+    defaultValues: { nickname: nickname, password: "", intro: intro },
+  });
 
   function handleEditBtnClick(): void {
     setIsEdit(true);
   }
 
   function handleEditClick(data: Form): void {
-    if (throttle) return;
-    if (!throttle) {
-      setThrottle(true);
-      setTimeout(async () => {
-        axios
-          .patch(
-            `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
-            {
-              name: data.nickname,
-              password: data.password,
-              introduce: data.intro,
-            },
-            { headers: { "Content-Type": "application/json" } },
-          )
-          .then(() => {
-            setNickname(data.nickname);
-            setIntro(data.intro);
-            setIsEdit(false);
-            reset({
-              nickname: "",
-              password: "",
-              intro: "",
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-        setThrottle(false);
-      }, 3000);
-    }
+    setIsLoading(true);
+    axios
+      .patch(
+        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
+        {
+          name: data.nickname,
+          password: data.password,
+          introduce: data.intro,
+        },
+        { headers: { "Content-Type": "application/json" } },
+      )
+      .then(() => {
+        setNickname(data.nickname);
+        setIntro(data.intro);
+        setIsEdit(false);
+        reset({
+          nickname: nickname,
+          password: "",
+          intro: intro,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setIsLoading(false);
   }
 
   function handleCancleClick(): void {
     reset({
-      nickname: "",
+      nickname: nickname,
       password: "",
-      intro: "",
+      intro: intro,
     });
     setIsEdit(false);
   }
@@ -160,6 +159,11 @@ const MyPage = (): JSX.Element => {
         setEmail(res.data.data.email);
         setIntro(res.data.data.introduce);
         setPhoto(res.data.data.profileImageUrl);
+        reset({
+          nickname: nickname,
+          password: "",
+          intro: intro,
+        });
       })
       .catch(() => {
         console.log("데이터 로딩에 실패하였습니다.");
@@ -214,215 +218,222 @@ const MyPage = (): JSX.Element => {
   }, [curMenu]);
 
   return (
-    <MyPageBg>
-      <MyPageContainer>
-        <MyPageTop>
-          <MyPageImgContainer>
-            {isPhotoEdit ? <MyPageProfileImg src={photoSrc} /> : <MyPageProfileImg src={photo} />}
-          </MyPageImgContainer>
-          <MyPageIdContainer>
-            <MyPageId>{nickname}</MyPageId>
-            <MyPageEmail>{email}</MyPageEmail>
-          </MyPageIdContainer>
-        </MyPageTop>
-        <MyPageBottom>
-          <MyPageMenu>
+    <>
+      {isLoading ? (
+        <MyPageLoading>
+          <img src={loading} />
+        </MyPageLoading>
+      ) : null}
+      <MyPageBg>
+        <MyPageContainer>
+          <MyPageTop>
+            <MyPageImgContainer>
+              {isPhotoEdit ? <MyPageProfileImg src={photoSrc} /> : <MyPageProfileImg src={photo} />}
+            </MyPageImgContainer>
+            <MyPageIdContainer>
+              <MyPageId>{nickname}</MyPageId>
+              <MyPageEmail>{email}</MyPageEmail>
+            </MyPageIdContainer>
+          </MyPageTop>
+          <MyPageBottom>
+            <MyPageMenu>
+              {curMenu === "profile" ? (
+                <MyPageMenuBtnFocus>프로필</MyPageMenuBtnFocus>
+              ) : (
+                <MyPageMenuBtn onClick={() => setCurMenu("profile")}>프로필</MyPageMenuBtn>
+              )}
+              {curMenu === "character" ? (
+                <MyPageMenuBtnFocus>내 캐릭터</MyPageMenuBtnFocus>
+              ) : (
+                <MyPageMenuBtn onClick={() => setCurMenu("character")}>내 캐릭터</MyPageMenuBtn>
+              )}
+              {curMenu === "blog" ? (
+                <MyPageMenuBtnFocus>내가 쓴 글</MyPageMenuBtnFocus>
+              ) : (
+                <MyPageMenuBtn onClick={() => setCurMenu("blog")}>내가 쓴 글</MyPageMenuBtn>
+              )}
+              {curMenu === "delete" ? (
+                <MyPageMenuBtnFocus>회원 탈퇴</MyPageMenuBtnFocus>
+              ) : (
+                <MyPageMenuBtn onClick={() => setCurMenu("delete")}>회원 탈퇴</MyPageMenuBtn>
+              )}
+            </MyPageMenu>
             {curMenu === "profile" ? (
-              <MyPageMenuBtnFocus>프로필</MyPageMenuBtnFocus>
-            ) : (
-              <MyPageMenuBtn onClick={() => setCurMenu("profile")}>프로필</MyPageMenuBtn>
-            )}
-            {curMenu === "character" ? (
-              <MyPageMenuBtnFocus>내 캐릭터</MyPageMenuBtnFocus>
-            ) : (
-              <MyPageMenuBtn onClick={() => setCurMenu("character")}>내 캐릭터</MyPageMenuBtn>
-            )}
-            {curMenu === "blog" ? (
-              <MyPageMenuBtnFocus>내가 쓴 글</MyPageMenuBtnFocus>
-            ) : (
-              <MyPageMenuBtn onClick={() => setCurMenu("blog")}>내가 쓴 글</MyPageMenuBtn>
-            )}
-            {curMenu === "delete" ? (
-              <MyPageMenuBtnFocus>회원 탈퇴</MyPageMenuBtnFocus>
-            ) : (
-              <MyPageMenuBtn onClick={() => setCurMenu("delete")}>회원 탈퇴</MyPageMenuBtn>
-            )}
-          </MyPageMenu>
-          {curMenu === "profile" ? (
-            <MyPageContent>
-              <MyPageContentTitleContainer>
-                <MyPageContentTitle>내 프로필</MyPageContentTitle>
-                {!isEdit ? (
-                  <MyPageProfileEdit onClick={handleEditBtnClick}>
-                    <img src={editWhite} />
-                    <div>프로필 정보 수정하기</div>
-                  </MyPageProfileEdit>
-                ) : null}
-              </MyPageContentTitleContainer>
-              <form onSubmit={handleSubmit(handleEditClick)}>
-                <MyPageProfileNicknameInfo>
-                  <MyPageNicknameContainer>
-                    <div>닉네임</div>
-                    {!isEdit ? (
-                      <div>{nickname}</div>
-                    ) : (
-                      <div>
-                        <input
-                          type="text"
-                          {...register("nickname", { required: "닉네임을 입력해주세요." })}
-                        ></input>
-                      </div>
-                    )}
-                  </MyPageNicknameContainer>
-                  {errors?.nickname ? (
-                    <MyPageWarning>{errors.nickname.message}</MyPageWarning>
+              <MyPageContent>
+                <MyPageContentTitleContainer>
+                  <MyPageContentTitle>내 프로필</MyPageContentTitle>
+                  {!isEdit ? (
+                    <MyPageProfileEdit onClick={handleEditBtnClick}>
+                      <img src={editWhite} />
+                      <div>프로필 정보 수정하기</div>
+                    </MyPageProfileEdit>
                   ) : null}
-                </MyPageProfileNicknameInfo>
-                <MyPageProfileInfo>
-                  <div>이메일</div>
-                  <div>{email}</div>
-                </MyPageProfileInfo>
-                <MyPageProfileInfo>
-                  <div>비밀번호</div>
-                  {!isEdit ? (
-                    <img src={lock} />
-                  ) : (
-                    <MyPagePasswordFlexBox>
-                      <MyPageInputPasswordCon>
-                        <input
-                          type={isHidePassword ? "password" : "text"}
-                          {...register("password", {
-                            required: "비밀번호를 입력해주세요.",
-                            minLength: {
-                              value: 8,
-                              message: "8자리 이상의 비밀번호를 사용해주세요.",
-                            },
-                          })}
-                        ></input>
-                        {isHidePassword ? (
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="passwordShow"
-                            onClick={() => setIsHidePassword(false)}
-                          >
-                            <path
-                              d="M12 5C15.679 5 20.162 7.417 21.73 10.901C21.876 11.229 22 11.611 22 12C22 12.388 21.877 12.771 21.73 13.099C20.161 16.583 15.678 19 12 19C8.321 19 3.838 16.583 2.27 13.099C2.124 12.77 2 12.389 2 12C2 11.612 2.123 11.229 2.27 10.901C3.839 7.417 8.322 5 12 5ZM12 8C10.9391 8 9.92172 8.42143 9.17157 9.17157C8.42143 9.92172 8 10.9391 8 12C8 13.0609 8.42143 14.0783 9.17157 14.8284C9.92172 15.5786 10.9391 16 12 16C13.0609 16 14.0783 15.5786 14.8284 14.8284C15.5786 14.0783 16 13.0609 16 12C16 10.9391 15.5786 9.92172 14.8284 9.17157C14.0783 8.42143 13.0609 8 12 8ZM12 10C12.5304 10 13.0391 10.2107 13.4142 10.5858C13.7893 10.9609 14 11.4696 14 12C14 12.5304 13.7893 13.0391 13.4142 13.4142C13.0391 13.7893 12.5304 14 12 14C11.4696 14 10.9609 13.7893 10.5858 13.4142C10.2107 13.0391 10 12.5304 10 12C10 11.4696 10.2107 10.9609 10.5858 10.5858C10.9609 10.2107 11.4696 10 12 10Z"
-                              fill="black"
-                            />
-                          </svg>
-                        ) : (
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="passwordHide"
-                            onClick={() => setIsHidePassword(true)}
-                          >
-                            <path
-                              d="M6.99951 6.362C8.51195 5.46328 10.2402 4.99251 11.9995 5C18.3065 5 21.3665 10.683 21.9095 11.808C21.9695 11.931 21.9695 12.069 21.9095 12.193C21.5575 12.921 20.1535 15.555 17.4995 17.324M13.9995 18.8C13.3413 18.9341 12.6712 19.0012 11.9995 19C5.69251 19 2.63251 13.317 2.08951 12.192C2.06017 12.1319 2.04492 12.0659 2.04492 11.999C2.04492 11.9321 2.06017 11.8661 2.08951 11.806C2.30851 11.354 2.92951 10.174 3.99951 8.921M9.99951 9.764C10.571 9.2531 11.3165 8.98037 12.0828 9.00182C12.8491 9.02326 13.5781 9.33725 14.1202 9.87932C14.6623 10.4214 14.9762 11.1504 14.9977 11.9167C15.0191 12.683 14.7464 13.4285 14.2355 14M2.99951 3L20.9995 21"
-                              stroke="black"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            />
-                          </svg>
-                        )}
-                      </MyPageInputPasswordCon>
-                      {errors?.password ? (
-                        <MyPageWarning>{errors.password.message}</MyPageWarning>
-                      ) : null}
-                    </MyPagePasswordFlexBox>
-                  )}
-                </MyPageProfileInfo>
-                <MyPageProfileIntro>
-                  <div>자기소개</div>
-                  {!isEdit ? (
-                    <div>{intro}</div>
-                  ) : (
-                    <textarea
-                      {...register("intro", { required: "자기소개를 입력해주세요." })}
-                    ></textarea>
-                  )}
-                  {errors?.intro ? <MyPageWarning>{errors.intro.message}</MyPageWarning> : null}
-                </MyPageProfileIntro>
-                {isEdit ? (
+                </MyPageContentTitleContainer>
+                <form onSubmit={handleSubmit(handleEditClick)}>
+                  <MyPageProfileNicknameInfo>
+                    <MyPageNicknameContainer>
+                      <div>닉네임</div>
+                      {!isEdit ? (
+                        <div>{nickname}</div>
+                      ) : (
+                        <div>
+                          <input
+                            type="text"
+                            {...register("nickname", { required: "닉네임을 입력해주세요." })}
+                          ></input>
+                        </div>
+                      )}
+                    </MyPageNicknameContainer>
+                    {errors?.nickname ? (
+                      <MyPageWarning>{errors.nickname.message}</MyPageWarning>
+                    ) : null}
+                  </MyPageProfileNicknameInfo>
+                  <MyPageProfileInfo>
+                    <div>이메일</div>
+                    <div>{email}</div>
+                  </MyPageProfileInfo>
+                  <MyPageProfileInfo>
+                    <div>비밀번호</div>
+                    {!isEdit ? (
+                      <img src={lock} />
+                    ) : (
+                      <MyPagePasswordFlexBox>
+                        <MyPageInputPasswordCon>
+                          <input
+                            type={isHidePassword ? "password" : "text"}
+                            {...register("password", {
+                              required: "비밀번호를 입력해주세요.",
+                              minLength: {
+                                value: 8,
+                                message: "8자리 이상의 비밀번호를 사용해주세요.",
+                              },
+                            })}
+                          ></input>
+                          {isHidePassword ? (
+                            <svg
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="passwordShow"
+                              onClick={() => setIsHidePassword(false)}
+                            >
+                              <path
+                                d="M12 5C15.679 5 20.162 7.417 21.73 10.901C21.876 11.229 22 11.611 22 12C22 12.388 21.877 12.771 21.73 13.099C20.161 16.583 15.678 19 12 19C8.321 19 3.838 16.583 2.27 13.099C2.124 12.77 2 12.389 2 12C2 11.612 2.123 11.229 2.27 10.901C3.839 7.417 8.322 5 12 5ZM12 8C10.9391 8 9.92172 8.42143 9.17157 9.17157C8.42143 9.92172 8 10.9391 8 12C8 13.0609 8.42143 14.0783 9.17157 14.8284C9.92172 15.5786 10.9391 16 12 16C13.0609 16 14.0783 15.5786 14.8284 14.8284C15.5786 14.0783 16 13.0609 16 12C16 10.9391 15.5786 9.92172 14.8284 9.17157C14.0783 8.42143 13.0609 8 12 8ZM12 10C12.5304 10 13.0391 10.2107 13.4142 10.5858C13.7893 10.9609 14 11.4696 14 12C14 12.5304 13.7893 13.0391 13.4142 13.4142C13.0391 13.7893 12.5304 14 12 14C11.4696 14 10.9609 13.7893 10.5858 13.4142C10.2107 13.0391 10 12.5304 10 12C10 11.4696 10.2107 10.9609 10.5858 10.5858C10.9609 10.2107 11.4696 10 12 10Z"
+                                fill="black"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="passwordHide"
+                              onClick={() => setIsHidePassword(true)}
+                            >
+                              <path
+                                d="M6.99951 6.362C8.51195 5.46328 10.2402 4.99251 11.9995 5C18.3065 5 21.3665 10.683 21.9095 11.808C21.9695 11.931 21.9695 12.069 21.9095 12.193C21.5575 12.921 20.1535 15.555 17.4995 17.324M13.9995 18.8C13.3413 18.9341 12.6712 19.0012 11.9995 19C5.69251 19 2.63251 13.317 2.08951 12.192C2.06017 12.1319 2.04492 12.0659 2.04492 11.999C2.04492 11.9321 2.06017 11.8661 2.08951 11.806C2.30851 11.354 2.92951 10.174 3.99951 8.921M9.99951 9.764C10.571 9.2531 11.3165 8.98037 12.0828 9.00182C12.8491 9.02326 13.5781 9.33725 14.1202 9.87932C14.6623 10.4214 14.9762 11.1504 14.9977 11.9167C15.0191 12.683 14.7464 13.4285 14.2355 14M2.99951 3L20.9995 21"
+                                stroke="black"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          )}
+                        </MyPageInputPasswordCon>
+                        {errors?.password ? (
+                          <MyPageWarning>{errors.password.message}</MyPageWarning>
+                        ) : null}
+                      </MyPagePasswordFlexBox>
+                    )}
+                  </MyPageProfileInfo>
+                  <MyPageProfileIntro>
+                    <div>자기소개</div>
+                    {!isEdit ? (
+                      <div>{intro}</div>
+                    ) : (
+                      <textarea
+                        {...register("intro", { required: "자기소개를 입력해주세요." })}
+                      ></textarea>
+                    )}
+                    {errors?.intro ? <MyPageWarning>{errors.intro.message}</MyPageWarning> : null}
+                  </MyPageProfileIntro>
+                  {isEdit ? (
+                    <MyPageEditBtnContainer>
+                      <MyPageEditBtn>수정</MyPageEditBtn>
+                      <MyPageCancelBtn onClick={handleCancleClick}>취소</MyPageCancelBtn>
+                    </MyPageEditBtnContainer>
+                  ) : null}
+                </form>
+              </MyPageContent>
+            ) : curMenu === "character" ? (
+              <MyPageContent>
+                <MyPageContentTitleContainer>
+                  <MyPageContentTitle>내 캐릭터</MyPageContentTitle>
+                  {!isPhotoEdit ? (
+                    <MyPageProfileEdit onClick={handlePhotoEditBtn}>
+                      <img src={changeIcon} />
+                      <div>캐릭터 변경하기</div>
+                    </MyPageProfileEdit>
+                  ) : null}
+                </MyPageContentTitleContainer>
+                <MyPageCharacterContainer>
+                  {photoList.map((el) => {
+                    return (
+                      <MyPageCharacter
+                        className={isPhotoEdit ? "focus" : ""}
+                        onClick={() => handlePhotoChange(el)}
+                      >
+                        <CharacterSquare src={el.imageUrl} />
+                        {el.unlocked ? <div>{el.name}</div> : null}
+                      </MyPageCharacter>
+                    );
+                  })}
+                </MyPageCharacterContainer>
+                {isPhotoEdit ? (
                   <MyPageEditBtnContainer>
-                    <MyPageEditBtn>수정</MyPageEditBtn>
-                    <MyPageCancelBtn onClick={handleCancleClick}>취소</MyPageCancelBtn>
+                    <MyPageEditBtn onClick={handlePhotoEdit}>변경하기</MyPageEditBtn>
+                    <MyPageCancelBtn onClick={handlePhotoCancel}>취소</MyPageCancelBtn>
                   </MyPageEditBtnContainer>
                 ) : null}
-              </form>
-            </MyPageContent>
-          ) : curMenu === "character" ? (
-            <MyPageContent>
-              <MyPageContentTitleContainer>
-                <MyPageContentTitle>내 캐릭터</MyPageContentTitle>
-                {!isPhotoEdit ? (
-                  <MyPageProfileEdit onClick={handlePhotoEditBtn}>
-                    <img src={changeIcon} />
-                    <div>캐릭터 변경하기</div>
-                  </MyPageProfileEdit>
-                ) : null}
-              </MyPageContentTitleContainer>
-              <MyPageCharacterContainer>
-                {photoList.map((el) => {
-                  return (
-                    <MyPageCharacter
-                      className={isPhotoEdit ? "focus" : ""}
-                      onClick={() => handlePhotoChange(el)}
-                    >
-                      <CharacterSquare src={el.imageUrl} />
-                      {el.unlocked ? <div>{el.name}</div> : null}
-                    </MyPageCharacter>
-                  );
-                })}
-              </MyPageCharacterContainer>
-              {isPhotoEdit ? (
-                <MyPageEditBtnContainer>
-                  <MyPageEditBtn onClick={handlePhotoEdit}>변경하기</MyPageEditBtn>
-                  <MyPageCancelBtn onClick={handlePhotoCancel}>취소</MyPageCancelBtn>
-                </MyPageEditBtnContainer>
-              ) : null}
-            </MyPageContent>
-          ) : curMenu === "blog" ? (
-            <MyPageContent>
-              <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
-              <MyPageBlogList>
-                {/* {data.map(() => (
+              </MyPageContent>
+            ) : curMenu === "blog" ? (
+              <MyPageContent>
+                <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
+                <MyPageBlogList>
+                  {/* {data.map(() => (
                   <Card></Card>
                 ))} */}
-              </MyPageBlogList>
-              <MyPagePaginationContainer>
-                <Pagination
-                  currentPage={currentPage}
-                  onPrevPage={onPrevPageHandler}
-                  totalPages={totalPages}
-                  onPageChange={onPageChangeHandler}
-                  onNextPage={onNextPageHandler}
-                />
-              </MyPagePaginationContainer>
-            </MyPageContent>
-          ) : (
-            <MyPageContent>
-              <MyPageContentTitle>회원 탈퇴</MyPageContentTitle>
-              <MyPageAccountDeleteCon>
-                <button onClick={handleAccountDelete}>회원 탈퇴하기</button>
-              </MyPageAccountDeleteCon>
-              <MyPageAccountDeleteWarning>
-                * 회원 탈퇴 시, 모든 회원 정보는 서버로부터 삭제됩니다. 해당 작업은 되돌릴 수 없으니
-                주의해주세요.
-              </MyPageAccountDeleteWarning>
-            </MyPageContent>
-          )}
-        </MyPageBottom>
-      </MyPageContainer>
-    </MyPageBg>
+                </MyPageBlogList>
+                <MyPagePaginationContainer>
+                  <Pagination
+                    currentPage={currentPage}
+                    onPrevPage={onPrevPageHandler}
+                    totalPages={totalPages}
+                    onPageChange={onPageChangeHandler}
+                    onNextPage={onNextPageHandler}
+                  />
+                </MyPagePaginationContainer>
+              </MyPageContent>
+            ) : (
+              <MyPageContent>
+                <MyPageContentTitle>회원 탈퇴</MyPageContentTitle>
+                <MyPageAccountDeleteCon>
+                  <button onClick={handleAccountDelete}>회원 탈퇴하기</button>
+                </MyPageAccountDeleteCon>
+                <MyPageAccountDeleteWarning>
+                  * 회원 탈퇴 시, 모든 회원 정보는 서버로부터 삭제됩니다. 해당 작업은 되돌릴 수
+                  없으니 주의해주세요.
+                </MyPageAccountDeleteWarning>
+              </MyPageContent>
+            )}
+          </MyPageBottom>
+        </MyPageContainer>
+      </MyPageBg>
+    </>
   );
 };
 
@@ -755,4 +766,22 @@ const MyPageAccountDeleteCon = styled.div`
 
 const MyPageAccountDeleteWarning = styled.span`
   font-size: 14px;
+`;
+
+const MyPageLoading = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100px;
+    height: 100px;
+  }
 `;

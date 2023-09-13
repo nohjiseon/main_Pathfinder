@@ -58,7 +58,16 @@ const Login = (): JSX.Element => {
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY_K;
     const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI_K;
 
-    const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}/kakao&response_type=code`;
+    const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+    window.location.href = link;
+  }
+
+  function handleGoogleLogin(): void {
+    const REST_API_KEY = process.env.REACT_APP_REST_API_KEY_G;
+    const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI_G;
+
+    const link = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email`;
 
     window.location.href = link;
   }
@@ -158,7 +167,7 @@ const Login = (): JSX.Element => {
         </LoginLine>
         <LoginSocialCon>
           <LoginSocial>
-            <img src={Google} />
+            <img src={Google} onClick={handleGoogleLogin} />
           </LoginSocial>
           <LoginSocial>
             <img src={Github} />
