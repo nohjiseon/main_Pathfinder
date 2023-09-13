@@ -505,10 +505,12 @@ const MyPageMenuBtn = styled.div`
   padding-bottom: 15px;
   font-size: 20px;
   font-weight: 600;
+  cursor: pointer;
 `;
 
 const MyPageMenuBtnFocus = styled(MyPageMenuBtn)`
   border-bottom: 3px solid #416dc9;
+  cursor: pointer;
 `;
 
 const MyPageContent = styled.div`
