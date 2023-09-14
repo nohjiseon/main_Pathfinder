@@ -77,6 +77,47 @@ const StyledModal = styled.div`
       }
     }
   }
+
+  .consent-con {
+    margin: 20px;
+    height: 500px;
+    overflow: scroll;
+  }
+
+  .consent-intro {
+    margin-bottom: 5px;
+  }
+
+  .consent-link {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .consent-h1 {
+    margin: 30px 0 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .consent-h2 {
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .consent-h3 {
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  li {
+    text-indent: -18px;
+    margin-left: 18px;
+  }
+
+  .consent-indent {
+    margin: 2px 0 2px 37px;
+  }
 `;
 
 const Modal = ({ children }: ModalProp): JSX.Element => {

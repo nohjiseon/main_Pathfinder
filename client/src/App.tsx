@@ -11,6 +11,7 @@ import WritePage from "./pages/WritePage";
 import AreaMap from "./pages/AreaMap";
 import Recommend from "./pages/Recommend";
 import WriteEdit from "./pages/WriteEdit";
+import Oauth2 from "./pages/Oauth2";
 
 function App() {
   const routes: RouteObject[] = [
@@ -53,6 +54,10 @@ function App() {
         {
           path: "/write-edit/:id",
           element: <WriteEdit />,
+        },
+        {
+          path: "/oauth2/:providerId",
+          element: <Oauth2 />,
         },
       ],
     },
