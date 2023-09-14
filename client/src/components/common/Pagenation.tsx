@@ -1,5 +1,6 @@
 import styled from "styled-components";
-// import { COMMON_CSS } from "../../constants/common_css";
+import Prev from "../../assets/images/prev.png";
+import Next from "../../assets/images/next.png";
 
 interface paginationProp {
   onPrevPage: () => void;
@@ -10,24 +11,18 @@ interface paginationProp {
 }
 
 const StyledPagination = styled.div`
-  padding: 1.5rem;
+  padding: 16px 0;
   display: flex;
   flex-flow: row;
-  gap: 0.25rem;
+  gap: 16px;
 
   button {
-    background: #ffffff;
-    border: 1px solid black;
-    padding: 0 0.5rem;
-    line-height: 1.5rem;
-    border-radius: 4px;
-    color: black;
-
-    &:hover,
-    &.active {
-      background: black;
-      border: 1px solid black;
-      color: #fff;
+    color: #444;
+    font-size: 18px;
+    border-bottom: 1px solid transparent;
+    &:hover:not(:first-child, :last-child),
+    &.active:not(:first-child, :last-child) {
+      border-color: #444;
     }
 
     &.disabled {
@@ -54,7 +49,7 @@ const Pagination = ({
   return (
     <StyledPagination>
       <button onClick={onPrevPage} className={currentPage === 1 ? "disabled" : ""}>
-        prev
+        <img src={Prev} alt="이전 페이지" />
       </button>
       {visiblePageNumbers.map((pageNumber) => (
         <button
@@ -67,7 +62,7 @@ const Pagination = ({
       ))}
       {totalPages > 0 && (
         <button onClick={onNextPage} className={currentPage === totalPages ? "disabled" : ""}>
-          next
+          <img src={Next} alt="다음 페이지" />
         </button>
       )}
     </StyledPagination>
