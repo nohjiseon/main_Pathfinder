@@ -27,7 +27,7 @@ jobs:
 
       - name: Build with Gradle
         working-directory: server
-        run: ./gradlew build
+        run: ./gradlew clean build
 
       - name: Docker build
         run: |
@@ -43,15 +43,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Start SSH key
+      - name: Set up SSH key
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
 
+      - name: Set up SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
       - name: Deploy to Server via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com <<EOF
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com <<EOF
             if sudo docker ps -a --format '{{.Names}}' | grep -q '^server$'; then
               sudo docker stop server
               sudo docker rm server
