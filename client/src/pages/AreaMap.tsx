@@ -109,10 +109,11 @@ const AreaMap = (): JSX.Element => {
       return null;
     }
   };
+  console.log(areaName);
 
   return (
     <MainCon>
-      {areaName !== null && renderWeatherComponent()}
+      {areaName !== "전체 지역" && areaName !== null && renderWeatherComponent()}
       {areaName && <List></List>}
 
       <SubWave />
