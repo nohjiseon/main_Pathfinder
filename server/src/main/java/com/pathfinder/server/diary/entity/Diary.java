@@ -42,10 +42,10 @@ public class Diary extends Auditable {
     private long recommendedCount;
 
     @Column
-    private int views;
+    private Integer views = 0;
 
     @Column
-    private int scrapCount;
+    private Integer scrapCount = 0;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
