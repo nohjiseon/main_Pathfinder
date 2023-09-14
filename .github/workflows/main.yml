@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
       - name: Grant execute permission for gradlew
         run: chmod +x server/gradlew
       - name: Build with Gradle
@@ -29,8 +29,8 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker build -t pathfinder server/
-          docker tag spring-cicd ${{ secrets.DOCKER_HUB_USERNAME }}/spring-cicd:${GITHUB_SHA::7}
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/spring-cicd:${GITHUB_SHA::7}
+          docker tag pathfinder ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder:${GITHUB_SHA::7}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder:${GITHUB_SHA::7}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
