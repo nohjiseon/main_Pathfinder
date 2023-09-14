@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import WritePage from "./pages/WritePage";
 import AreaMap from "./pages/AreaMap";
 import Recommend from "./pages/Recommend";
+import WriteEdit from "./pages/WriteEdit";
 import Oauth2 from "./pages/Oauth2";
 
 function App() {
@@ -49,6 +50,10 @@ function App() {
         {
           path: "/recommend",
           element: <Recommend />,
+        },
+        {
+          path: "/write-edit/:id",
+          element: <WriteEdit />,
         },
         {
           path: "/oauth2/:providerId",

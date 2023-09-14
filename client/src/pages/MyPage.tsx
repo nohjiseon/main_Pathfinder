@@ -11,6 +11,9 @@ import loading from "../assets/images/loading.gif";
 import changeIcon from "../assets/images/change-icon.png";
 import editWhite from "../assets/images/edit-white.png";
 import lock from "../assets/images/lock.png";
+import { diaryListState } from "../atoms/atoms";
+import { Diary, DiaryData } from "../types/types";
+import { useFetch } from "../hooks/useFetch";
 
 const MyPage = (): JSX.Element => {
   const [curMenu, setCurMenu] = useState<string>("profile");
@@ -47,12 +50,14 @@ const MyPage = (): JSX.Element => {
     onNextPageHandler,
   } = usePagination();
 
+  const url = `/diary/member/${memberId}?page=${currentPage}`;
+  const { fetchData, data } = useFetch<Diary>(diaryListState, url);
+
   useEffect(() => {
-    setTotalPages(10); // 총 페이지 몇개인지 임의로 정한거라 수정 필요함
-  }, []);
-
-  // const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
+    // 컴포넌트가 처음 렌더링될 때와 fetchData 호출
+    setTotalPages(data.pageInfo.totalPages);
+    fetchData();
+  }, [currentPage]); // currentPage가 변경될 때 fetchData 호출
   interface Form {
     nickname: string;
     password: string;
@@ -399,6 +404,67 @@ const MyPage = (): JSX.Element => {
                     <MyPageCancelBtn onClick={handlePhotoCancel}>취소</MyPageCancelBtn>
                   </MyPageEditBtnContainer>
                 ) : null}
+              </form>
+            </MyPageContent>
+          ) : curMenu === "character" ? (
+            <MyPageContent>
+              <MyPageContentTitleContainer>
+                <MyPageContentTitle>내 캐릭터</MyPageContentTitle>
+                {!isPhotoEdit ? (
+                  <MyPageProfileEdit onClick={handlePhotoEditBtn}>
+                    <img src={changeIcon} />
+                    <div>캐릭터 변경하기</div>
+                  </MyPageProfileEdit>
+                ) : null}
+              </MyPageContentTitleContainer>
+              <MyPageCharacterContainer>
+                {photoList.map((el) => {
+                  return (
+                    <MyPageCharacter onClick={() => handlePhotoChange(el)}>
+                      <CharacterSquare src={el.imageUrl} />
+                      {el.unlocked ? <div>{el.name}</div> : null}
+                    </MyPageCharacter>
+                  );
+                })}
+              </MyPageCharacterContainer>
+              {isPhotoEdit ? (
+                <MyPageEditBtnContainer>
+                  <MyPageEditBtn onClick={handlePhotoEdit}>변경하기</MyPageEditBtn>
+                  <MyPageCancelBtn onClick={handlePhotoCancel}>취소</MyPageCancelBtn>
+                </MyPageEditBtnContainer>
+              ) : null}
+            </MyPageContent>
+          ) : curMenu === "blog" ? (
+            <MyPageContent>
+              <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
+              <MyPageBlogList>
+                {data?.data.map((el: DiaryData) => <Card key={el.diaryId} diaryData={el}></Card>)}
+              </MyPageBlogList>
+              <MyPagePaginationContainer>
+                <Pagination
+                  currentPage={currentPage}
+                  onPrevPage={onPrevPageHandler}
+                  totalPages={totalPages}
+                  onPageChange={onPageChangeHandler}
+                  onNextPage={onNextPageHandler}
+                />
+              </MyPagePaginationContainer>
+            </MyPageContent>
+          ) : (
+            <MyPageContent>
+              <MyPageContentTitle>회원 탈퇴</MyPageContentTitle>
+              <MyPageAccountDeleteCon>
+                <button onClick={handleAccountDelete}>회원 탈퇴하기</button>
+              </MyPageAccountDeleteCon>
+              <MyPageAccountDeleteWarning>
+                * 회원 탈퇴 시, 모든 회원 정보는 서버로부터 삭제됩니다. 해당 작업은 되돌릴 수 없으니
+                주의해주세요.
+              </MyPageAccountDeleteWarning>
+            </MyPageContent>
+          )}
+        </MyPageBottom>
+      </MyPageContainer>
+    </MyPageBg>
               </MyPageContent>
             ) : curMenu === "blog" ? (
               <MyPageContent>

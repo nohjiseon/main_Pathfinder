@@ -51,6 +51,7 @@ const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
   const imgRegex = /<img *?src=["'](.*?)["'].*?>/g;
   const matches = diaryData.content.match(imgRegex);
   let firstThumbnail = null;
+  console.log(diaryData);
   if (matches && matches.length > 0) {
     const firstMatch = matches[0];
     const srcMatch = firstMatch.match(/src=["'](.*?)["']/);
@@ -60,25 +61,23 @@ const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
   }
   return (
     <CardBox>
-      <li>
-        <Link to={`/${diaryData.diaryId}`}>
-          <div className="cardContent">
-            <div className="img-container">
-              <img className="image" src={firstThumbnail ? firstThumbnail : empty} alt="" />
-            </div>
-            <div className="content">
-              <h2>{diaryData.title}</h2>
-              <div dangerouslySetInnerHTML={{ __html: resultContent }}></div>
-              <div className="information">
-                <div>{diaryData.name}</div>
-                <div>{diaryData.recommendedCount}</div>
-                <div>{diaryData.views}</div>
-                <div>{getFormattedDate(diaryData.modifiedAt)}</div>
-              </div>
+      <Link to={`/${diaryData.diaryId}`}>
+        <div className="cardContent">
+          <div className="img-container">
+            <img className="image" src={firstThumbnail ? firstThumbnail : empty} alt="" />
+          </div>
+          <div className="content">
+            <h2>{diaryData.title}</h2>
+            <div dangerouslySetInnerHTML={{ __html: resultContent }}></div>
+            <div className="information">
+              <div>{diaryData.name}</div>
+              <div>{diaryData.recommendedCount}</div>
+              <div>{diaryData.views}</div>
+              <div>{getFormattedDate(diaryData.modifiedAt)}</div>
             </div>
           </div>
-        </Link>
-      </li>
+        </div>
+      </Link>
     </CardBox>
   );
 };
