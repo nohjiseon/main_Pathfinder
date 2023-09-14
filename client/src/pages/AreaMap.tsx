@@ -2,6 +2,10 @@ import { keyframes, styled } from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import SubWave from "../components/common/SubWave";
+import Rain from "../components/Rain";
+import Clear from "../components/Clear";
+import Clouds from "../components/Clouds";
+import Snow from "../components/Snow";
 
 import MapGuide from "../assets/images/map_guide.png";
 import AreaAll from "../assets/images/area_all.png";
@@ -27,9 +31,11 @@ const AreaMap = (): JSX.Element => {
   const [weather, setWeather] = useState("");
   const setArea = useSetRecoilState(areaState);
   const areaName = useRecoilValue(areaState);
+
   useEffect(() => {
     getAreaWeather();
   }, [areaName]);
+
   // 클릭한 지역을 활성화하고 지역 리스트를 불러오는 함수
   const handleAreaClick = (area: string) => {
     setArea(area);
@@ -86,8 +92,29 @@ const AreaMap = (): JSX.Element => {
     }
   }
 
+  const renderWeatherComponent = () => {
+    if (weather === null) {
+      return null; // 날씨 정보가 없는 경우 아무것도 표시하지 않음
+    }
+
+    if (weather === "Rain") {
+      return <Rain />;
+    } else if (weather === "Clear") {
+      return <Clear />;
+    } else if (weather === "Clouds") {
+      return <Clouds />;
+    } else if (weather === "Snow") {
+      return <Snow />;
+    } else {
+      return null;
+    }
+  };
+  console.log(areaName);
+
   return (
     <MainCon>
+      {/* <Rain></Rain> */}
+      {areaName !== "전체 지역" && areaName !== null && renderWeatherComponent()}
       {areaName && <List></List>}
 
       <SubWave />
@@ -217,6 +244,7 @@ const AreaBox = styled.div`
   left: calc(50% - 150px);
   width: 500px;
   height: 770px;
+  z-index: 2;
 `;
 
 const Bounce = keyframes`
@@ -230,6 +258,7 @@ const AlArea = styled.div`
   left: 0;
   top: calc(50% - 170px);
   animation: ${Bounce} 5s infinite;
+  z-index: 2;
 `;
 
 const Area = styled.div`

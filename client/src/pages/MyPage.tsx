@@ -506,14 +506,14 @@ const MyPage = (): JSX.Element => {
 export default MyPage;
 
 const MyPageBg = styled.main`
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 50px);
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f3f3f3;
   margin-top: -70px;
-  padding-top: 120px;
+  padding: 120px 20px 0;
 `;
 
 const MyPageContainer = styled.div`
@@ -578,11 +578,11 @@ const MyPageMenu = styled.div`
   border-bottom: 1px solid #e7e7e7;
 `;
 
-const MyPageMenuBtn = styled.div`
+const MyPageMenuBtn = styled.button`
   padding-bottom: 15px;
   font-size: 20px;
   font-weight: 600;
-  cursor: pointer;
+  color: #444;
 `;
 
 const MyPageMenuBtnFocus = styled(MyPageMenuBtn)`
@@ -591,7 +591,7 @@ const MyPageMenuBtnFocus = styled(MyPageMenuBtn)`
 `;
 
 const MyPageContent = styled.div`
-  margin: 40px 40px;
+  margin: 40px;
 `;
 
 const MyPageContentTitleContainer = styled.div`
@@ -606,12 +606,13 @@ const MyPageContentTitle = styled.div`
   font-weight: 500;
 `;
 
-const MyPageProfileEdit = styled.div`
-  padding: 5px 20px;
+const MyPageProfileEdit = styled.button`
+  padding: 0 12px;
+  height: 30px;
+  line-height: 30px;
   border-radius: 4px;
   background-color: #ffc03f;
   color: #ffffff;
-  font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -630,7 +631,7 @@ const MyPageProfileInfo = styled.div`
   align-items: center;
   margin-top: 30px;
   padding: 0 20px 20px 20px;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid #e7e7e7;
 
   div:first-child {
     font-size: 20px;
@@ -656,7 +657,7 @@ const MyPageProfileNicknameInfo = styled.div`
   align-items: flex-end;
   margin-top: 30px;
   padding: 0 20px 20px 20px;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid #e7e7e7;
 `;
 
 const MyPageNicknameContainer = styled(MyPageProfileInfo)`
@@ -756,17 +757,18 @@ const MyPageEditBtn = styled.button`
   padding: 10px 35px;
 `;
 
-const MyPageCancelBtn = styled.div`
+const MyPageCancelBtn = styled.button`
   font-size: 20px;
   background-color: #ffffff;
   border-radius: 4px;
   padding: 10px 35px;
   box-shadow: 0 0 0 1px #bebebe inset;
+  color: #444;
 `;
 
 const MyPageCharacterContainer = styled.div`
   width: 100%;
-  margin-top: 30px;
+  margin-top: -10px;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
@@ -787,17 +789,13 @@ const MyPageCharacter = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  padding: 15px 20px;
-
-  div {
-    font-size: 16px;
-    margin-top: 10px;
+  padding: 8px 20px;
   }
 `;
 
 const CharacterSquare = styled.img`
-  width: 130px;
-  height: 130px;
+  width: 120px;
+  height: 120px;
 `;
 
 const MyPageBlogList = styled.ul`
