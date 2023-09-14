@@ -5,6 +5,7 @@ import com.pathfinder.server.audit.Auditable;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.recommend.entity.Recommend;
 //import com.pathfinder.server.scrap.entity.Scrap;
+import com.pathfinder.server.scrap.entity.Scrap;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,8 +44,8 @@ public class Diary extends Auditable {
     @Column
     private int views;
 
-//    @Column
-//    private int scrapCount;
+    @Column
+    private int scrapCount;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
@@ -53,8 +54,8 @@ public class Diary extends Auditable {
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
-//    private List<Scrap> scraps = new ArrayList<>();
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
+    private List<Scrap> scraps = new ArrayList<>();
 
     public void setMember(Member member) {
         this.member = member;

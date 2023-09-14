@@ -3,6 +3,7 @@ package com.pathfinder.server.member.entity;
 import com.pathfinder.server.diary.entity.Diary;
 import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.reward.entity.Reward;
+import com.pathfinder.server.scrap.entity.Scrap;
 import lombok.*;
 
 import javax.persistence.*;
@@ -51,6 +52,16 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Reward> rewards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Scrap> scraps = new ArrayList<>();
+
+    public void setScrap(Scrap scrap) {
+        scraps.add(scrap);
+        if(scrap.getMember() != this) {
+            scrap.setMember(this);
+        }
+    }
 
     public void setRecommend(Recommend recommend) {
         recommends.add(recommend);
