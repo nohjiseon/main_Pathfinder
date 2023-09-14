@@ -14,16 +14,13 @@ const Oauth2 = (): JSX.Element => {
 
   useEffect(() => {
     axios
-      .get(`http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/oauth`, {
-        params: {
-          provider: providerId,
-          code: code,
-        },
-      })
+      .get(
+        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/oauth/kakao?code=${code}`,
+      )
       .then((res) => {
         console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("err : " + err));
     console.log("providerId : " + providerId);
     console.log("code : " + code);
   }, []);
