@@ -45,13 +45,13 @@ jobs:
 
       - name: Start SSH key
         env:
-          PRIVATE_KEYPRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: echo "$PRIVATE_KEY" > private_key.pem
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
 
       - name: Deploy to Server via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@your-ec2-ip-address <<EOF
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com <<EOF
             if sudo docker ps -a --format '{{.Names}}' | grep -q '^server$'; then
               sudo docker stop server
               sudo docker rm server
