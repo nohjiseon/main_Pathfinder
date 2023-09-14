@@ -2,6 +2,9 @@ export interface Diary {
   data: DiaryData[];
   pageInfo: PageInfo;
 }
+export interface DiaryDetail {
+  data: DiaryData;
+}
 export interface DiaryData {
   diaryId: number;
   createdAt: string;
@@ -13,6 +16,7 @@ export interface DiaryData {
   content: string;
   recommendedCount: number;
   views: number;
+  recommend: boolean;
 }
 
 export interface PageInfo {

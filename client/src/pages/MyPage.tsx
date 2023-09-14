@@ -10,6 +10,9 @@ import styled from "styled-components";
 import changeIcon from "../assets/images/change-icon.png";
 import editWhite from "../assets/images/edit-white.png";
 import lock from "../assets/images/lock.png";
+import { diaryListState } from "../atoms/atoms";
+import { Diary, DiaryData } from "../types/types";
+import { useFetch } from "../hooks/useFetch";
 
 const MyPage = (): JSX.Element => {
   const [curMenu, setCurMenu] = useState<string>("profile");
@@ -46,12 +49,14 @@ const MyPage = (): JSX.Element => {
     onNextPageHandler,
   } = usePagination();
 
+  const url = `/diary/member/${memberId}?page=${currentPage}`;
+  const { fetchData, data } = useFetch<Diary>(diaryListState, url);
+
   useEffect(() => {
-    setTotalPages(10); // 총 페이지 몇개인지 임의로 정한거라 수정 필요함
-  }, []);
-
-  // const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
+    // 컴포넌트가 처음 렌더링될 때와 fetchData 호출
+    setTotalPages(data.pageInfo.totalPages);
+    fetchData();
+  }, [currentPage]); // currentPage가 변경될 때 fetchData 호출
   interface Form {
     nickname: string;
     password: string;
@@ -380,9 +385,7 @@ const MyPage = (): JSX.Element => {
             <MyPageContent>
               <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
               <MyPageBlogList>
-                {/* {data.map(() => (
-                  <Card></Card>
-                ))} */}
+                {data?.data.map((el: DiaryData) => <Card key={el.diaryId} diaryData={el}></Card>)}
               </MyPageBlogList>
               <MyPagePaginationContainer>
                 <Pagination
