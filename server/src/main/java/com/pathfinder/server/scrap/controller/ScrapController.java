@@ -37,7 +37,7 @@ public class ScrapController {
     @GetMapping("/{member-id}")
     public ResponseEntity getScraps(@PathVariable("member-id") @Positive Long memberId,
                                     @RequestParam int page) {
-        Page<Scrap> pageScraps = scrapService.getScrapsByMember(memberId, page);
+        Page<Scrap> pageScraps = scrapService.getScrapsByMember(memberId, page-1);
 
         List<Scrap> scraps = pageScraps.getContent();
 
