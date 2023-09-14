@@ -16,7 +16,7 @@ const Oauth2 = (): JSX.Element => {
     axios
       .get(`http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/oauth`, {
         params: {
-          providerId: providerId,
+          provider: providerId,
           code: code,
         },
       })
