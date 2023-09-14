@@ -35,30 +35,34 @@ const SignUp = (): JSX.Element => {
   } = useForm<Form>();
 
   function SignUpSubmit(data: Form): void {
-    setIsLoading(true);
-    axios
-      .post(
-        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/signup`,
-        {
-          name: data.nickname,
-          email: data.email,
-          password: data.password,
-        },
-        { headers: { "Content-Type": "application/json" } },
-      )
-      .then(() => {
-        window.alert("회원가입이 완료되었습니다. 로그인 해주세요.");
-        setIsLoading(false);
-        navigate("/login");
-      })
-      .catch((err) => {
-        if (err.response.data.message === "Email already exists") {
-          alert("이미 존재하는 이메일입니다.");
-        } else if (err.response.data.message === "Name already exists") {
-          alert("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
-        }
-        setIsLoading(false);
-      });
+    if (isChecked === false) {
+      alert("약관에 동의하셔야 사이트 회원가입이 가능합니다.");
+    } else {
+      setIsLoading(true);
+      axios
+        .post(
+          `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/signup`,
+          {
+            name: data.nickname,
+            email: data.email,
+            password: data.password,
+          },
+          { headers: { "Content-Type": "application/json" } },
+        )
+        .then(() => {
+          window.alert("회원가입이 완료되었습니다. 로그인 해주세요.");
+          setIsLoading(false);
+          navigate("/login");
+        })
+        .catch((err) => {
+          if (err.response.data.message === "Email already exists") {
+            alert("이미 존재하는 이메일입니다.");
+          } else if (err.response.data.message === "Name already exists") {
+            alert("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+          }
+          setIsLoading(false);
+        });
+    }
   }
 
   const modalChildren: JSX.Element = (
