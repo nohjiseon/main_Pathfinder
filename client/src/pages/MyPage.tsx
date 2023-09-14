@@ -728,7 +728,6 @@ const MyPageCharacter = styled.div`
   align-items: center;
   gap: 10px;
   padding: 8px 20px;
-  }
 `;
 
 const CharacterSquare = styled.img`
