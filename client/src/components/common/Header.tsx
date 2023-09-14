@@ -1,30 +1,55 @@
 import styled from "styled-components";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Cookies } from "react-cookie";
-import Profile from "../../assets/images/profile.png";
 import IcMenu from "../../assets/images/menu.png";
 import IcMenuOpen from "../../assets/images/menu_open.png";
+import logo from "../../assets/images/logo.png";
+import logoTxt from "../../assets/images/logo_txt.png";
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [nickname, setNickname] = useState<string>("");
+  const [profilePhoto, setProfilePhoto] = useState<string>("");
   const navigate = useNavigate();
   const cookies = new Cookies();
   const getCookie = cookies.get("is_login");
-  const token = localStorage.getItem("token");
+  const memberId = localStorage.getItem("memberId");
 
-  const MenuHandeler = () => {
+  const MenuHandeler = (): void => {
     setIsOpen(!isOpen);
   };
 
+  const LogoutMenuHandeler = (): boolean => {
+    alert("로그인 후 이용할 수 있는 서비스입니다.");
+    return false;
+  };
+
   useEffect(() => {
-    if (getCookie && token) {
-      setIsLogin(true);
+    if (getCookie) {
+      axios
+        .get(
+          `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
+          {
+            headers: {
+              "Content-Type": `application/json`,
+            },
+          },
+        )
+        .then((res) => {
+          setNickname(res.data.data.name);
+          setProfilePhoto(res.data.data.profileImageUrl);
+          setIsLogin(true);
+        })
+        .catch(() => {
+          console.log("데이터 로딩에 실패하였습니다.");
+        });
     } else {
       setIsLogin(false);
     }
-  }, [getCookie, token]);
+  }, [getCookie]);
 
   const handleLogoutClick = () => {
     MenuHandeler();
@@ -39,15 +64,15 @@ const Header = () => {
   return (
     <HeaderCon>
       <Logo to="/">
-        <img src="logo.png" />
-        <img src="logo_txt.png" />
+        <img src={logo} />
+        <img src={logoTxt} />
       </Logo>
       {isLogin ? (
         <BtnBox>
-          <ProfileInfo>반갑습니다! ㅇㅇㅇ님</ProfileInfo>
+          <ProfileInfo>반갑습니다! {nickname}님</ProfileInfo>
           <Link to="/mypage">
             <ProfileImg>
-              <img src={Profile} />
+              <img src={profilePhoto} />
             </ProfileImg>
           </Link>
           <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
@@ -78,6 +103,18 @@ const Header = () => {
           <Link to="/signup">
             <Button $signup>회원가입</Button>
           </Link>
+          <MenuBtn className={isOpen ? "active" : ""} onClick={MenuHandeler}></MenuBtn>
+
+          <Menu className={isOpen ? "active" : ""}>
+            <Link to="/areamap" onClick={MenuHandeler}>
+              여행기록 모아보기
+            </Link>
+            <div onClick={LogoutMenuHandeler}>마이페이지</div>
+            <div onClick={LogoutMenuHandeler}>글 작성하기</div>
+            <Link to="/recommend" onClick={MenuHandeler}>
+              여행지 추천
+            </Link>
+          </Menu>
         </BtnBox>
       )}
     </HeaderCon>
@@ -120,6 +157,7 @@ const Logo = styled(Link)`
 const BtnBox = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
 `;
 
 const Button = styled.button<{ $signup?: boolean }>`
@@ -128,7 +166,6 @@ const Button = styled.button<{ $signup?: boolean }>`
   line-height: 32px;
   border-radius: 4px;
   background-color: ${(props) => (props.$signup ? "#1A298E" : "#416DC9")};
-  margin-left: 10px;
 `;
 
 const ProfileInfo = styled.span`
@@ -144,7 +181,6 @@ const ProfileImg = styled.div`
   border-radius: 100%;
   box-shadow: 2px 2px 2px rgba(175, 175, 175, 0.25);
   border: 1px solid #d9d9d9;
-  margin: 0 10px;
   > img {
     width: 25px;
   }
@@ -176,7 +212,8 @@ const Menu = styled.div`
     opacity: 1;
     visibility: visible;
   }
-  > a {
+  > a,
+  div {
     display: block;
     height: 42px;
     line-height: 42px;
@@ -184,7 +221,7 @@ const Menu = styled.div`
     border-radius: 4px;
     font-size: 14px;
     transition: 0.3s;
-    &:last-child {
+    &:nth-child(5) {
       color: #f36c68;
     }
     &:hover {

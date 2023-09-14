@@ -4,15 +4,21 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import Wave from "../components/common/Wave";
+import Modal from "../components/common/Modal";
 import ImgSun from "../assets/images/img_sun.png";
 import ImgCharacter from "../assets/images/character.png";
 import loading from "../assets/images/loading.gif";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { modalState } from "../atoms/atoms";
 
 const SignUp = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
   const [isHidePasswordCheck, setIsHidePasswordCheck] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const navigate = useNavigate();
+  const setModal = useSetRecoilState(modalState);
+  const modalIsOpen = useRecoilValue(modalState);
 
   interface Form {
     email: string;
@@ -29,31 +35,145 @@ const SignUp = (): JSX.Element => {
   } = useForm<Form>();
 
   function SignUpSubmit(data: Form): void {
-    setIsLoading(true);
-    axios
-      .post(
-        `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/signup`,
-        {
-          name: data.nickname,
-          email: data.email,
-          password: data.password,
-        },
-        { headers: { "Content-Type": "application/json" } },
-      )
-      .then(() => {
-        window.alert("회원가입이 완료되었습니다. 로그인 해주세요.");
-        setIsLoading(false);
-        navigate("/login");
-      })
-      .catch((err) => {
-        if (err.response.data.message === "Email already exists") {
-          alert("이미 존재하는 이메일입니다.");
-        } else if (err.response.data.message === "Name already exists") {
-          alert("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
-        }
-        setIsLoading(false);
-      });
+    if (isChecked === false) {
+      alert("약관에 동의하셔야 사이트 회원가입이 가능합니다.");
+    } else {
+      setIsLoading(true);
+      axios
+        .post(
+          `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/signup`,
+          {
+            name: data.nickname,
+            email: data.email,
+            password: data.password,
+          },
+          { headers: { "Content-Type": "application/json" } },
+        )
+        .then(() => {
+          window.alert("회원가입이 완료되었습니다. 로그인 해주세요.");
+          setIsLoading(false);
+          navigate("/login");
+        })
+        .catch((err) => {
+          if (err.response.data.message === "Email already exists") {
+            alert("이미 존재하는 이메일입니다.");
+          } else if (err.response.data.message === "Name already exists") {
+            alert("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+          }
+          setIsLoading(false);
+        });
+    }
   }
+
+  const modalChildren: JSX.Element = (
+    <div className="consent-con">
+      <div className="consent-intro">
+        * 해당 약관은 코드스테이츠의 45기 교육 과정 중 메인 프로젝트를 진행하는 과정에서 약관 동의
+        기능을 구현하는 연습을 하기 위해 예시로 작성된 샘플을 가져온 것으로, 법적으로 아무런 효력이
+        없음을 알려드립니다.
+      </div>
+      <div className="consent-intro">
+        약관 예시 출처:{" "}
+        <a href="https://www.bver.co.kr/bbs/new/22163" className="consent-link" target="_blank">
+          https://www.bver.co.kr/bbs/new/22163
+        </a>
+      </div>
+      <div className="consent-h1">제 1 장 총 칙</div>
+      <div className="consent-h2">제 1 조 (목적)</div>
+      <div className="consent-h3">
+        이 약관은 Pathfinder(이하 "사이트"라 합니다)에서 제공하는 인터넷서비스(이하 "서비스"라
+        합니다)의 이용 조건 및 절차에 관한 기본적인 사항을 규정함을 목적으로 합니다.
+      </div>
+      <div className="consent-h2">제 2 조 (약관의 효력 및 변경)</div>
+      <div className="consent-h3">
+        <ul>
+          <li>
+            ① 이 약관은 서비스 화면이나 기타의 방법으로 이용고객에게 공지함으로써 효력을 발생합니다.
+          </li>
+          <li>
+            ② 사이트는 이 약관의 내용을 변경할 수 있으며, 변경된 약관은 제1항과 같은 방법으로 공지
+            또는 통지함으로써 효력을 발생합니다.
+          </li>
+        </ul>
+      </div>
+      <div className="consent-h2">제 3 조 (용어의 정의)</div>
+      <div className="consent-h3">
+        <ul>
+          <li>이 약관에서 사용하는 용어의 정의는 다음과 같습니다.</li>
+          <li>
+            ① 회원 : 사이트와 서비스 이용계약을 체결하거나 이용자 아이디(ID)를 부여받은 개인 또는
+            단체를 말합니다.
+          </li>
+          <li>② 신청자 : 회원가입을 신청하는 개인 또는 단체를 말합니다.</li>
+          <li>
+            ③ 아이디(ID) : 회원의 식별과 서비스 이용을 위하여 회원이 정하고 사이트가 승인하는 문자와
+            숫자의 조합을 말합니다.
+          </li>
+          <li>
+            ④ 비밀번호 : 회원이 부여 받은 아이디(ID)와 일치된 회원임을 확인하고, 회원 자신의 비밀을
+            보호하기 위하여 회원이 정한 문자와 숫자의 조합을 말합니다.
+          </li>
+          <li>⑤ 해지 : 사이트 또는 회원이 서비스 이용계약을 취소하는 것을 말합니다.</li>
+        </ul>
+      </div>
+      <div className="consent-h1">제 2 장 서비스 이용계약</div>
+      <div className="consent-h2">제 4 조 (이용계약의 성립)</div>
+      <div className="consent-h3">
+        <ul>
+          <li>① 이용약관 하단의 동의 버튼을 누르면 이 약관에 동의하는 것으로 간주됩니다.</li>
+          <li>
+            ② 이용계약은 서비스 이용희망자의 이용약관 동의 후 이용 신청에 대하여 사이트가
+            승낙함으로써 성립합니다.
+          </li>
+        </ul>
+      </div>
+      <div className="consent-h2">제 5 조 (이용신청)</div>
+      <div className="consent-h3">
+        <ul>
+          <li>
+            ① 신청자가 본 서비스를 이용하기 위해서는 사이트 소정의 가입신청 양식에서 요구하는 이용자
+            정보를 기록하여 제출해야 합니다.
+          </li>
+          <li>
+            ② 가입신청 양식에 기재하는 모든 이용자 정보는 모두 실제 데이터인 것으로 간주됩니다.
+            실명이나 실제 정보를 입력하지 않은 사용자는 법적인 보호를 받을 수 없으며, 서비스의
+            제한을 받을 수 있습니다.
+          </li>
+        </ul>
+      </div>
+      <div className="consent-h2">제 6 조 (이용신청의 승낙)</div>
+      <div className="consent-h3">
+        <ul>
+          <li>
+            ① 사이트는 신청자에 대하여 제2항, 제3항의 경우를 예외로 하여 서비스 이용신청을
+            승낙합니다.
+          </li>
+          <li>
+            ② 사이트는 다음에 해당하는 경우에 그 신청에 대한 승낙 제한사유가 해소될 때까지 승낙을
+            유보할 수 있습니다.
+          </li>
+          <li className="consent-indent">가. 서비스 관련 설비에 여유가 없는 경우</li>
+          <li className="consent-indent">나. 기술상 지장이 있는 경우</li>
+          <li className="consent-indent">다. 기타 사이트가 필요하다고 인정되는 경우</li>
+          <li>③ 사이트는 신청자가 다음에 해당하는 경우에는 승낙을 거부할 수 있습니다.</li>
+          <li className="consent-indent">가. 다른 개인(사이트)의 명의를 사용하여 신청한 경우</li>
+          <li className="consent-indent">나. 이용자 정보를 허위로 기재하여 신청한 경우</li>
+          <li className="consent-indent">
+            다. 사회의 안녕질서 또는 미풍양속을 저해할 목적으로 신청한 경우
+          </li>
+          <li className="consent-indent">
+            라. 기타 사이트 소정의 이용신청요건을 충족하지 못하는 경우
+          </li>
+        </ul>
+      </div>
+      <div className="consent-h2">제 7 조 (이용자정보의 변경)</div>
+      <div className="consent-h3">
+        회원은 이용 신청시에 기재했던 회원정보가 변경되었을 경우에는, 온라인으로 수정하여야 하며
+        변경하지 않음으로 인하여 발생되는 모든 문제의 책임은 회원에게 있습니다.
+      </div>
+      <div>...</div>
+    </div>
+  );
 
   return (
     <MainCon>
@@ -64,6 +184,7 @@ const SignUp = (): JSX.Element => {
       <Character>
         <img src={ImgCharacter} alt="" />
       </Character>
+      {modalIsOpen ? <Modal children={modalChildren} /> : null}
       <SignUpCon onSubmit={handleSubmit(SignUpSubmit)}>
         <SignUpTitle>회원가입</SignUpTitle>
         <SignUpInputCon>
@@ -184,6 +305,10 @@ const SignUp = (): JSX.Element => {
             <SignUpWarning>{errors.passwordCheck.message}</SignUpWarning>
           ) : null}
         </SignUpInputCon>
+        <SignUpConsent>
+          <input type="checkbox" onClick={() => setIsChecked(!isChecked)} />
+          <span onClick={() => setModal(true)}>사이트 약관에 동의합니다.</span>
+        </SignUpConsent>
         {isLoading ? <LoadingImg src={loading} /> : <SignUpBtn>회원가입</SignUpBtn>}
       </SignUpCon>
     </MainCon>
@@ -308,6 +433,25 @@ const SignUpInputPasswordCon = styled.div`
   }
 `;
 
+const SignUpConsent = styled.div`
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  input {
+    width: 15px;
+    height: 15px;
+  }
+
+  span {
+    text-decoration: underline;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+
 const LoadingImg = styled.img`
   width: 50px;
   height: 50px;
@@ -320,5 +464,5 @@ const SignUpBtn = styled.button`
   background-color: #416dc9;
   border-radius: 4px;
   font-size: 20px;
-  margin-top: 60px;
+  margin-top: 50px;
 `;

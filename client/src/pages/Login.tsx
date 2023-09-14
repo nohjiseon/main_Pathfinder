@@ -43,7 +43,6 @@ const Login = (): JSX.Element => {
       .then((res) => {
         const accessToken = res.headers.authorization;
         cookies.set("is_login", `${accessToken}`);
-        localStorage.setItem("token", accessToken);
         localStorage.setItem("memberId", res.data.memberId);
 
         setIsLoading(false);
@@ -53,6 +52,15 @@ const Login = (): JSX.Element => {
         console.log(err);
         setIsLoading(false);
       });
+  }
+
+  function handleKakaoLogin(): void {
+    const REST_API_KEY = process.env.REACT_APP_REST_API_KEY_K;
+    const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI_K;
+
+    const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+    window.location.href = link;
   }
 
   return (
@@ -155,7 +163,7 @@ const Login = (): JSX.Element => {
           <LoginSocial>
             <img src={Github} />
           </LoginSocial>
-          <LoginSocial>
+          <LoginSocial onClick={handleKakaoLogin}>
             <img src={Kakao} />
           </LoginSocial>
         </LoginSocialCon>
@@ -331,6 +339,10 @@ const LoginSocial = styled.div`
   background-color: #ffffff;
   border-radius: 4px;
   box-shadow: 0 0 0 1px #bebebe inset;
+
+  &:hover {
+    cursor: pointer;
+  }
 
   img {
     width: 24px;

@@ -1,16 +1,70 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import waveBg1 from "../assets/images/wave-bg1.png";
 import backArrow from "../assets/images/back-arrow.png";
 import thumbUp from "../assets/images/thumb-up-icon.png";
 import eye from "../assets/images/eye-icon.png";
 import thumbUpWhite from "../assets/images/thumb-up-icon-white.png";
+import { useFetch } from "../hooks/useFetch";
+import { diaryDetailState } from "../atoms/atoms";
+import { DiaryDetail } from "../types/types";
+import { getFormattedDate } from "../util/date";
+import axios from "axios";
+import { getAccessToken, getUserId } from "../util/auth";
 
 const Detail = (): JSX.Element => {
-  const [isRecommended, setIsRecommended] = useState(false);
   const navigate = useNavigate();
-
+  const params = useParams();
+  const { fetchData, isLoading, isError, data } = useFetch<DiaryDetail>(
+    diaryDetailState,
+    `diary/${params.id}`,
+  );
+  console.log(data);
+  const patchBtnHandler = () => {
+    // "수정" 버튼을 클릭할 때 글쓰기/편집 페이지로 이동하도록 합니다.
+    // diaryId는 수정할 일기의 ID입니다.-
+    navigate(`/write-edit/${params.id}`); // 경로 및 파라미터를 적절히 수정하십시오.
+  };
+  type Headers = Record<string, string>;
+  const headers: Headers = {};
+  const token = getAccessToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const likeBtnHandler = async () => {
+    try {
+      const response = await axios.post(`recommend?memberId=${getUserId()}&diaryId=${params.id}`, {
+        headers,
+      });
+      if (response.status === 201 || 200) {
+        console.log(data);
+      } else {
+        console.error(`${response.status} 실패`);
+      }
+    } catch (error) {
+      alert("권한이 없습니다.");
+    }
+    await fetchData();
+  };
+  const deleteBtnHandler = async () => {
+    try {
+      const response = await axios.delete(`diary/${params.id}`, {
+        headers,
+      });
+      if (response.status === 201 || 200) {
+        console.log(data);
+      }
+    } catch (error) {
+      alert("권한이 없습니다.");
+    }
+    await navigate(-1);
+  };
+  if (isLoading) {
+    return <DetailBg>Loading...</DetailBg>;
+  }
+  if (isError) {
+    return <DetailBg>Error...!</DetailBg>;
+  }
   return (
     <DetailBg>
       <DetailBgImg src={waveBg1} />
@@ -20,51 +74,62 @@ const Detail = (): JSX.Element => {
         </DetailArrowContainer>
         <DetailMainContent>
           <DetailTitleContainer>
-            <DetailTitle>제목</DetailTitle>
+            <DetailTitle>{data?.data.title}</DetailTitle>
             <DetailSide>
-              <DetailDiaryInfo>아이디</DetailDiaryInfo>
-              <DetailDiaryInfo>2023/08/31</DetailDiaryInfo>
+              <DetailDiaryInfo>{data?.data.name}</DetailDiaryInfo>
+              <DetailDiaryInfo>{getFormattedDate(data?.data.modifiedAt)}</DetailDiaryInfo>
             </DetailSide>
           </DetailTitleContainer>
           <DetailContent>
             <DetailReaderRecordContainer>
               <DetailReaderRecord>
                 <img src={thumbUp} />
-                <div>0</div>
+                <div>{data?.data.recommendedCount}</div>
               </DetailReaderRecord>
               <DetailReaderRecord>
                 <img src={eye} />
-                <div>0</div>
+                <div>{data?.data.views}</div>
               </DetailReaderRecord>
             </DetailReaderRecordContainer>
             <DetailContentBox>
-              <DetailContentImg></DetailContentImg>
               <DetailConentParagraph>
-                <p>
-                  내용내용내용내용내용내용내용
-                  <br />
-                  내용내용내용내용내용내용
-                  <br />
-                  내용내용
-                  <br />
-                  내용내용내용내용내용
-                </p>
+                <div dangerouslySetInnerHTML={{ __html: data?.data.content }}></div>
               </DetailConentParagraph>
               <DetailBtnContainer>
-                {isRecommended ? (
-                  <DetailLikeBtnFocus onClick={() => setIsRecommended(false)}>
+                {data?.data.recommend ? (
+                  <DetailLikeBtnFocus
+                    onClick={() => {
+                      likeBtnHandler();
+                    }}
+                  >
                     <img src={thumbUpWhite} />
                     <span>추천</span>
                   </DetailLikeBtnFocus>
                 ) : (
-                  <DetailLikeBtn onClick={() => setIsRecommended(true)}>
+                  <DetailLikeBtn
+                    onClick={() => {
+                      likeBtnHandler();
+                    }}
+                  >
                     <img src={thumbUp} />
                     <span>추천</span>
                   </DetailLikeBtn>
                 )}
                 <DetailEditBtnContainer>
-                  <DetailEditBtn>수정</DetailEditBtn>
-                  <DetailCancelBtn>삭제</DetailCancelBtn>
+                  <DetailEditBtn
+                    onClick={() => {
+                      patchBtnHandler();
+                    }}
+                  >
+                    수정
+                  </DetailEditBtn>
+                  <DetailCancelBtn
+                    onClick={() => {
+                      deleteBtnHandler();
+                    }}
+                  >
+                    삭제
+                  </DetailCancelBtn>
                 </DetailEditBtnContainer>
               </DetailBtnContainer>
             </DetailContentBox>
@@ -172,11 +237,6 @@ const DetailContentBox = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 30px;
-`;
-
-const DetailContentImg = styled.img`
-  width: 1000px;
-  height: 300px;
 `;
 
 const DetailConentParagraph = styled.div`

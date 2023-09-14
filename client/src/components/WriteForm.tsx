@@ -2,10 +2,12 @@ import React, { useRef, useState } from "react";
 import { styled } from "styled-components";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { getUserId } from "../util/auth";
+import { getAccessToken, getUserId } from "../util/auth";
+import { diaryDetailState } from "../atoms/atoms";
+import { useRecoilValue } from "recoil";
 const WriteCon = styled.div`
   display: flex;
   flex-direction: column;
@@ -86,25 +88,218 @@ const WriteCon = styled.div`
 `;
 
 const WriteForm = () => {
+  const { id } = useParams();
+  let oldData = useRecoilValue(diaryDetailState);
   const editorRef = useRef<Editor | null>(null);
+  if (!id) {
+    oldData = {
+      data: {
+        diaryId: 0,
+        createdAt: "",
+        modifiedAt: "",
+        area1: "",
+        area2: "",
+        name: "",
+        title: "",
+        content: "",
+        recommendedCount: 0,
+        views: 0,
+        recommend: false,
+      },
+    };
+  } else {
+  }
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      title: oldData.data.title,
+      content: oldData.data.content,
+      area1: oldData.data.area1,
+      area2: oldData.data.area2,
+      memberId: 0,
+    },
+  });
   interface CityOptions {
     [region: string]: string[];
   }
-
+  type Headers = Record<string, string>;
+  const headers: Headers = {};
+  const token = getAccessToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const options: CityOptions = {
-    경기도: ["수원", "성남", "용인"],
-    강원도: ["춘천", "원주", "강릉"],
-    // 다른 지역도 추가할 수 있음
+    경기도: [
+      "서울",
+      "고양",
+      "수원",
+      "용인",
+      "과천",
+      "광명",
+      "광주",
+      "구리",
+      "군포",
+      "김포",
+      "남양주",
+      "동두천",
+      "부천",
+      "성남",
+      "시흥",
+      "안산",
+      "안성",
+      "안양",
+      "양주",
+      "여주",
+      "오산",
+      "의왕",
+      "의정부",
+      "이천",
+      "파주",
+      "평택",
+      "포천",
+      "하남",
+      "화성",
+      "가평",
+      "양평",
+      "연천",
+    ].sort(),
+    강원도: [
+      "강릉",
+      "동해",
+      "삼척",
+      "속초",
+      "원주",
+      "춘천",
+      "태백",
+      "고성",
+      "양구",
+      "양양",
+      "영월",
+      "인제",
+      "정선",
+      "철원",
+      "평창",
+      "홍천",
+      "화천",
+      "횡성",
+    ].sort(),
+    충청도: [
+      "제철",
+      "청주",
+      "충주",
+      "괴산",
+      "단양",
+      "보은",
+      "영동",
+      "옥천",
+      "음성",
+      "증평",
+      "진천",
+      "계룡",
+      "공주",
+      "논산",
+      "당진",
+      "보령",
+      "서산",
+      "아산",
+      "천안",
+      "금산",
+      "부여",
+      "서천",
+      "예산",
+      "청양",
+      "태안",
+      "홍성",
+    ].sort(),
+    경상도: [
+      "경산",
+      "경주",
+      "구미",
+      "김천",
+      "문경",
+      "상주",
+      "안동",
+      "영주",
+      "영천",
+      "포항",
+      "고령",
+      "봉화",
+      "성주",
+      "영덕",
+      "영양",
+      "예천",
+      "울릉",
+      "울진",
+      "의성",
+      "청도",
+      "청송",
+      "칠곡",
+      "창원",
+      "거제",
+      "김해",
+      "밀양",
+      "사천",
+      "양산",
+      "진주",
+      "통영",
+      "거창",
+      "고성",
+      "남해",
+      "산청",
+      "의령",
+      "창녕",
+      "하동",
+      "함안",
+      "함양",
+      "합천",
+    ].sort(),
+    전라도: [
+      "군산",
+      "김제",
+      "남원",
+      "익산",
+      "전주",
+      "정읍",
+      "고창",
+      "무주",
+      "부안",
+      "순창",
+      "완주",
+      "임실",
+      "장수",
+      "진안",
+      "목포",
+      "여수",
+      "순천",
+      "나주",
+      "광양",
+      "담양",
+      "곡성",
+      "구례",
+      "고흥",
+      "보성",
+      "화순",
+      "장흥",
+      "강진",
+      "해남",
+      "영암",
+      "무안",
+      "함평",
+      "영광",
+      "장성",
+      "완도",
+      "진도",
+      "신안",
+    ].sort(),
+    제주도: ["제주", "서귀포"].sort(),
   };
 
-  const [selectedRegion, setSelectedRegion] = useState<string>(""); // 선택된 지역
-  const [selectedCity, setSelectedCity] = useState<string>(""); // 선택된 도시
+  const [selectedRegion, setSelectedRegion] = useState<string>(oldData.data.area1); // 선택된 지역
+  const [selectedCity, setSelectedCity] = useState<string>(oldData.data.area2); // 선택된 도시
 
   const handleRegionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newRegion = event.target.value;
@@ -123,12 +318,24 @@ const WriteForm = () => {
         onSubmit={handleSubmit(async (data) => {
           await new Promise((r) => setTimeout(r, 1000));
           const content = editorRef.current?.getInstance().getHTML();
-          data.content = content; // 에디터의 내용을 폼 데이터에 추가
+          data.content = content || ""; // 에디터의 내용을 폼 데이터에 추가
           data.area1 = selectedRegion; // 선택된 지역을 폼 데이터에 추가
           data.area2 = selectedCity; // 선택된 도시를 폼 데이터에 추가
-          data.memberId = getUserId();
+          data.memberId = getUserId() || 0;
           try {
-            const response = await axios.post("/diary/registration", data);
+            if (data.title === "") {
+              return alert("제목을 입력해주세요");
+            }
+            const clean_text = content?.replace(/<.*?>/g, "");
+            if (clean_text === "") {
+              return alert("내용을 입력해주세요");
+            }
+            if (selectedRegion === "" || selectedCity === "") {
+              return alert("지역,도시 선택은 필수입니다!");
+            }
+            const response = !!id
+              ? await axios.patch(`/diary/edit/${id}`, data, { headers })
+              : await axios.post("/diary/registration", data);
 
             if (response.status === 201) {
               console.log(data);
@@ -136,7 +343,7 @@ const WriteForm = () => {
               console.error(`${response.status} 실패`);
             }
           } catch (error) {
-            console.error("오류 발생:", error);
+            alert("권한이 없습니다!");
           } finally {
             navigate(-1);
           }
@@ -175,7 +382,7 @@ const WriteForm = () => {
           <div className="editor-container">
             <Editor
               ref={editorRef}
-              initialValue="hello react editor world!"
+              initialValue={id ? oldData.data.content : "내용을 입력해주세요"}
               previewStyle="vertical"
               height="440px"
               initialEditType="markdown"
@@ -208,7 +415,9 @@ const WriteForm = () => {
             <button type="submit" disabled={isSubmitting}>
               등록
             </button>
-            <button onClick={() => navigate(-1)}>취소</button>
+            <button type="button" onClick={() => navigate(-1)}>
+              취소
+            </button>
           </div>
         </div>
       </form>
