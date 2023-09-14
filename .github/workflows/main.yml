@@ -16,15 +16,19 @@ jobs:
         with:
           java-version: '11'
           distribution: 'zulu'
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16'
+
       - name: Grant execute permission for gradlew
         run: chmod +x server/gradlew
+
       - name: Build with Gradle
         working-directory: server
         run: ./gradlew build
+
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
@@ -38,24 +42,21 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
-      - name: Start Session Manager session
-        run: aws ssm start-session --target i-01eff5b497299bffa
-      - name: Deploy to Server
+
+      - name: Start SSH key
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2
+          PRIVATE_KEYPRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: echo "$PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Deploy to Server via SSH
         run: |
-          aws ssm send-command \
-            --instance-ids i-0480f00fe2f1848ff \
-            --document-name "AWS-RunShellScript" \
-            --parameters "commands=[
-              'if sudo docker ps -a --format \\'{{.Names}}\\' | grep -q \'^server$\\'; then',
-              '  sudo docker stop server',
-              '  sudo docker rm server',
-              'fi',
-              'sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/spring-cicd:${GITHUB_SHA::7}',
-              'sudo docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/spring-cicd:${GITHUB_SHA::7} spring-cicd',
-              'sudo docker run -d --name server -p 8080:8080 spring-cicd'
-            ]" \
-            --output text
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@your-ec2-ip-address <<EOF
+            if sudo docker ps -a --format '{{.Names}}' | grep -q '^server$'; then
+              sudo docker stop server
+              sudo docker rm server
+            fi
+            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder:${GITHUB_SHA::7}
+            sudo docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder:${GITHUB_SHA::7} pathfinder
+            sudo docker run -d --name server -p 8080:8080 pathfinder
+          EOF
