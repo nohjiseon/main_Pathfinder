@@ -18,14 +18,14 @@ import java.util.UUID;
 @Slf4j
 @Component
 @Service
-public class S3UploadService {
+public class ImageService {
     private final AmazonS3 amazonS3;
     private final ImageRepository imageRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public S3UploadService(AmazonS3 amazonS3, ImageRepository imageRepository) {
+    public ImageService(AmazonS3 amazonS3, ImageRepository imageRepository) {
         this.amazonS3 = amazonS3;
         this.imageRepository = imageRepository;
     }
