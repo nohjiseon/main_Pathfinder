@@ -74,6 +74,7 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
             sudo docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7} server
             sudo docker run -d \
+            --name server \
             -p 8080:8080 \
             -e S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }} \
             -e S3_SECRETKEY=${{ secrets.S3_SECRETKEY }} \
