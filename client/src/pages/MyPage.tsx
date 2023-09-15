@@ -258,6 +258,11 @@ const MyPage = (): JSX.Element => {
               ) : (
                 <MyPageMenuBtn onClick={() => setCurMenu("blog")}>내가 쓴 글</MyPageMenuBtn>
               )}
+              {curMenu === "scrap" ? (
+                <MyPageMenuBtnFocus>스크랩</MyPageMenuBtnFocus>
+              ) : (
+                <MyPageMenuBtn onClick={() => setCurMenu("scrap")}>스크랩</MyPageMenuBtn>
+              )}
               {curMenu === "delete" ? (
                 <MyPageMenuBtnFocus>회원 탈퇴</MyPageMenuBtnFocus>
               ) : (
@@ -409,6 +414,22 @@ const MyPage = (): JSX.Element => {
             ) : curMenu === "blog" ? (
               <MyPageContent>
                 <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
+                <MyPageBlogList>
+                  {data?.data.map((el: DiaryData) => <Card key={el.diaryId} diaryData={el}></Card>)}
+                </MyPageBlogList>
+                <MyPagePaginationContainer>
+                  <Pagination
+                    currentPage={currentPage}
+                    onPrevPage={onPrevPageHandler}
+                    totalPages={totalPages}
+                    onPageChange={onPageChangeHandler}
+                    onNextPage={onNextPageHandler}
+                  />
+                </MyPagePaginationContainer>
+              </MyPageContent>
+            ) : curMenu === "scrap" ? (
+              <MyPageContent>
+                <MyPageContentTitle>스크랩</MyPageContentTitle>
                 <MyPageBlogList>
                   {data?.data.map((el: DiaryData) => <Card key={el.diaryId} diaryData={el}></Card>)}
                 </MyPageBlogList>
