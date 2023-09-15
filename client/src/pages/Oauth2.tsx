@@ -11,21 +11,28 @@ const Oauth2 = (): JSX.Element => {
   const { providerId } = useParams();
   const navigate = useNavigate();
   const cookies = new Cookies();
+  let provider = "";
 
   useEffect(() => {
+    if (providerId === "kakao") {
+      provider = "KAKAO";
+    } else if (providerId === "github") {
+      provider = "GITHUB";
+    }
     axios
       .get(`http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/auth/oauth`, {
         params: {
-          provider: providerId,
+          provider: provider,
           code: code,
         },
       })
       .then((res) => {
-        console.log(res);
+        const accessToken = res.headers.authorization;
+        cookies.set("is_login", `${accessToken}`);
+        localStorage.setItem("memberId", res.data.memberId);
+        navigate("/");
       })
-      .catch((err) => console.log("err : " + err));
-    console.log("provider : " + providerId);
-    console.log("code : " + code);
+      .catch((err) => console.log(err));
   }, []);
 
   return (
