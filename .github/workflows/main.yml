@@ -23,22 +23,6 @@ jobs:
       TOURAPI_SERVICEKEY: ${{ secrets.TOURAPI_SERVICEKEY }}
 
     steps:
-      - name: Set up environment
-        run: |
-          echo "ENV=${ENV}" >> $GITHUB_ENV
-          echo "S3_ACCESSKEY=${S3_ACCESSKEY}" >> $GITHUB_ENV
-          echo "S3_SECRETKEY=${S3_SECRETKEY}" >> $GITHUB_ENV
-          echo "JWT_SECRET_KEY=${JWT_SECRET_KEY}" >> $GITHUB_ENV
-          echo "RDS_PASSWORD=${RDS_PASSWORD}" >> $GITHUB_ENV
-          echo "G_CLIENT_ID=${G_CLIENT_ID}" >> $GITHUB_ENV
-          echo "G_CLIENT_SECRET=${G_CLIENT_SECRET}" >> $GITHUB_ENV
-          echo "GIT_CLIENT_ID=${GIT_CLIENT_ID}" >> $GITHUB_ENV
-          echo "GIT_CLIENT_SECRET=${GIT_CLIENT_SECRET}" >> $GITHUB_ENV
-          echo "K_CLIENT_ID=${K_CLIENT_ID}" >> $GITHUB_ENV
-          echo "K_CLIENT_SECRET=${K_CLIENT_SECRET}" >> $GITHUB_ENV
-          echo "TOURAPI_SERVICEKEY=${TOURAPI_SERVICEKEY}" >> $GITHUB_ENV
-          
-
       - uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v2
@@ -64,6 +48,20 @@ jobs:
           docker build -t pathfinder-server server/
           docker tag pathfinder-server ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
+
+      - name: Set Environment Variables in .env file
+        run: |
+          echo "S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }}" >> .env
+          echo "S3_SECRETKEY=${{ secrets.S3_SECRETKEY }}" >> .env
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+          echo "RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}" >> .env
+          echo "G_CLIENT_ID=${{ secrets.G_CLIENT_ID }}" >> .env
+          echo "G_CLIENT_SECRET=${{ secrets.G_CLIENT_SECRET }}" >> .env
+          echo "GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }}" >> .env
+          echo "GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }}" >> .env
+          echo "K_CLIENT_ID=${{ secrets.K_CLIENT_ID }}" >> .env
+          echo "K_CLIENT_SECRET=${{ secrets.K_CLIENT_SECRET }}" >> .env
+          echo "TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }}" >> .env
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
