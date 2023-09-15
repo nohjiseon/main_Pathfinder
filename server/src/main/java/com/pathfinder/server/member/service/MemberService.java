@@ -36,6 +36,9 @@ public class MemberService {
 
     @Transactional
     public Long signup(MemberDto.Post request) {
+        if(!request.getAgreeToTerms()){
+            throw new MemberNotAgreeToTerms();
+        }
         String mail = request.getEmail();
         String name = request.getName();
 
@@ -108,9 +111,6 @@ public class MemberService {
         Member findMember =
                 optionalMember.orElseThrow(() ->
                         new MemberNotFoundException());
-        if (!findMember.getAgreeToTerms()) {    // 회원가입 약관 미동의 계정
-            new MemberNotAgreeToTerms();
-        }
         return findMember;
     }
 
