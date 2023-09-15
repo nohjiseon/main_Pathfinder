@@ -11,7 +11,7 @@ import loading from "../assets/images/loading.gif";
 import changeIcon from "../assets/images/change-icon.png";
 import editWhite from "../assets/images/edit-white.png";
 import lock from "../assets/images/lock.png";
-import { diaryListState } from "../atoms/atoms";
+import { diaryMyListState } from "../atoms/atoms";
 import { Diary, DiaryData } from "../types/types";
 import { useFetch } from "../hooks/useFetch";
 
@@ -51,7 +51,7 @@ const MyPage = (): JSX.Element => {
   } = usePagination();
 
   const url = `/diary/member/${memberId}?page=${currentPage}`;
-  const { fetchData, data } = useFetch<Diary>(diaryListState, url);
+  const { fetchData, data } = useFetch<Diary>(diaryMyListState, url);
 
   useEffect(() => {
     // 컴포넌트가 처음 렌더링될 때와 fetchData 호출

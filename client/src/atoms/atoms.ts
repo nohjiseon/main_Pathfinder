@@ -8,6 +8,14 @@ export const diaryListState = atom<Diary>({
     pageInfo: { page: 1, size: 10, totalElements: 0, totalPages: 1 },
   },
 });
+
+export const diaryMyListState = atom<Diary>({
+  key: "diaryMyListState",
+  default: {
+    data: [],
+    pageInfo: { page: 1, size: 10, totalElements: 0, totalPages: 1 },
+  },
+});
 export const diaryDetailState = atom<DiaryDetail>({
   key: "diaryDetailState",
   default: {

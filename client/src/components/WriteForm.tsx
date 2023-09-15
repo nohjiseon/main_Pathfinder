@@ -342,10 +342,9 @@ const WriteForm = () => {
             } else {
               console.error(`${response.status} 실패`);
             }
+            navigate(-1);
           } catch (error) {
             alert("권한이 없습니다!");
-          } finally {
-            navigate(-1);
           }
         })}
       >
