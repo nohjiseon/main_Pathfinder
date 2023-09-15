@@ -35,46 +35,6 @@ const StyledModal = styled.div`
       right: 0;
       cursor: pointer;
     }
-
-    h1 {
-      font-size: 1.6875rem;
-      color: #c22e32;
-      margin: 0 0 1rem;
-    }
-
-    p {
-      font-size: 0.8125rem;
-      margin: 0 0 1.5rem;
-    }
-
-    button {
-      padding: 0.8rem;
-      border-radius: 6px;
-      border: none;
-    }
-
-    .button-gap {
-      display: flex;
-      flex-flow: row;
-      gap: 0.5rem;
-    }
-
-    .discard-action {
-      background: #c22e32;
-      color: #fff;
-
-      &:hover {
-        background: #ab262a;
-      }
-    }
-
-    .cancel-action {
-      background: transparent;
-
-      &:hover {
-        background: #f9fafa;
-      }
-    }
   }
 
   // 약관 동의 모달 셋팅
