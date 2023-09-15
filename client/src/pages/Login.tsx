@@ -8,7 +8,6 @@ import Wave from "../components/common/Wave";
 import ImgSun from "../assets/images/img_sun.png";
 import ImgCharacter from "../assets/images/character.png";
 import loading from "../assets/images/loading.gif";
-import Google from "../assets/images/google.png";
 import Github from "../assets/images/github.png";
 import Kakao from "../assets/images/kakao.png";
 
@@ -43,6 +42,7 @@ const Login = (): JSX.Element => {
       .then((res) => {
         const accessToken = res.headers.authorization;
         cookies.set("is_login", `${accessToken}`);
+        localStorage.setItem("token", accessToken);
         localStorage.setItem("memberId", res.data.memberId);
 
         setIsLoading(false);
