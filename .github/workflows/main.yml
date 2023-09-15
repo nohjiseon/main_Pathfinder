@@ -51,17 +51,18 @@ jobs:
 
       - name: Set Environment Variables in .env file
         run: |
-          echo "S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }}" >> .env
-          echo "S3_SECRETKEY=${{ secrets.S3_SECRETKEY }}" >> .env
-          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
-          echo "RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}" >> .env
-          echo "G_CLIENT_ID=${{ secrets.G_CLIENT_ID }}" >> .env
-          echo "G_CLIENT_SECRET=${{ secrets.G_CLIENT_SECRET }}" >> .env
-          echo "GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }}" >> .env
-          echo "GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }}" >> .env
-          echo "K_CLIENT_ID=${{ secrets.K_CLIENT_ID }}" >> .env
-          echo "K_CLIENT_SECRET=${{ secrets.K_CLIENT_SECRET }}" >> .env
-          echo "TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }}" >> .env
+          echo "S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }}" >> server/.env
+          echo "S3_SECRETKEY=${{ secrets.S3_SECRETKEY }}" >> server/.env
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> server/.env
+          echo "RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}" >> server/.env
+          echo "G_CLIENT_ID=${{ secrets.G_CLIENT_ID }}" >> server/.env
+          echo "G_CLIENT_SECRET=${{ secrets.G_CLIENT_SECRET }}" >> server/.env
+          echo "GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }}" >> server/.env
+          echo "GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }}" >> server/.env
+          echo "K_CLIENT_ID=${{ secrets.K_CLIENT_ID }}" >> server/.env
+          echo "K_CLIENT_SECRET=${{ secrets.K_CLIENT_SECRET }}" >> server/.env
+          echo "TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }}" >> server/.env
+      
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
