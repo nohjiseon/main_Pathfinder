@@ -166,9 +166,6 @@ const Login = (): JSX.Element => {
         </LoginLine>
         <LoginSocialCon>
           <LoginSocial>
-            <img src={Google} />
-          </LoginSocial>
-          <LoginSocial>
             <img src={Github} onClick={handleGithubLogin} />
           </LoginSocial>
           <LoginSocial onClick={handleKakaoLogin}>
