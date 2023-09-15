@@ -64,9 +64,9 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > pathfinder.pem
           chmod 600 pathfinder.pem
 
-      - name: Copy .env to Server via SCP
-        run: |
-          scp -o StrictHostKeyChecking=no -i pathfinder.pem .env ubuntu@ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:~/
+#      - name: Copy .env to Server via SCP
+#        run: |
+#          scp -o StrictHostKeyChecking=no -i pathfinder.pem .env ubuntu@ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:~/
 
       - name: Deploy to Server via SSH
         run: |
