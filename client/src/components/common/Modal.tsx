@@ -1,6 +1,6 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { modalState } from "../../atoms/atoms";
+import { consentModalState, teamModalState } from "../../atoms/atoms";
 
 interface ModalProp {
   children: JSX.Element;
@@ -27,6 +27,7 @@ const StyledModal = styled.div`
       0 3px 8px hsla(0, 0%, 0%, 0.09),
       0 4px 13px hsla(0, 0%, 0%, 0.13);
     border-radius: 8px;
+    max-width: 620px;
 
     .close-button {
       position: absolute;
@@ -162,21 +163,23 @@ const StyledModal = styled.div`
 `;
 
 const Modal = ({ children }: ModalProp): JSX.Element => {
-  const setModal = useSetRecoilState(modalState);
-  const modalIsOpen = useRecoilValue(modalState);
+  const setConsentModal = useSetRecoilState(consentModalState);
+  const setTeamModal = useSetRecoilState(teamModalState);
+  const consentModal = useRecoilValue(consentModalState);
+  const teamModal = useRecoilValue(teamModalState);
 
-  const closeModal = (event: React.MouseEvent<HTMLElement>) => {
-    if (event.target === event.currentTarget) setModal(false);
-  };
-
-  const toggleModal = () => {
-    setModal(!modalIsOpen);
+  const closeModal = () => {
+    if (consentModal) {
+      setConsentModal(false);
+    } else if (teamModal) {
+      setTeamModal(false);
+    }
   };
 
   return (
     <StyledModal onClick={closeModal}>
       <section className="modal">
-        <div className="close-button" onClick={toggleModal}>
+        <div className="close-button" onClick={closeModal}>
           <svg
             aria-hidden="true"
             className="svg-icon iconClearSm"

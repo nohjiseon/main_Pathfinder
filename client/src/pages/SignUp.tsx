@@ -11,7 +11,7 @@ import loading from "../assets/images/loading.gif";
 import Uncheck from "../assets/images/un-check.png";
 import Check from "../assets/images/check.png";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { modalState } from "../atoms/atoms";
+import { consentModalState } from "../atoms/atoms";
 
 const SignUp = (): JSX.Element => {
   const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
@@ -19,8 +19,8 @@ const SignUp = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const navigate = useNavigate();
-  const setModal = useSetRecoilState(modalState);
-  const modalIsOpen = useRecoilValue(modalState);
+  const setConsentModal = useSetRecoilState(consentModalState);
+  const consentModal = useRecoilValue(consentModalState);
 
   interface Form {
     email: string;
@@ -190,7 +190,7 @@ const SignUp = (): JSX.Element => {
       <Character>
         <img src={ImgCharacter} alt="" />
       </Character>
-      {modalIsOpen ? <Modal children={modalChildren} /> : null}
+      {consentModal ? <Modal children={modalChildren} /> : null}
       <SignUpCon onSubmit={handleSubmit(SignUpSubmit)}>
         <SignUpTitle>회원가입</SignUpTitle>
         <SignUpInputCon>
@@ -314,7 +314,7 @@ const SignUp = (): JSX.Element => {
         <SignUpConsent>
           <input type="checkbox" id="check" onClick={() => setIsChecked(!isChecked)} />
           <label htmlFor="check"></label>
-          <span onClick={() => setModal(true)}>사이트 약관에 동의합니다.</span>
+          <span onClick={() => setConsentModal(true)}>사이트 약관에 동의합니다.</span>
         </SignUpConsent>
         {isLoading ? <LoadingImg src={loading} /> : <SignUpBtn>회원가입</SignUpBtn>}
       </SignUpCon>
