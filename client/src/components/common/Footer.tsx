@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import logoWhite from "../../assets/images/logo_w.png";
 import githubWhite from "../../assets/images/github-w.png";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { modalState } from "../../atoms/atoms";
+import { teamModalState } from "../../atoms/atoms";
 import sumin from "../../assets/images/team/sumin.png";
 import minyong from "../../assets/images/team/minyong.png";
 import jungwoo from "../../assets/images/team/jungwoo.jpg";
@@ -13,8 +13,8 @@ import jaeyeon from "../../assets/images/team/jaeyeon.png";
 import github from "../../assets/images/github.png";
 
 const Footer = () => {
-  const setModal = useSetRecoilState(modalState);
-  const modalIsOpen = useRecoilValue(modalState);
+  const setTeamModal = useSetRecoilState(teamModalState);
+  const teamModal = useRecoilValue(teamModalState);
 
   const modalChildren: JSX.Element = (
     <div className="footer-con">
@@ -76,9 +76,9 @@ const Footer = () => {
 
   return (
     <FooterCon>
-      {modalIsOpen ? <Modal children={modalChildren} /> : null}
+      {teamModal ? <Modal children={modalChildren} /> : null}
       <img src={logoWhite} />
-      <FooterMid onClick={() => setModal(true)}>
+      <FooterMid onClick={() => setTeamModal(true)}>
         <span>Team</span>
         <img src={githubWhite} />
       </FooterMid>

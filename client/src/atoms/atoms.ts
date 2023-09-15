@@ -51,8 +51,13 @@ export const diaryState = atom<DiaryData>({
   },
 });
 
-export const modalState = atom<boolean>({
-  key: "modalState",
+export const consentModalState = atom<boolean>({
+  key: "consentModalState",
+  default: false,
+});
+
+export const teamModalState = atom<boolean>({
+  key: "teamModalState",
   default: false,
 });
 
