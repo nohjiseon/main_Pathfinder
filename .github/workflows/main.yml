@@ -31,8 +31,9 @@ jobs:
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-          docker build -t pathfinder-server:latest server/
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server
+          docker build -t pathfinder-server server/
+          docker tag pathfinder-server ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
 
       - name: Set Environment Variables in .env file
         run: |
