@@ -8,20 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      ENV: ${{ secrets.ENV }}
-      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
-      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
-      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-      RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
-      G_CLIENT_ID: ${{ secrets.G_CLIENT_ID }}
-      G_CLIENT_SECRET: ${{ secrets.G_CLIENT_SECRET }}
-      GIT_CLIENT_ID: ${{ secrets.GIT_CLIENT_ID }}
-      GIT_CLIENT_SECRET: ${{ secrets.GIT_CLIENT_SECRET }}
-      K_CLIENT_ID: ${{ secrets.K_CLIENT_ID }}
-      K_CLIENT_SECRET: ${{ secrets.K_CLIENT_SECRET }}
-      TOURAPI_SERVICEKEY: ${{ secrets.TOURAPI_SERVICEKEY }}
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -78,6 +64,10 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > pathfinder.pem
           chmod 600 pathfinder.pem
 
+      - name: Copy .env to Server via SCP
+        run: |
+          scp -o StrictHostKeyChecking=no -i pathfinder.pem .env ubuntu@ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:~/
+
       - name: Deploy to Server via SSH
         run: |
           ssh -o StrictHostKeyChecking=no -i pathfinder.pem ubuntu@ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com "bash -s" <<EOF
@@ -87,5 +77,18 @@ jobs:
             fi
             sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
             sudo docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7} server
-            sudo docker run -d --name server -p 8080:8080 server
+            sudo docker run -d \
+            -p 8080:8080 \
+            -e S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }} \
+            -e S3_SECRETKEY=${{ secrets.S3_SECRETKEY }} \
+            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            -e RDS_PASSWORD=${{ secrets.RDS_PASSWORD }} \
+            -e G_CLIENT_ID=${{ secrets.G_CLIENT_ID }} \
+            -e G_CLIENT_SECRET=${{ secrets.G_CLIENT_SECRET }} \
+            -e GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }} \
+            -e GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }} \
+            -e K_CLIENT_ID=${{ secrets.K_CLIENT_ID }} \
+            -e K_CLIENT_SECRET=${{ secrets.K_CLIENT_SECRET }} \
+            -e TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }} \
+            ${{ secrets.DOCKER_USERNAME}}/pathfinder-server:latest
           EOF

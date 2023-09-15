@@ -1,0 +1,19 @@
+version: '3'
+services:
+  eatitdog:
+    image: minyongpark/pathfinder-server:latest
+    ports:
+      - 8080:8080
+    restart: always
+    environment:
+      S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
+      S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+      G_CLIENT_ID: ${{ secrets.G_CLIENT_ID }}
+      G_CLIENT_SECRET: ${{ secrets.G_CLIENT_SECRET }}
+      GIT_CLIENT_ID: ${{ secrets.GIT_CLIENT_ID }}
+      GIT_CLIENT_SECRET: ${{ secrets.GIT_CLIENT_SECRET }}
+      K_CLIENT_ID: ${{ secrets.K_CLIENT_ID }}
+      K_CLIENT_SECRET: ${{ secrets.K_CLIENT_SECRET }}
+      TOURAPI_SERVICEKEY: ${{ secrets.TOURAPI_SERVICEKEY }}
