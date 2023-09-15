@@ -34,7 +34,7 @@ spring:
             clientSecret: ${K_CLIENT_SECRET}
             redirect-uri: http://seb45-main-020.s3-website.ap-northeast-2.amazonaws.com/oauth2/kakao
 jwt:
-  secret-key: ${JWT_SECRET_KEY}
+  secret-key: 0b38945b99ef52eadb3e93797b384093dd0a08be6ddd617b5171dd53da5ba6e778d0303f186cef434c014301ac56f06d14314e4ce646fec7bda1dec704968ffb
   access-token-expire-time: 7200000
   refresh-token-expire-time: 604800000
 cloud:
