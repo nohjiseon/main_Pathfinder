@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -35,6 +36,8 @@ public class DiaryService {
 
     public Diary createDiary(Diary diary) {
         verifyDiaryGetMemberName(diary);
+        diary.setCreatedAt(LocalDateTime.now());
+        diary.setModifiedAt(LocalDateTime.now());
 
         return diaryRepository.save(diary);
     }
@@ -51,6 +54,8 @@ public class DiaryService {
                     .ifPresent(area1 -> findDiary.setArea1(area1));
             Optional.ofNullable(diary.getArea2())
                     .ifPresent(area2 -> findDiary.setArea2(area2));
+
+            findDiary.setModifiedAt(LocalDateTime.now());
             return diaryRepository.save(findDiary);
         }
         else {
