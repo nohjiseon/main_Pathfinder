@@ -2,6 +2,7 @@ package com.pathfinder.server.member.service;
 
 import com.pathfinder.server.global.exception.memberexception.MemberEmailExistException;
 import com.pathfinder.server.global.exception.memberexception.MemberNameExistException;
+import com.pathfinder.server.global.exception.memberexception.MemberNotAgreeToTerms;
 import com.pathfinder.server.global.exception.memberexception.MemberNotFoundException;
 import com.pathfinder.server.member.dto.MemberDto;
 import com.pathfinder.server.member.entity.Member;
@@ -58,7 +59,8 @@ public class MemberService {
         return Member.createMember(
                 request.getEmail(),
                 request.getName(),
-                passwordEncoder.encode(request.getPassword())
+                passwordEncoder.encode(request.getPassword()),
+                request.getAgreeToTerms()
         );
     }
 
@@ -106,6 +108,9 @@ public class MemberService {
         Member findMember =
                 optionalMember.orElseThrow(() ->
                         new MemberNotFoundException());
+        if (!findMember.getAgreeToTerms()) {    // 회원가입 약관 미동의 계정
+            new MemberNotAgreeToTerms();
+        }
         return findMember;
     }
 
