@@ -45,7 +45,7 @@ public class Member {
     private int diaryCount;
 
     @Column(nullable = false)
-    private Boolean agreeToTerms = false;   // todo 미동의 회원 사용불가 처리
+    private Boolean agreeToTerms;   // todo 미동의 회원 사용불가 처리
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
