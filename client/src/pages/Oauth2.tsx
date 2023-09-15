@@ -31,8 +31,7 @@ const Oauth2 = (): JSX.Element => {
         cookies.set("is_login", `${accessToken}`);
         localStorage.setItem("memberId", res.data.memberId);
         navigate("/");
-      })
-      .catch((err) => console.log(err));
+      });
   }, []);
 
   return (

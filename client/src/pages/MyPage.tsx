@@ -100,9 +100,6 @@ const MyPage = (): JSX.Element => {
           password: "",
           intro: intro,
         });
-      })
-      .catch((err) => {
-        console.log(err);
       });
     setIsLoading(false);
   }
@@ -141,7 +138,6 @@ const MyPage = (): JSX.Element => {
         if (err.response.status) {
           alert("아직 오픈되지 않은 캐릭터입니다.");
         } else {
-          console.log(err);
         }
       });
   }
@@ -170,9 +166,6 @@ const MyPage = (): JSX.Element => {
           password: "",
           intro: intro,
         });
-      })
-      .catch(() => {
-        console.log("데이터 로딩에 실패하였습니다.");
       });
   }, [nickname, intro]);
 
@@ -188,9 +181,6 @@ const MyPage = (): JSX.Element => {
       )
       .then((res) => {
         setPhotoList(res.data.data);
-      })
-      .catch(() => {
-        console.log("캐릭터 이미지 로딩에 실패하였습니다.");
       });
   }, []);
 

@@ -49,7 +49,6 @@ const Login = (): JSX.Element => {
         navigate("/");
       })
       .catch((err) => {
-        console.log(err);
         setIsLoading(false);
       });
   }
