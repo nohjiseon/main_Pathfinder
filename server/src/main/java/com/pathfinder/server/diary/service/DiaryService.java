@@ -11,6 +11,7 @@ import com.pathfinder.server.member.service.MemberService;
 import com.pathfinder.server.reward.service.RewardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -79,7 +80,8 @@ public class DiaryService {
     }
 
     public Page<Diary> getTop3DiariesByRecommendedCount() {
-        return diaryRepository.findByTop3ByOrderedByRecommendedCount(PageRequest.of(0,3,Sort.by("recommendedCount").descending()));
+        Pageable pageable = PageRequest.of(0, 3);
+        return diaryRepository.findByTop3ByOrderedByRecommendedCount(pageable);
     }
 
     public void deleteDiary(Long diaryId) {
@@ -91,9 +93,7 @@ public class DiaryService {
             throw new DiaryDeleteUnAuthorizedException();
         }
     }
-
-
-    @Transactional(readOnly = true)
+    @Transactional
     public Diary findVerifiedDiary(Long diaryId) {
         Optional<Diary> optionalQuestion = diaryRepository.findById(diaryId);
         Diary findDiary = optionalQuestion.orElseThrow(()-> new DiaryNotFoundException());
