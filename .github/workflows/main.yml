@@ -86,5 +86,5 @@ jobs:
             -e K_CLIENT_ID=${{ secrets.K_CLIENT_ID }} \
             -e K_CLIENT_SECRET=${{ secrets.K_CLIENT_SECRET }} \
             -e TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }} \
-            pathfinder-server:${GITHUB_SHA::7}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
           EOF
