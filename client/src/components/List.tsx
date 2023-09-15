@@ -115,6 +115,7 @@ const List = () => {
   }
   return (
     <Listbox>
+      {isLoading && <Loading></Loading>}
       <section className="modal">
         <div className="title">
           <Tree />
