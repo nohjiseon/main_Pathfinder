@@ -90,5 +90,5 @@ jobs:
             -e K_CLIENT_ID=${{ secrets.K_CLIENT_ID }} \
             -e K_CLIENT_SECRET=${{ secrets.K_CLIENT_SECRET }} \
             -e TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }} \
-            ${{ secrets.DOCKER_USERNAME}}/pathfinder-server:latest
+            pathfinder-server:latest
           EOF
