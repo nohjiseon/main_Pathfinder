@@ -22,7 +22,7 @@ const StyledModal = styled.div`
     position: relative;
     max-width: 37.5rem;
     background: #fff;
-    padding: 1.5rem;
+    padding: 24px 30px;
     box-shadow:
       0 1px 4px hsla(0, 0%, 0%, 0.09),
       0 3px 8px hsla(0, 0%, 0%, 0.09),
@@ -31,9 +31,9 @@ const StyledModal = styled.div`
 
     .close-button {
       position: absolute;
-      padding: 1rem;
-      top: 0;
-      right: 0;
+      padding: 16px;
+      top: 10px;
+      right: 7px;
       cursor: pointer;
     }
 
@@ -79,13 +79,39 @@ const StyledModal = styled.div`
   }
 
   .consent-con {
-    margin: 20px;
+    > strong {
+      display: block;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      font-size: 24px;
+      border-bottom: 1px solid #e7e7e7;
+    }
+  }
+
+  .txt-conbox {
     height: 500px;
-    overflow: scroll;
+    overflow: auto;
+    padding-right: 10px;
+  }
+
+  .txt-conbox::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .txt-conbox::-webkit-scrollbar-thumb {
+    background-color: #d6d6d6;
+    border-radius: 100px;
+  }
+  .txt-conbox::-webkit-scrollbar-track {
+    border-radius: 100px;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+    background-color: #efefef;
   }
 
   .consent-intro {
     margin-bottom: 5px;
+    line-height: 24px;
   }
 
   .consent-link {
@@ -139,8 +165,8 @@ const Modal = ({ children }: ModalProp): JSX.Element => {
           <svg
             aria-hidden="true"
             className="svg-icon iconClearSm"
-            width="14"
-            height="14"
+            width="24"
+            height="24"
             viewBox="0 0 14 14"
           >
             <path d="M12 3.41 10.59 2 7 5.59 3.41 2 2 3.41 5.59 7 2 10.59 3.41 12 7 8.41 10.59 12 12 10.59 8.41 7 12 3.41Z"></path>

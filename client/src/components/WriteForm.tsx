@@ -5,56 +5,74 @@ import { Editor } from "@toast-ui/react-editor";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
 import { getAccessToken, getUserId } from "../util/auth";
 import { diaryDetailState } from "../atoms/atoms";
-import { useRecoilValue } from "recoil";
+import SubWave from "./common/SubWave";
+import Arrow from "../assets/images/select_arrow.png";
+
 const WriteCon = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
+  > form {
+    display: block;
+    max-width: 1200px;
+    width: 100%;
+  }
+
   .writeBox {
-    background-color: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 2px 4px 6px rgba(167, 167, 167, 0.15);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid #eaeaea;
+    box-shadow: 2px 4px 6px rgba(185, 185, 185, 0.25);
     border-radius: 4px;
-    width: 1200px;
-    height: 750px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 모든 내용 가운데 정렬 */
-    justify-content: center;
+    padding: 40px;
+    margin-top: 40px;
+
     .editor-container {
-      width: 1100px; // 에디터 컨테이너 가로 폭 설정
+      width: 100%; // 에디터 컨테이너 가로 폭 설정
+      .ProseMirror {
+        font-size: 16px;
+      }
+      .toastui-editor-contents p {
+        font-size: 16px;
+      }
     }
     .title_tag {
       display: flex;
-      flex-direction: row;
       align-items: center;
       justify-content: space-between; /* 좌우 균형 정렬 */
-      width: 1100px;
       font-size: 24px;
 
       select {
-        margin-left: 10px;
-        border: 1px solid rgba(190, 190, 190, 1);
-        background-color: rgba(255, 255, 255, 1);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background: url(${Arrow}) no-repeat right center / 30px transparent;
         width: 200px;
-        height: 30px;
+        height: 40px;
         border-radius: 4px;
+        padding-left: 16px;
+        margin-left: 10px;
+        cursor: pointer;
+        border: 1px solid #dadde6;
+      }
+      select::-ms-expand {
+        display: none;
       }
     }
     .content {
-      width: 1100px;
+      display: block;
       font-size: 24px;
+      padding-bottom: 12px;
     }
     .titleInput,
     .contentInput {
       margin-top: 10px;
-      border: 1px solid rgba(190, 190, 190, 1);
-      background-color: rgba(255, 255, 255, 1);
-      width: 1100px;
+      border: 1px solid #dadde6;
+      width: 100%;
       border-radius: 4px;
       padding: 10px;
       margin-bottom: 30px;
@@ -65,7 +83,8 @@ const WriteCon = styled.div`
     }
 
     .button {
-      margin-top: 20px;
+      text-align: center;
+      margin-top: 30px;
 
       button {
         width: 130px;
@@ -313,6 +332,7 @@ const WriteForm = () => {
 
   return (
     <WriteCon>
+      <SubWave />
       <form
         action=""
         onSubmit={handleSubmit(async (data) => {

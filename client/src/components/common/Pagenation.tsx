@@ -13,8 +13,8 @@ interface paginationProp {
 const StyledPagination = styled.div`
   padding: 16px 0;
   display: flex;
-  flex-flow: row;
   gap: 16px;
+  justify-content: center;
 
   button {
     color: #444;

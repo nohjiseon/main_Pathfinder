@@ -3,46 +3,88 @@ import { styled } from "styled-components";
 import { DiaryData } from "../../types/types";
 import { getFormattedDate } from "../../util/date";
 import empty from "../../assets/images/img_empty.png";
+import Thumbup from "../../assets/images/thumb-up-icon.png";
+import Eye from "../../assets/images/eye-icon.png";
+
 const CardBox = styled.li`
+  width: calc(50% - 8px);
+
   .cardContent {
     display: flex;
-    flex-direction: row;
-    width: 550px;
-    height: 125px;
     background-color: rgba(255, 255, 255, 0.9);
     border: 0.5px solid rgba(243, 243, 243, 1);
     border-radius: 4px;
-    margin: 0 5px;
-    padding: 15px 21px 10px 21px;
+    padding: 10px 14px;
     align-items: center;
-    justify-content: space-between;
     box-shadow: 2px 4px 4px rgba(185, 185, 185, 0.25);
-    overflow: hidden;
   }
   .img-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 156px;
+    width: 120px;
     height: 95px;
     overflow: hidden;
+    background: url(${empty}) no-repeat center / 55px #d9d9d9;
+    border-radius: 4px;
   }
-  img {
-    width: 100%;
-    height: 100%;
+  .image {
     object-fit: cover;
+    min-width: 100%;
   }
   .content {
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    gap: 3px; /* 여백 설정 */
+    padding-left: 20px;
+    width: calc(100% - 120px);
+    strong {
+      display: block;
+      font-size: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .txt-box {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 20px;
+      margin: 8px 0 10px;
+      font-size: 14px;
+      min-height: 40px;
+    }
   }
   .information {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    font-size: 14px;
+    font-weight: 300;
+    .count,
+    .view {
+      padding-left: 16px;
+      background: no-repeat left center / 13px;
+    }
+    .count {
+      background-image: url(${Thumbup});
+    }
+    .view {
+      background-image: url(${Eye});
+    }
+    > div span ~ span {
+      margin-left: 10px;
+    }
+  }
+  @media screen and (max-width: 820px) {
+    .information {
+      font-size: 11px;
+      > div span ~ span {
+        margin-left: 5px;
+      }
+      .count,
+      .view {
+        background-size: 12px;
+        padding-left: 13px;
+      }
+    }
   }
 `;
 
@@ -50,7 +92,7 @@ const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
   const resultContent = diaryData.content.replace(/<img\b[^>]*>/gi, "");
   const imgRegex = /<img *?src=["'](.*?)["'].*?>/g;
   const matches = diaryData.content.match(imgRegex);
-  let firstThumbnail = null;
+  let firstThumbnail = "";
   console.log(diaryData);
   if (matches && matches.length > 0) {
     const firstMatch = matches[0];
@@ -61,19 +103,19 @@ const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
   }
   return (
     <CardBox>
-      <Link to={`/${diaryData.diaryId}`}>
-        <div className="cardContent">
-          <div className="img-container">
-            <img className="image" src={firstThumbnail ? firstThumbnail : empty} alt="" />
-          </div>
-          <div className="content">
-            <h2>{diaryData.title}</h2>
-            <div dangerouslySetInnerHTML={{ __html: resultContent }}></div>
-            <div className="information">
-              <div>{diaryData.name}</div>
-              <div>{diaryData.recommendedCount}</div>
-              <div>{diaryData.views}</div>
-              <div>{getFormattedDate(diaryData.modifiedAt)}</div>
+      <Link to={`/${diaryData.diaryId}`} className="cardContent">
+        <div className="img-container">
+          <img className="image" src={firstThumbnail} alt="" />
+        </div>
+        <div className="content">
+          <strong>{diaryData.title}</strong>
+          <div className="txt-box" dangerouslySetInnerHTML={{ __html: resultContent }}></div>
+          <div className="information">
+            <span>{diaryData.name}</span>
+            <div>
+              <span className="count">{diaryData.recommendedCount}</span>
+              <span className="view">{diaryData.views}</span>
+              <span>{getFormattedDate(diaryData.modifiedAt)}</span>
             </div>
           </div>
         </div>

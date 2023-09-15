@@ -1,16 +1,17 @@
-import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
-import waveBg1 from "../assets/images/wave-bg1.png";
-import backArrow from "../assets/images/back-arrow.png";
-import thumbUp from "../assets/images/thumb-up-icon.png";
-import eye from "../assets/images/eye-icon.png";
-import thumbUpWhite from "../assets/images/thumb-up-icon-white.png";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { diaryDetailState } from "../atoms/atoms";
 import { DiaryDetail } from "../types/types";
 import { getFormattedDate } from "../util/date";
-import axios from "axios";
 import { getAccessToken, getUserId } from "../util/auth";
+import backArrow from "../assets/images/back-arrow.png";
+import thumbUp from "../assets/images/thumb-up-icon.png";
+import eye from "../assets/images/eye-icon.png";
+import thumbUpWhite from "../assets/images/thumb-up-icon-white.png";
+import Loading from "../components/common/Loading";
+import SubWave from "../components/common/SubWave";
 
 const Detail = (): JSX.Element => {
   const navigate = useNavigate();
@@ -60,80 +61,76 @@ const Detail = (): JSX.Element => {
     await navigate(-1);
   };
   if (isLoading) {
-    return <DetailBg>Loading...</DetailBg>;
+    return <Loading />;
   }
   if (isError) {
     return <DetailBg>Error...!</DetailBg>;
   }
   return (
     <DetailBg>
-      <DetailBgImg src={waveBg1} />
+      <SubWave />
       <DetailContentContainer>
-        <DetailArrowContainer>
-          <img src={backArrow} onClick={() => navigate(-1)} />
-        </DetailArrowContainer>
         <DetailMainContent>
           <DetailTitleContainer>
+            <DetailArrowContainer>
+              <img src={backArrow} onClick={() => navigate(-1)} />
+            </DetailArrowContainer>
             <DetailTitle>{data?.data.title}</DetailTitle>
+          </DetailTitleContainer>
+          <DetailReaderRecordContainer>
             <DetailSide>
               <DetailDiaryInfo>{data?.data.name}</DetailDiaryInfo>
               <DetailDiaryInfo>{getFormattedDate(data?.data.modifiedAt)}</DetailDiaryInfo>
             </DetailSide>
-          </DetailTitleContainer>
-          <DetailContent>
-            <DetailReaderRecordContainer>
-              <DetailReaderRecord>
+            <DetailReaderRecord>
+              <img src={thumbUp} />
+              <div>{data?.data.recommendedCount}</div>
+            </DetailReaderRecord>
+            <DetailReaderRecord>
+              <img src={eye} />
+              <div>{data?.data.views}</div>
+            </DetailReaderRecord>
+          </DetailReaderRecordContainer>
+          <DetailConentParagraph>
+            <div dangerouslySetInnerHTML={{ __html: data?.data.content }}></div>
+          </DetailConentParagraph>
+          <DetailBtnContainer>
+            {data?.data.recommend ? (
+              <DetailLikeBtnFocus
+                onClick={() => {
+                  likeBtnHandler();
+                }}
+              >
+                <img src={thumbUpWhite} />
+                <span>추천</span>
+              </DetailLikeBtnFocus>
+            ) : (
+              <DetailLikeBtn
+                onClick={() => {
+                  likeBtnHandler();
+                }}
+              >
                 <img src={thumbUp} />
-                <div>{data?.data.recommendedCount}</div>
-              </DetailReaderRecord>
-              <DetailReaderRecord>
-                <img src={eye} />
-                <div>{data?.data.views}</div>
-              </DetailReaderRecord>
-            </DetailReaderRecordContainer>
-            <DetailContentBox>
-              <DetailConentParagraph>
-                <div dangerouslySetInnerHTML={{ __html: data?.data.content }}></div>
-              </DetailConentParagraph>
-              <DetailBtnContainer>
-                {data?.data.recommend ? (
-                  <DetailLikeBtnFocus
-                    onClick={() => {
-                      likeBtnHandler();
-                    }}
-                  >
-                    <img src={thumbUpWhite} />
-                    <span>추천</span>
-                  </DetailLikeBtnFocus>
-                ) : (
-                  <DetailLikeBtn
-                    onClick={() => {
-                      likeBtnHandler();
-                    }}
-                  >
-                    <img src={thumbUp} />
-                    <span>추천</span>
-                  </DetailLikeBtn>
-                )}
-                <DetailEditBtnContainer>
-                  <DetailEditBtn
-                    onClick={() => {
-                      patchBtnHandler();
-                    }}
-                  >
-                    수정
-                  </DetailEditBtn>
-                  <DetailCancelBtn
-                    onClick={() => {
-                      deleteBtnHandler();
-                    }}
-                  >
-                    삭제
-                  </DetailCancelBtn>
-                </DetailEditBtnContainer>
-              </DetailBtnContainer>
-            </DetailContentBox>
-          </DetailContent>
+                <span>추천</span>
+              </DetailLikeBtn>
+            )}
+            <DetailEditBtnContainer>
+              <DetailEditBtn
+                onClick={() => {
+                  patchBtnHandler();
+                }}
+              >
+                수정
+              </DetailEditBtn>
+              <DetailCancelBtn
+                onClick={() => {
+                  deleteBtnHandler();
+                }}
+              >
+                삭제
+              </DetailCancelBtn>
+            </DetailEditBtnContainer>
+          </DetailBtnContainer>
         </DetailMainContent>
       </DetailContentContainer>
     </DetailBg>
@@ -143,74 +140,56 @@ const Detail = (): JSX.Element => {
 export default Detail;
 
 const DetailBg = styled.div`
-  min-height: calc(100vh - 120px);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-`;
-
-const DetailBgImg = styled.img`
-  position: fixed;
-  max-width: 100%;
-  z-index: -100;
-  left: 0;
-  bottom: 0px;
+  position: relative;
+  min-height: calc(100vh - 160px);
+  padding: 0 20px 70px;
 `;
 
 const DetailContentContainer = styled.div`
-  width: 1200px;
-  min-height: calc(100vh - 120px);
+  max-width: 1200px;
+  margin: 40px auto 0;
   background-color: rgba(255, 255, 255, 0.7);
-  border-left: 1px solid #f3f3f3;
-  border-right: 1px solid #f3f3f3;
+  box-shadow: 2px 4px 6px rgba(185, 185, 185, 0.25);
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
 `;
 
-const DetailArrowContainer = styled(DetailContentContainer)`
-  width: 1200px;
-  min-height: 0%;
-  height: 80px;
-  padding: 30px 40px 10px 40px;
-  position: fixed;
-  z-index: 100;
-  box-sizing: border-box;
-  opacity: 100%;
-  background-color: #ffffff;
+const DetailArrowContainer = styled.button`
+  width: 32px;
+  height: 32px;
 
   img {
-    cursor: pointer;
+    width: 100%;
   }
 `;
 
 const DetailMainContent = styled.div`
-  padding: 100px 50px 30px 50px;
+  padding: 24px 40px;
 `;
 
 const DetailTitleContainer = styled.div`
-  border-bottom: 1px solid #bebebe;
-  padding: 0 5px 10px 5px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 16px;
+  margin-bottom: 12px;
 `;
 
-const DetailTitle = styled.div`
-  font-size: 30px;
-  font-weight: 600;
+const DetailTitle = styled.strong`
+  display: inline-block;
+  max-width: calc(100% - 40px);
+  font-size: 24px;
+  vertical-align: text-top;
+  padding-left: 12px;
 `;
 
 const DetailSide = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 20px;
-  margin-top: 5px;
+  gap: 10px;
+  margin-right: 12px;
+  font-size: 14px;
 `;
 
 const DetailDiaryInfo = styled.span`
   font-weight: 400;
-`;
-
-const DetailContent = styled.div`
-  padding: 10px 5px 0 5px;
 `;
 
 const DetailReaderRecordContainer = styled.div`
@@ -218,13 +197,14 @@ const DetailReaderRecordContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 7px;
+  gap: 10px;
 `;
 
 const DetailReaderRecord = styled.div`
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
+  font-size: 14px;
 
   img {
     width: 16px;
@@ -232,25 +212,18 @@ const DetailReaderRecord = styled.div`
   }
 `;
 
-const DetailContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
-`;
-
 const DetailConentParagraph = styled.div`
-  width: 1000px;
-  margin-top: 20px;
   line-height: 30px;
+  padding: 30px;
+  min-height: 560px;
 `;
 
 const DetailBtnContainer = styled.div`
-  width: 1000px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-top: 30px;
+  border-top: 1px solid #eaeaea;
+  padding-top: 12px;
 `;
 
 const DetailLikeBtn = styled.button`
