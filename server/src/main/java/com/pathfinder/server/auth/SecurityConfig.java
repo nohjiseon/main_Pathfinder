@@ -92,6 +92,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST,"/image/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/tag/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/recommend/**").permitAll()
+                .antMatchers("/scrap/**").permitAll()
                 .anyRequest().authenticated();
     }
 
