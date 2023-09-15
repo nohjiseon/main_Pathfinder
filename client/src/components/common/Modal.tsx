@@ -20,7 +20,6 @@ const StyledModal = styled.div`
 
   section {
     position: relative;
-    max-width: 37.5rem;
     background: #fff;
     padding: 1.5rem;
     box-shadow:
@@ -36,48 +35,9 @@ const StyledModal = styled.div`
       right: 0;
       cursor: pointer;
     }
-
-    h1 {
-      font-size: 1.6875rem;
-      color: #c22e32;
-      margin: 0 0 1rem;
-    }
-
-    p {
-      font-size: 0.8125rem;
-      margin: 0 0 1.5rem;
-    }
-
-    button {
-      padding: 0.8rem;
-      border-radius: 6px;
-      border: none;
-    }
-
-    .button-gap {
-      display: flex;
-      flex-flow: row;
-      gap: 0.5rem;
-    }
-
-    .discard-action {
-      background: #c22e32;
-      color: #fff;
-
-      &:hover {
-        background: #ab262a;
-      }
-    }
-
-    .cancel-action {
-      background: transparent;
-
-      &:hover {
-        background: #f9fafa;
-      }
-    }
   }
 
+  // 약관 동의 모달 셋팅
   .consent-con {
     margin: 20px;
     height: 500px;
@@ -117,6 +77,61 @@ const StyledModal = styled.div`
 
   .consent-indent {
     margin: 2px 0 2px 37px;
+  }
+
+  // 팀원 소개 모달 셋팅
+  .footer-con {
+    margin: 20px 50px;
+    color: #444444;
+    text-align: center;
+  }
+
+  .footer-h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #4270cf;
+  }
+
+  .footer-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .footer-h2 {
+    font-size: 22px;
+    font-size: 500;
+    letter-spacing: 1px;
+  }
+
+  .footer-team-con {
+    display: flex;
+    align-items: flex-start;
+    gap: 50px;
+    margin-top: 20px;
+  }
+
+  .footer-team {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .footer-teammate {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    border: 0.5px solid rgba(68, 68, 68, 0.4);
+  }
+
+  .footer-github {
+    margin-top: 5px;
+    cursor: pointer;
   }
 `;
 

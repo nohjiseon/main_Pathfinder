@@ -63,6 +63,14 @@ const Login = (): JSX.Element => {
     window.location.href = link;
   }
 
+  function handleGithubLogin(): void {
+    const REST_API_KEY = process.env.REACT_APP_REST_API_KEY_G;
+
+    const link = `https://github.com/login/oauth/authorize?client_id=${REST_API_KEY}&scope=user:email`;
+
+    window.location.href = link;
+  }
+
   return (
     <MainCon>
       <Wave />
@@ -161,7 +169,7 @@ const Login = (): JSX.Element => {
             <img src={Google} />
           </LoginSocial>
           <LoginSocial>
-            <img src={Github} />
+            <img src={Github} onClick={handleGithubLogin} />
           </LoginSocial>
           <LoginSocial onClick={handleKakaoLogin}>
             <img src={Kakao} />
