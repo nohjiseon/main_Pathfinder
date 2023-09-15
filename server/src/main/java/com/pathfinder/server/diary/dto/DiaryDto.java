@@ -39,7 +39,7 @@ public class DiaryDto {
         private String area1;
         private String area2;
         private Long recommendedCount;
-        private Long scrapCount;
+        private Integer scrapCount;
         private Integer views;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
