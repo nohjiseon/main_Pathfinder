@@ -33,7 +33,7 @@ const Recommend = (): JSX.Element => {
     <MainCon>
       <SubWave />
       <RecommendCon>
-        <Title>이번 여행지는 부산 어떠세요?</Title>
+        {/* <Title>이번 여행지는 {recommendData[0].area2} 어떠세요?</Title> */}
         <SubTitle>추천 수 가장 높은 게시물</SubTitle>
         {isLoading ? (
           <Loading />

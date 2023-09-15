@@ -755,7 +755,7 @@ const MyPageBlogList = styled.ul`
   flex-wrap: wrap;
   align-items: center;
   margin-top: 30px;
-  gap: 20px 0;
+  gap: 12px 16px;
 `;
 
 const MyPagePaginationContainer = styled.div`

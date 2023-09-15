@@ -36,6 +36,7 @@ const WaveCon = styled.div`
   height: calc(100vh - 120px);
   background-image: linear-gradient(to bottom, transparent 519px, #badeff 520px);
   z-index: -1;
+  bottom: 0;
 `;
 
 const Waves = styled.svg`

@@ -234,6 +234,7 @@ const LoginCon = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px 0;
   @media screen and (max-width: 1200px) {
     margin-right: 20px;
   }
