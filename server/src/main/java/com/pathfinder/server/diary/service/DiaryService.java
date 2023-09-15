@@ -57,7 +57,7 @@ public class DiaryService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Diary getDiary(Long diaryId){
         Diary findDiary = findVerifiedDiary(diaryId);
         findDiary.setViews(findDiary.getViews() + 1); // 조회수 증가
