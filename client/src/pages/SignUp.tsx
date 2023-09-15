@@ -48,6 +48,7 @@ const SignUp = (): JSX.Element => {
             name: data.nickname,
             email: data.email,
             password: data.password,
+            agreeToTerms: isChecked,
           },
           { headers: { "Content-Type": "application/json" } },
         )
