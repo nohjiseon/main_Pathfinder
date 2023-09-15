@@ -32,7 +32,7 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
           docker build -t pathfinder-server:latest server/
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server
 
       - name: Set Environment Variables in .env file
         run: |
@@ -85,5 +85,5 @@ jobs:
             -e K_CLIENT_ID=${{ secrets.K_CLIENT_ID }} \
             -e K_CLIENT_SECRET=${{ secrets.K_CLIENT_SECRET }} \
             -e TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }} \
-            pathfinder-server:latest
+            pathfinder-server
           EOF
