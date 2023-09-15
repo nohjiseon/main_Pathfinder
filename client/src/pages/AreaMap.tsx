@@ -113,7 +113,6 @@ const AreaMap = (): JSX.Element => {
 
   return (
     <MainCon>
-      {/* <Rain></Rain> */}
       {areaName !== "전체 지역" && areaName !== null && renderWeatherComponent()}
       {areaName && <List></List>}
 

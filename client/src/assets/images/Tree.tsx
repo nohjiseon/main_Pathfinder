@@ -3,8 +3,8 @@ export const Tree = () => {
     <>
       {" "}
       <svg
-        width="70"
-        height="70"
+        width="50"
+        height="50"
         viewBox="0 0 80 80"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

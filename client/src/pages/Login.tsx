@@ -227,12 +227,16 @@ const LoginCon = styled.form`
   min-height: calc(100vh - 120px);
   width: 550px;
   background-color: rgba(255, 255, 255, 0.8);
-  margin-left: 55%;
+  margin-left: auto;
+  margin-right: 227px;
   box-shadow: 0 4px 20px rgba(163, 163, 163, 0.25);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: 1200px) {
+    margin-right: 20px;
+  }
 `;
 
 const LoginTitle = styled.span`

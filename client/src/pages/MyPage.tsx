@@ -348,9 +348,9 @@ const MyPage = (): JSX.Element => {
                               <path
                                 d="M6.99951 6.362C8.51195 5.46328 10.2402 4.99251 11.9995 5C18.3065 5 21.3665 10.683 21.9095 11.808C21.9695 11.931 21.9695 12.069 21.9095 12.193C21.5575 12.921 20.1535 15.555 17.4995 17.324M13.9995 18.8C13.3413 18.9341 12.6712 19.0012 11.9995 19C5.69251 19 2.63251 13.317 2.08951 12.192C2.06017 12.1319 2.04492 12.0659 2.04492 11.999C2.04492 11.9321 2.06017 11.8661 2.08951 11.806C2.30851 11.354 2.92951 10.174 3.99951 8.921M9.99951 9.764C10.571 9.2531 11.3165 8.98037 12.0828 9.00182C12.8491 9.02326 13.5781 9.33725 14.1202 9.87932C14.6623 10.4214 14.9762 11.1504 14.9977 11.9167C15.0191 12.683 14.7464 13.4285 14.2355 14M2.99951 3L20.9995 21"
                                 stroke="black"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                             </svg>
                           )}
@@ -466,10 +466,8 @@ export default MyPage;
 
 const MyPageBg = styled.main`
   min-height: calc(100vh - 50px);
-  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
   background-color: #f3f3f3;
   margin-top: -70px;
   padding: 120px 20px 0;
@@ -477,10 +475,6 @@ const MyPageBg = styled.main`
 
 const MyPageContainer = styled.div`
   width: 1200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 const MyPageTop = styled.div`
@@ -522,10 +516,10 @@ const MyPageEmail = styled.div`
 
 const MyPageBottom = styled.div`
   width: 100%;
-  min-height: 500px;
+  min-height: 520px;
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 4px 6px rgba(185, 185, 185, 0.25);
   margin: 40px 0 70px 0;
 `;
 

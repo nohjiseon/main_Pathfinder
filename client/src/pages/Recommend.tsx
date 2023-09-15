@@ -10,6 +10,7 @@ import AirPlane from "../assets/images/ic_air.png";
 const Recommend = (): JSX.Element => {
   const [recommendData, setRecommendData] = useState<DiaryData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -21,6 +22,7 @@ const Recommend = (): JSX.Element => {
     } catch (error) {
       console.error("데이터 불러오기 실패:", error);
       setIsLoading(false);
+      setIsError(true);
     }
   };
   useEffect(() => {
@@ -35,6 +37,8 @@ const Recommend = (): JSX.Element => {
         <SubTitle>추천 수 가장 높은 게시물</SubTitle>
         {isLoading ? (
           <Loading />
+        ) : isError ? (
+          <div>server Error...</div>
         ) : (
           <ul>
             {recommendData.map((item: DiaryData) => (
