@@ -48,13 +48,12 @@ const AreaMap = (): JSX.Element => {
         `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=27306e0d72080c1e89bb4b2a519e6a55&units=metric`,
       )
       .then((res) => {
-        console.log(res.data.weather[0].main);
         setWeather(res.data.weather[0].main);
       });
   }
 
   function geoError(): void {
-    console.log("위치 정보를 불러오는 데 실패하였습니다.");
+    return;
   }
 
   useEffect(() => {
@@ -86,7 +85,6 @@ const AreaMap = (): JSX.Element => {
           `https://api.openweathermap.org/data/2.5/weather?lat=${pos[0]}&lon=${pos[1]}&appid=27306e0d72080c1e89bb4b2a519e6a55&units=metric`,
         )
         .then((res) => {
-          console.log(res.data.weather[0].main);
           setWeather(res.data.weather[0].main);
         });
     }
@@ -109,7 +107,6 @@ const AreaMap = (): JSX.Element => {
       return null;
     }
   };
-  console.log(areaName);
 
   return (
     <MainCon>

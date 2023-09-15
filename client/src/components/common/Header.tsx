@@ -42,9 +42,6 @@ const Header = () => {
           setNickname(res.data.data.name);
           setProfilePhoto(res.data.data.profileImageUrl);
           setIsLogin(true);
-        })
-        .catch(() => {
-          console.log("데이터 로딩에 실패하였습니다.");
         });
     } else {
       setIsLogin(false);

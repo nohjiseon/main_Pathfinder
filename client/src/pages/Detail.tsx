@@ -37,7 +37,6 @@ const Detail = (): JSX.Element => {
         headers,
       });
       if (response.status === 201 || 200) {
-        console.log(data);
       } else {
         console.error(`${response.status} 실패`);
       }
@@ -52,7 +51,6 @@ const Detail = (): JSX.Element => {
         headers,
       });
       if (response.status === 201 || 200) {
-        console.log(data);
       }
     } catch (error) {
       alert("권한이 없습니다.");
@@ -79,7 +77,11 @@ const Detail = (): JSX.Element => {
           <DetailReaderRecordContainer>
             <DetailSide>
               <DetailDiaryInfo>{data?.data.name}</DetailDiaryInfo>
-              <DetailDiaryInfo>{getFormattedDate(data?.data.modifiedAt)}</DetailDiaryInfo>
+              <DetailDiaryInfo>
+                {getFormattedDate(
+                  data?.data.modifiedAt ? data?.data.modifiedAt : data?.data.createdAt,
+                )}
+              </DetailDiaryInfo>
             </DetailSide>
             <DetailReaderRecord>
               <img src={thumbUp} />
