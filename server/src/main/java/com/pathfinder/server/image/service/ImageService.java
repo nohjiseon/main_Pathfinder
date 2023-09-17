@@ -3,8 +3,10 @@ package com.pathfinder.server.image.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.pathfinder.server.global.exception.imageexception.ImageNotFoundException;
+import com.pathfinder.server.global.exception.memberexception.MemberNotFoundException;
 import com.pathfinder.server.image.entity.Image;
 import com.pathfinder.server.image.repository.ImageRepository;
+import com.pathfinder.server.member.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -50,13 +52,17 @@ public class ImageService {
 
 
     public void deleteImage(String imageUrl)  {
-        Optional<Image> image = imageRepository.findByUrl(imageUrl);
-        if (image.isPresent()) {
-            amazonS3.deleteObject(bucket, image.get().getImageName());
-        }
-        else {
-            throw new ImageNotFoundException();
-        }
+        Image image = findVerifiedImage(imageUrl);
+        amazonS3.deleteObject(bucket, image.getImageName());
+        imageRepository.delete(image);
     }
 
+    public Image findVerifiedImage(String imageUrl) {
+        Optional<Image> optionalImage =
+                imageRepository.findByUrl(imageUrl);
+        Image findImage =
+                optionalImage.orElseThrow(() ->
+                        new ImageNotFoundException());
+        return findImage;
+    }
 }
