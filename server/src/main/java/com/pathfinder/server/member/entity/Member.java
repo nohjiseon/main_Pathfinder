@@ -39,7 +39,7 @@ public class Member {
 
     @Column(nullable = false)
     private String profileImageUrl =
-            "https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png";   // 기본 이미지
+            "https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
 
     @Column(nullable = false)
     private int diaryCount;
