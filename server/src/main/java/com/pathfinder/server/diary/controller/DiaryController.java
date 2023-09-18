@@ -15,6 +15,7 @@ import com.pathfinder.server.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
@@ -52,6 +53,8 @@ public class DiaryController {
     public ResponseEntity getDiary(@PathVariable("diary-id") @Positive Long diaryId) {
         Diary diary = diaryService.getDiary(diaryId);
         DiaryDto.Response response = mapper.DiaryToDiaryResponseDto(diary);
+        System.out.println(SecurityUtil.getCurrentId());
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
         Optional<Recommend> optionalRecommend = recommendRepository.findByMemberMemberIdAndDiaryDiaryId(SecurityUtil.getCurrentId(), diaryId);
         response.setRecommend(optionalRecommend.isPresent());
         Optional<Scrap> optionalScrap = scrapRepository.findByMemberMemberIdAndDiaryDiaryId(SecurityUtil.getCurrentId(),diaryId);
