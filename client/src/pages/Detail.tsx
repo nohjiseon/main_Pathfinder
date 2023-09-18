@@ -5,7 +5,7 @@ import { useFetch } from "../hooks/useFetch";
 import { diaryDetailState } from "../atoms/atoms";
 import { DiaryDetail } from "../types/types";
 import { getFormattedDate } from "../util/date";
-import { getAccessToken, getUserId } from "../util/auth";
+import { getAccessToken, getEmail, getUserId } from "../util/auth";
 import backArrow from "../assets/images/back-arrow.png";
 import thumbUp from "../assets/images/thumb-up-icon.png";
 import eye from "../assets/images/eye-icon.png";
@@ -74,7 +74,7 @@ const Detail = (): JSX.Element => {
     } catch (error) {
       alert("권한이 없습니다.");
     }
-    await navigate(-1);
+    await fetchData();
   };
   if (isLoading) {
     return <Loading />;
@@ -142,20 +142,28 @@ const Detail = (): JSX.Element => {
               >
                 스크랩
               </DetailScrapBtn>
-              <DetailEditBtn
-                onClick={() => {
-                  patchBtnHandler();
-                }}
-              >
-                수정
-              </DetailEditBtn>
-              <DetailCancelBtn
-                onClick={() => {
-                  deleteBtnHandler();
-                }}
-              >
-                삭제
-              </DetailCancelBtn>
+              {getEmail() === data.data.email ? (
+                <DetailEditBtn
+                  onClick={() => {
+                    patchBtnHandler();
+                  }}
+                >
+                  수정
+                </DetailEditBtn>
+              ) : (
+                <></>
+              )}
+              {getEmail() === data.data.email ? (
+                <DetailCancelBtn
+                  onClick={() => {
+                    deleteBtnHandler();
+                  }}
+                >
+                  삭제
+                </DetailCancelBtn>
+              ) : (
+                <></>
+              )}
             </DetailEditBtnContainer>
           </DetailBtnContainer>
         </DetailMainContent>

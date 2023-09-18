@@ -16,3 +16,12 @@ export const getUserId = () => {
 
   return id;
 };
+export const getEmail = () => {
+  const email = localStorage.getItem("email");
+
+  if (!email) {
+    return null;
+  }
+
+  return email;
+};

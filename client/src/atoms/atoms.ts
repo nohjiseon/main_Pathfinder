@@ -16,6 +16,14 @@ export const diaryMyListState = atom<Diary>({
     pageInfo: { page: 1, size: 10, totalElements: 0, totalPages: 1 },
   },
 });
+
+export const diaryMyScrapListState = atom<Diary>({
+  key: "diaryMyScrapListState",
+  default: {
+    data: [],
+    pageInfo: { page: 1, size: 10, totalElements: 0, totalPages: 1 },
+  },
+});
 export const diaryDetailState = atom<DiaryDetail>({
   key: "diaryDetailState",
   default: {
@@ -23,6 +31,7 @@ export const diaryDetailState = atom<DiaryDetail>({
       diaryId: 0,
       createdAt: "",
       modifiedAt: "",
+      email: "",
       area1: "",
       area2: "",
       name: "",
@@ -40,6 +49,7 @@ export const diaryState = atom<DiaryData>({
     diaryId: 0,
     createdAt: "",
     modifiedAt: "",
+    email: "",
     area1: "",
     area2: "",
     name: "",

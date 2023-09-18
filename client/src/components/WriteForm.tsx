@@ -116,6 +116,7 @@ const WriteForm = () => {
         diaryId: 0,
         createdAt: "",
         modifiedAt: "",
+        email: "",
         area1: "",
         area2: "",
         name: "",
@@ -207,6 +208,7 @@ const WriteForm = () => {
       "횡성",
     ].sort(),
     충청도: [
+      "대전",
       "제철",
       "청주",
       "충주",

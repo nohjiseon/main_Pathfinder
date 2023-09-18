@@ -14,6 +14,7 @@ import lock from "../assets/images/lock.png";
 import { diaryMyListState } from "../atoms/atoms";
 import { Diary, DiaryData } from "../types/types";
 import { useFetch } from "../hooks/useFetch";
+import Scrap from "../components/Scrap";
 
 const MyPage = (): JSX.Element => {
   const [curMenu, setCurMenu] = useState<string>("profile");
@@ -385,11 +386,11 @@ const MyPage = (): JSX.Element => {
                   {photoList.map((el) => {
                     return (
                       <MyPageCharacter
+                        key={el.requirement}
                         className={isPhotoEdit ? "focus" : ""}
                         onClick={() => handlePhotoChange(el)}
-                        key={el.rewardId}
                       >
-                        <CharacterSquare src={el.imageUrl} />
+                        <CharacterSquare src={el.imageUrl} key={el.requirement} />
                         {el.unlocked ? <div>{el.name}</div> : null}
                       </MyPageCharacter>
                     );
@@ -421,18 +422,7 @@ const MyPage = (): JSX.Element => {
             ) : curMenu === "scrap" ? (
               <MyPageContent>
                 <MyPageContentTitle>스크랩</MyPageContentTitle>
-                <MyPageBlogList>
-                  {data?.data.map((el: DiaryData) => <Card key={el.diaryId} diaryData={el}></Card>)}
-                </MyPageBlogList>
-                <MyPagePaginationContainer>
-                  <Pagination
-                    currentPage={currentPage}
-                    onPrevPage={onPrevPageHandler}
-                    totalPages={totalPages}
-                    onPageChange={onPageChangeHandler}
-                    onNextPage={onNextPageHandler}
-                  />
-                </MyPagePaginationContainer>
+                <Scrap></Scrap>
               </MyPageContent>
             ) : (
               <MyPageContent>
@@ -535,7 +525,7 @@ const MyPageMenuBtnFocus = styled(MyPageMenuBtn)`
 `;
 
 const MyPageContent = styled.div`
-  padding: 40px;
+  margin: 40px;
 `;
 
 const MyPageContentTitleContainer = styled.div`
