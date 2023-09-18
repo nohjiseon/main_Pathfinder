@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { RecoilState, useRecoilState } from "recoil";
+import { getAccessToken } from "../util/auth";
 
 export interface FetchReturn<T> {
   fetchData: () => void;
@@ -9,11 +10,7 @@ export interface FetchReturn<T> {
   data: T;
 }
 
-export const useFetch = <T extends object>(
-  atom: RecoilState<T>,
-  url: string,
-  token: string | null = null,
-): FetchReturn<T> => {
+export const useFetch = <T extends object>(atom: RecoilState<T>, url: string): FetchReturn<T> => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [data, setData] = useRecoilState(atom);
@@ -21,8 +18,8 @@ export const useFetch = <T extends object>(
   type Headers = Record<string, string>;
   const headers: Headers = {};
 
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+  if (getAccessToken()) {
+    headers["Authorization"] = `Bearer ${getAccessToken()}`;
   }
 
   const fetchData = async () => {

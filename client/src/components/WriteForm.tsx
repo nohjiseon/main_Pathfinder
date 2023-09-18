@@ -124,6 +124,8 @@ const WriteForm = () => {
         content: "",
         recommendedCount: 0,
         views: 0,
+        scrap: false,
+        scrapCount: 0,
         recommend: false,
       },
     };
