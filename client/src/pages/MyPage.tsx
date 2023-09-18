@@ -419,7 +419,11 @@ const MyPage = (): JSX.Element => {
               <MyPageContent>
                 <MyPageContentTitle>내가 쓴 글</MyPageContentTitle>
                 <MyPageBlogList>
-                  {data?.data.map((el: DiaryData) => <Card key={el.diaryId} diaryData={el}></Card>)}
+                  {data.data.length !== 0 ? (
+                    data.data.map((el: DiaryData) => <Card key={el.diaryId} diaryData={el}></Card>)
+                  ) : (
+                    <div className="MyPageEmpty">작성한 글이 없습니다.</div>
+                  )}
                 </MyPageBlogList>
                 <MyPagePaginationContainer>
                   <Pagination
@@ -749,6 +753,15 @@ const MyPageBlogList = styled.ul`
   align-items: center;
   margin-top: 30px;
   gap: 12px 16px;
+
+  .MyPageEmpty {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+  }
 `;
 
 const MyPagePaginationContainer = styled.div`
