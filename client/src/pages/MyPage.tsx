@@ -544,7 +544,7 @@ const MyPageMenuBtnFocus = styled(MyPageMenuBtn)`
 `;
 
 const MyPageContent = styled.div`
-  margin: 40px;
+  padding: 40px;
 `;
 
 const MyPageContentTitleContainer = styled.div`

@@ -25,3 +25,14 @@ export interface PageInfo {
   totalElements: number;
   totalPages: number;
 }
+
+export interface RandomData {
+  title: string;
+  addr1: string;
+  addr2: string;
+  tel: string;
+  firstimage: string;
+  firstimage2: string;
+  tag: string;
+  zipcode: string;
+}
