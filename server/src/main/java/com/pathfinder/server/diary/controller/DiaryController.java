@@ -53,8 +53,6 @@ public class DiaryController {
     public ResponseEntity getDiary(@PathVariable("diary-id") @Positive Long diaryId) {
         Diary diary = diaryService.getDiary(diaryId);
         DiaryDto.Response response = mapper.DiaryToDiaryResponseDto(diary);
-        System.out.println(SecurityUtil.getCurrentId());
-        System.out.println(SecurityContextHolder.getContext().getAuthentication());
         Optional<Recommend> optionalRecommend = recommendRepository.findByMemberMemberIdAndDiaryDiaryId(SecurityUtil.getCurrentId(), diaryId);
         response.setRecommend(optionalRecommend.isPresent());
         Optional<Scrap> optionalScrap = scrapRepository.findByMemberMemberIdAndDiaryDiaryId(SecurityUtil.getCurrentId(),diaryId);
