@@ -1,11 +1,10 @@
 package com.pathfinder.server.image.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.pathfinder.server.global.exception.imageexception.FileIsNotImageFile;
 import com.pathfinder.server.global.exception.imageexception.ImageNotFoundException;
-import com.pathfinder.server.image.entity.Image;
-import com.pathfinder.server.image.repository.ImageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -26,14 +27,12 @@ public class ImageService {
             "jpg", "jpeg", "png", "gif", "bmp"
     );
     private final AmazonS3 amazonS3;
-    private final ImageRepository imageRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public ImageService(AmazonS3 amazonS3, ImageRepository imageRepository) {
+    public ImageService(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
-        this.imageRepository = imageRepository;
     }
 
     public String saveFile(MultipartFile file) throws IOException {
@@ -48,30 +47,28 @@ public class ImageService {
         metadata.setContentType(file.getContentType());
 
         amazonS3.putObject(bucket, imageName, file.getInputStream(), metadata);
-        String url = amazonS3.getUrl(bucket, imageName).toString();
-
-        Image image = new Image();
-        image.setImageName(imageName);
-        image.setUrl(url);
-        imageRepository.save(image);
-
-        return url;
+        return amazonS3.getUrl(bucket, imageName).toString();
     }
 
 
-    public void deleteImage(String imageUrl)  {
-        Image image = findVerifiedImage(imageUrl);
-        amazonS3.deleteObject(bucket, image.getImageName());
-        imageRepository.delete(image);
+    public void deleteImage(String imageUrl) {
+        try {
+            String key = findVerifiedImage(imageUrl);
+            amazonS3.deleteObject(bucket, key);
+        } catch (AmazonServiceException e) {
+            throw new ImageNotFoundException();
+        }
     }
 
-    private Image findVerifiedImage(String imageUrl) {
-        Optional<Image> optionalImage =
-                imageRepository.findByUrl(imageUrl);
-        Image findImage =
-                optionalImage.orElseThrow(() ->
-                        new ImageNotFoundException());
-        return findImage;
+    private String  findVerifiedImage(String imageUrl) {
+        String regex = "https://main20-pathfinder\\.s3\\.ap-northeast-2\\.amazonaws\\.com/(.*)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(imageUrl);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
 
     private boolean isImageFile(MultipartFile file) {
