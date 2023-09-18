@@ -65,6 +65,11 @@ const MyPage = (): JSX.Element => {
     password: string;
     intro: string;
   }
+  interface setForm {
+    name?: string;
+    password?: string;
+    introduce?: string;
+  }
 
   const {
     register,
@@ -82,13 +87,21 @@ const MyPage = (): JSX.Element => {
 
   function handleEditClick(data: Form): void {
     setIsLoading(true);
+    const requestData: setForm = {};
+    if (data.nickname) {
+      requestData.name = data.nickname;
+    }
+    if (data.password) {
+      requestData.password = data.password;
+    }
+    if (data.intro) {
+      requestData.introduce = data.intro;
+    }
     axios
       .patch(
         `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/member/mypage/${memberId}`,
         {
-          name: data.nickname,
-          password: data.password,
-          introduce: data.intro,
+          ...requestData,
         },
         { headers: { "Content-Type": "application/json" } },
       )
@@ -304,7 +317,6 @@ const MyPage = (): JSX.Element => {
                           <input
                             type={isHidePassword ? "password" : "text"}
                             {...register("password", {
-                              required: "비밀번호를 입력해주세요.",
                               minLength: {
                                 value: 8,
                                 message: "8자리 이상의 비밀번호를 사용해주세요.",
