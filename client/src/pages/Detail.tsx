@@ -29,7 +29,7 @@ const Detail = (): JSX.Element => {
   const headers: Headers = {};
   const token = getAccessToken();
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers["Authorization"] = `${token}`;
   }
   const likeBtnHandler = async () => {
     try {
@@ -50,6 +50,25 @@ const Detail = (): JSX.Element => {
       const response = await axios.delete(`diary/${params.id}`, {
         headers,
       });
+      if (response.status === 201 || 200) {
+      }
+    } catch (error) {
+      alert("권한이 없습니다.");
+    }
+    await navigate(-1);
+  };
+  const scrapBtnHandler = async () => {
+    try {
+      const response = await axios.post(
+        "scrap",
+        {
+          memberId: getUserId(),
+          diaryId: data.data.diaryId,
+        },
+        {
+          headers,
+        },
+      );
       if (response.status === 201 || 200) {
       }
     } catch (error) {
@@ -116,6 +135,13 @@ const Detail = (): JSX.Element => {
               </DetailLikeBtn>
             )}
             <DetailEditBtnContainer>
+              <DetailScrapBtn
+                onClick={() => {
+                  scrapBtnHandler();
+                }}
+              >
+                스크랩
+              </DetailScrapBtn>
               <DetailEditBtn
                 onClick={() => {
                   patchBtnHandler();
@@ -269,6 +295,11 @@ const DetailEditBtnContainer = styled.div`
   gap: 7px;
 `;
 
+const DetailScrapBtn = styled(DetailLikeBtn)`
+  background-color: #3f95ff;
+  color: #ffffff;
+  box-shadow: none;
+`;
 const DetailEditBtn = styled(DetailLikeBtn)`
   background-color: #ffc03f;
   color: #ffffff;
