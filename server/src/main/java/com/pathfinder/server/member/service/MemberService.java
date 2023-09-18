@@ -39,11 +39,7 @@ public class MemberService {
         if(!request.getAgreeToTerms()){
             throw new MemberNotAgreeToTerms();
         }
-        String mail = request.getEmail();
-        String name = request.getName();
-
-        verifyExistsEmail(mail);
-        verifyExistsName(name);
+        verifyExistsEmail(request.getEmail());
 
         //TODO email인증 로직 추가
 
