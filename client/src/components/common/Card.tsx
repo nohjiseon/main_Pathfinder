@@ -93,7 +93,6 @@ const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
   const imgRegex = /<img *?src=["'](.*?)["'].*?>/g;
   const matches = diaryData.content.match(imgRegex);
   let firstThumbnail = "";
-  console.log(diaryData);
   if (matches && matches.length > 0) {
     const firstMatch = matches[0];
     const srcMatch = firstMatch.match(/src=["'](.*?)["']/);
@@ -115,7 +114,11 @@ const Card = ({ diaryData }: { diaryData: DiaryData }): JSX.Element => {
             <div>
               <span className="count">{diaryData.recommendedCount}</span>
               <span className="view">{diaryData.views}</span>
-              <span>{getFormattedDate(diaryData.modifiedAt)}</span>
+              <span>
+                {getFormattedDate(
+                  diaryData.modifiedAt ? diaryData.modifiedAt : diaryData.createdAt,
+                )}
+              </span>
             </div>
           </div>
         </div>

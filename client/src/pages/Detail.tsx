@@ -20,7 +20,6 @@ const Detail = (): JSX.Element => {
     diaryDetailState,
     `diary/${params.id}`,
   );
-  console.log(data);
   const patchBtnHandler = () => {
     // "수정" 버튼을 클릭할 때 글쓰기/편집 페이지로 이동하도록 합니다.
     // diaryId는 수정할 일기의 ID입니다.-
@@ -30,7 +29,7 @@ const Detail = (): JSX.Element => {
   const headers: Headers = {};
   const token = getAccessToken();
   if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+    headers["Authorization"] = `${token}`;
   }
   const likeBtnHandler = async () => {
     try {
@@ -38,7 +37,6 @@ const Detail = (): JSX.Element => {
         headers,
       });
       if (response.status === 201 || 200) {
-        console.log(data);
       } else {
         console.error(`${response.status} 실패`);
       }
@@ -53,7 +51,25 @@ const Detail = (): JSX.Element => {
         headers,
       });
       if (response.status === 201 || 200) {
-        console.log(data);
+      }
+    } catch (error) {
+      alert("권한이 없습니다.");
+    }
+    await navigate(-1);
+  };
+  const scrapBtnHandler = async () => {
+    try {
+      const response = await axios.post(
+        "scrap",
+        {
+          memberId: getUserId(),
+          diaryId: data.data.diaryId,
+        },
+        {
+          headers,
+        },
+      );
+      if (response.status === 201 || 200) {
       }
     } catch (error) {
       alert("권한이 없습니다.");
@@ -64,7 +80,7 @@ const Detail = (): JSX.Element => {
     return <Loading />;
   }
   if (isError) {
-    return <DetailBg>Error...!</DetailBg>;
+    navigate("/diary/error");
   }
   return (
     <DetailBg>
@@ -80,7 +96,11 @@ const Detail = (): JSX.Element => {
           <DetailReaderRecordContainer>
             <DetailSide>
               <DetailDiaryInfo>{data?.data.name}</DetailDiaryInfo>
-              <DetailDiaryInfo>{getFormattedDate(data?.data.modifiedAt)}</DetailDiaryInfo>
+              <DetailDiaryInfo>
+                {getFormattedDate(
+                  data?.data.modifiedAt ? data?.data.modifiedAt : data?.data.createdAt,
+                )}
+              </DetailDiaryInfo>
             </DetailSide>
             <DetailReaderRecord>
               <img src={thumbUp} />
@@ -115,6 +135,13 @@ const Detail = (): JSX.Element => {
               </DetailLikeBtn>
             )}
             <DetailEditBtnContainer>
+              <DetailScrapBtn
+                onClick={() => {
+                  scrapBtnHandler();
+                }}
+              >
+                스크랩
+              </DetailScrapBtn>
               <DetailEditBtn
                 onClick={() => {
                   patchBtnHandler();
@@ -268,6 +295,11 @@ const DetailEditBtnContainer = styled.div`
   gap: 7px;
 `;
 
+const DetailScrapBtn = styled(DetailLikeBtn)`
+  background-color: #3f95ff;
+  color: #ffffff;
+  box-shadow: none;
+`;
 const DetailEditBtn = styled(DetailLikeBtn)`
   background-color: #ffc03f;
   color: #ffffff;

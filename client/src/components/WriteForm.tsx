@@ -357,8 +357,7 @@ const WriteForm = () => {
               ? await axios.patch(`/diary/edit/${id}`, data, { headers })
               : await axios.post("/diary/registration", data);
 
-            if (response.status === 201) {
-              console.log(data);
+            if (response.status === 201 || 200) {
             } else {
               console.error(`${response.status} 실패`);
             }
@@ -404,14 +403,13 @@ const WriteForm = () => {
               initialValue={id ? oldData.data.content : "내용을 입력해주세요"}
               previewStyle="vertical"
               height="440px"
-              initialEditType="markdown"
+              initialEditType="wysiwyg"
               useCommandShortcut={true}
               usageStatistics={false}
               hooks={{
                 addImageBlobHook: async (blob, callback) => {
                   const formData = new FormData();
                   formData.append("image", blob, "image.png"); // 이미지 파일 이름은 임의로 지정할 수 있습니다.
-                  console.log(formData);
 
                   try {
                     const response = await axios.post("/image", formData);
@@ -432,7 +430,7 @@ const WriteForm = () => {
           </div>
           <div className="button">
             <button type="submit" disabled={isSubmitting}>
-              등록
+              {!id ? "등록" : "수정"}
             </button>
             <button type="button" onClick={() => navigate(-1)}>
               취소
