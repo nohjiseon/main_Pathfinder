@@ -20,6 +20,7 @@ const Detail = (): JSX.Element => {
     diaryDetailState,
     `diary/${params.id}`,
   );
+  console.log(data);
   const patchBtnHandler = () => {
     // "수정" 버튼을 클릭할 때 글쓰기/편집 페이지로 이동하도록 합니다.
     // diaryId는 수정할 일기의 ID입니다.-
@@ -74,7 +75,7 @@ const Detail = (): JSX.Element => {
     } catch (error) {
       alert("권한이 없습니다.");
     }
-    await navigate(-1);
+    await fetchData();
   };
   if (isLoading) {
     return <Loading />;
