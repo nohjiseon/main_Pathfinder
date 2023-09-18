@@ -5,7 +5,7 @@ import { useFetch } from "../hooks/useFetch";
 import { diaryDetailState } from "../atoms/atoms";
 import { DiaryDetail } from "../types/types";
 import { getFormattedDate } from "../util/date";
-import { getAccessToken, getUserId } from "../util/auth";
+import { getAccessToken, getEmail, getUserId } from "../util/auth";
 import backArrow from "../assets/images/back-arrow.png";
 import thumbUp from "../assets/images/thumb-up-icon.png";
 import eye from "../assets/images/eye-icon.png";
@@ -20,7 +20,6 @@ const Detail = (): JSX.Element => {
     diaryDetailState,
     `diary/${params.id}`,
   );
-  console.log(data);
   const patchBtnHandler = () => {
     // "수정" 버튼을 클릭할 때 글쓰기/편집 페이지로 이동하도록 합니다.
     // diaryId는 수정할 일기의 ID입니다.-
@@ -143,20 +142,28 @@ const Detail = (): JSX.Element => {
               >
                 스크랩
               </DetailScrapBtn>
-              <DetailEditBtn
-                onClick={() => {
-                  patchBtnHandler();
-                }}
-              >
-                수정
-              </DetailEditBtn>
-              <DetailCancelBtn
-                onClick={() => {
-                  deleteBtnHandler();
-                }}
-              >
-                삭제
-              </DetailCancelBtn>
+              {getEmail() === data.data.email ? (
+                <DetailEditBtn
+                  onClick={() => {
+                    patchBtnHandler();
+                  }}
+                >
+                  수정
+                </DetailEditBtn>
+              ) : (
+                <></>
+              )}
+              {getEmail() === data.data.email ? (
+                <DetailCancelBtn
+                  onClick={() => {
+                    deleteBtnHandler();
+                  }}
+                >
+                  삭제
+                </DetailCancelBtn>
+              ) : (
+                <></>
+              )}
             </DetailEditBtnContainer>
           </DetailBtnContainer>
         </DetailMainContent>

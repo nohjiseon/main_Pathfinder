@@ -44,11 +44,12 @@ const Login = (): JSX.Element => {
         cookies.set("is_login", `${accessToken}`);
         localStorage.setItem("token", accessToken);
         localStorage.setItem("memberId", res.data.memberId);
+        localStorage.setItem("email", data.email);
 
         setIsLoading(false);
         navigate("/");
       })
-      .catch((err) => {
+      .catch(() => {
         setIsLoading(false);
       });
   }
