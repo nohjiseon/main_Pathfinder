@@ -45,7 +45,9 @@ public class Member {
     private int diaryCount;
 
     @Column(nullable = false)
-    private Boolean agreeToTerms;   // todo 미동의 회원 사용불가 처리
+    private Boolean agreeToTerms;   // todo batch로 미동의 회원 사용불가 처리
+
+    // todo 일정기간 미로그인자 휴면상태로 변경
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
