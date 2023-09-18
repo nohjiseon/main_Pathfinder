@@ -9,6 +9,7 @@ export interface DiaryData {
   diaryId: number;
   createdAt: string;
   modifiedAt: string;
+  email: string;
   area1: string;
   area2: string;
   name: string;

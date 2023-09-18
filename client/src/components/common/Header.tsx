@@ -53,6 +53,7 @@ const Header = () => {
     cookies.remove("is_login");
     localStorage.removeItem("token");
     localStorage.removeItem("memberId");
+    localStorage.removeItem("email");
     setIsLogin(false);
     navigate("/");
     alert("성공적으로 로그아웃 되었습니다.");

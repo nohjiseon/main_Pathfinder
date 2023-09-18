@@ -116,6 +116,7 @@ const WriteForm = () => {
         diaryId: 0,
         createdAt: "",
         modifiedAt: "",
+        email: "",
         area1: "",
         area2: "",
         name: "",
