@@ -397,6 +397,7 @@ const MyPage = (): JSX.Element => {
                       <MyPageCharacter
                         className={isPhotoEdit ? "focus" : ""}
                         onClick={() => handlePhotoChange(el)}
+                        key={el.rewardId}
                       >
                         <CharacterSquare src={el.imageUrl} />
                         {el.unlocked ? <div>{el.name}</div> : null}
