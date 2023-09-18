@@ -38,6 +38,7 @@ public class ScrapService {
             scrapRepository.save(scrap);
         }
         else {
+            findDiary.setScrapCount(findDiary.getScrapCount() - 1);
             scrapRepository.delete(optionalScrap.get());
         }
     }
