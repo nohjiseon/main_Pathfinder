@@ -39,6 +39,8 @@ export const diaryDetailState = atom<DiaryDetail>({
       content: "",
       recommendedCount: 0,
       views: 0,
+      scrap: false,
+      scrapCount: 0,
       recommend: false,
     },
   },
@@ -57,6 +59,8 @@ export const diaryState = atom<DiaryData>({
     content: "",
     recommendedCount: 0,
     views: 0,
+    scrap: false,
+    scrapCount: 0,
     recommend: false,
   },
 });
