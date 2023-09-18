@@ -38,8 +38,7 @@ public class Member {
     private String introduce;
 
     @Column(nullable = false)
-    private String profileImageUrl =
-            "https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/defaultImage.png";
+    private String profileImageUrl;
 
     @Column(nullable = false)
     private int diaryCount;
@@ -97,7 +96,7 @@ public class Member {
                 .password(password)
                 .introduce("안녕하세요")
                 .authority(Authority.ROLE_USER)
-                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png")
+                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/defaultImage.png")
                 .diaryCount(0)
                 .agreeToTerms(agreeToTerms)
                 .build();
@@ -111,7 +110,7 @@ public class Member {
                 .password(password)
                 .introduce("안녕하세요")
                 .authority(Authority.ROLE_USER)
-                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png")
+                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/defaultImage.png")
                 .diaryCount(0)
                 .agreeToTerms(true)
                 .build();
