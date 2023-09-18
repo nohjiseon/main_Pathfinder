@@ -16,6 +16,8 @@ export interface DiaryData {
   title: string;
   content: string;
   recommendedCount: number;
+  scrap: boolean;
+  scrapCount: number;
   views: number;
   recommend: boolean;
 }

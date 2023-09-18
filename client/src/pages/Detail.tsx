@@ -135,13 +135,23 @@ const Detail = (): JSX.Element => {
               </DetailLikeBtn>
             )}
             <DetailEditBtnContainer>
-              <DetailScrapBtn
-                onClick={() => {
-                  scrapBtnHandler();
-                }}
-              >
-                스크랩
-              </DetailScrapBtn>
+              {data?.data.scrap ? (
+                <DetailScrapBtn
+                  onClick={() => {
+                    scrapBtnHandler();
+                  }}
+                >
+                  스크랩
+                </DetailScrapBtn>
+              ) : (
+                <DetailUnscrapBtn
+                  onClick={() => {
+                    scrapBtnHandler();
+                  }}
+                >
+                  스크랩 취소
+                </DetailUnscrapBtn>
+              )}
               {getEmail() === data.data.email ? (
                 <DetailEditBtn
                   onClick={() => {
@@ -305,6 +315,11 @@ const DetailEditBtnContainer = styled.div`
 
 const DetailScrapBtn = styled(DetailLikeBtn)`
   background-color: #3f95ff;
+  color: #ffffff;
+  box-shadow: none;
+`;
+const DetailUnscrapBtn = styled(DetailLikeBtn)`
+  background-color: #a1ccff;
   color: #ffffff;
   box-shadow: none;
 `;
