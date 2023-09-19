@@ -11,6 +11,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Page<Diary> findByArea1(String area1, Pageable pageable);
     Page<Diary> findByMemberMemberId(Long memberId, Pageable pageable);
 
-    @Query("SELECT d FROM Diary d ORDER BY d.recommendedCount")
+    @Query("SELECT d FROM Diary d ORDER BY d.recommendedCount DESC")
     Page<Diary> findByTop3ByOrderedByRecommendedCount(Pageable pageable);
 }

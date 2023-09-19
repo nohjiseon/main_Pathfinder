@@ -3,6 +3,7 @@ package com.pathfinder.server.member.entity;
 import com.pathfinder.server.diary.entity.Diary;
 import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.reward.entity.Reward;
+import com.pathfinder.server.scrap.entity.Scrap;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,11 +38,15 @@ public class Member {
     private String introduce;
 
     @Column(nullable = false)
-    private String profileImageUrl =
-            "https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png";   // 기본 이미지
+    private String profileImageUrl;
 
     @Column(nullable = false)
     private int diaryCount;
+
+    @Column(nullable = false)
+    private Boolean agreeToTerms;   // todo batch로 미동의 회원 사용불가 처리
+
+    // todo 일정기간 미로그인자 휴면상태로 변경
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Recommend> recommends = new ArrayList<>();
@@ -51,6 +56,16 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Reward> rewards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Scrap> scraps = new ArrayList<>();
+
+    public void setScrap(Scrap scrap) {
+        scraps.add(scrap);
+        if(scrap.getMember() != this) {
+            scrap.setMember(this);
+        }
+    }
 
     public void setRecommend(Recommend recommend) {
         recommends.add(recommend);
@@ -73,6 +88,21 @@ public class Member {
         }
     }
 
+    // 일반 회원가입
+    public static Member createMember(String email, String name, String password, boolean agreeToTerms) {
+        return Member.builder()
+                .email(email)
+                .name(name)
+                .password(password)
+                .introduce("안녕하세요")
+                .authority(Authority.ROLE_USER)
+                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/defaultImage.png")
+                .diaryCount(0)
+                .agreeToTerms(agreeToTerms)
+                .build();
+    }
+
+    // oauth2 회원가입
     public static Member createMember(String email, String name, String password) {
         return Member.builder()
                 .email(email)
@@ -80,8 +110,9 @@ public class Member {
                 .password(password)
                 .introduce("안녕하세요")
                 .authority(Authority.ROLE_USER)
-                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png")
+                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/defaultImage.png")
                 .diaryCount(0)
+                .agreeToTerms(true)
                 .build();
     }
 }

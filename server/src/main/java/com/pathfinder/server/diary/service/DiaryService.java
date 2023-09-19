@@ -11,12 +11,14 @@ import com.pathfinder.server.member.service.MemberService;
 import com.pathfinder.server.reward.service.RewardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -34,6 +36,8 @@ public class DiaryService {
 
     public Diary createDiary(Diary diary) {
         verifyDiaryGetMemberName(diary);
+        diary.setCreatedAt(LocalDateTime.now());
+        diary.setModifiedAt(LocalDateTime.now());
 
         return diaryRepository.save(diary);
     }
@@ -50,6 +54,8 @@ public class DiaryService {
                     .ifPresent(area1 -> findDiary.setArea1(area1));
             Optional.ofNullable(diary.getArea2())
                     .ifPresent(area2 -> findDiary.setArea2(area2));
+
+            findDiary.setModifiedAt(LocalDateTime.now());
             return diaryRepository.save(findDiary);
         }
         else {
@@ -57,7 +63,7 @@ public class DiaryService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Diary getDiary(Long diaryId){
         Diary findDiary = findVerifiedDiary(diaryId);
         findDiary.setViews(findDiary.getViews() + 1); // 조회수 증가
@@ -79,7 +85,8 @@ public class DiaryService {
     }
 
     public Page<Diary> getTop3DiariesByRecommendedCount() {
-        return diaryRepository.findByTop3ByOrderedByRecommendedCount(PageRequest.of(0,3,Sort.by("recommendedCount").descending()));
+        Pageable pageable = PageRequest.of(0, 3);
+        return diaryRepository.findByTop3ByOrderedByRecommendedCount(pageable);
     }
 
     public void deleteDiary(Long diaryId) {
@@ -91,17 +98,16 @@ public class DiaryService {
             throw new DiaryDeleteUnAuthorizedException();
         }
     }
-
-
-    @Transactional(readOnly = true)
+    @Transactional
     public Diary findVerifiedDiary(Long diaryId) {
         Optional<Diary> optionalQuestion = diaryRepository.findById(diaryId);
         Diary findDiary = optionalQuestion.orElseThrow(()-> new DiaryNotFoundException());
         return findDiary;
     }
     private void verifyDiaryGetMemberName(Diary diary){
-        Member findUser = memberService.findMember(diary.getMember().getMemberId());
+        Member findUser = memberService.findVerifiedMember(diary.getMember().getMemberId());
         diary.setName(findUser.getName());
+        diary.setEmail(findUser.getEmail());
         findUser.setDiaryCount(findUser.getDiaryCount() + 1);
         rewardService.unlockRewards(findUser,findUser.getRewards());
     }
