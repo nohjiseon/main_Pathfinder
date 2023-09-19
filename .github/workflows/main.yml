@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ feat/BE ]
+    branches: [ dev ]
 
 jobs:
   build:
@@ -89,3 +89,9 @@ jobs:
             -e TOURAPI_SERVICEKEY=${{ secrets.TOURAPI_SERVICEKEY }} \
             ${{ secrets.DOCKER_HUB_USERNAME }}/pathfinder-server:${GITHUB_SHA::7}
           EOF
+      - name: Notify Discord
+        if: always() # 항상 실행 (성공, 실패, 취소 상관없이)
+        uses: DiscordHooks/github-actions-discord-webhook@2.1.1
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          status: ${{ job.status }}
