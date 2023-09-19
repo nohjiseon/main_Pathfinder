@@ -76,109 +76,109 @@ const Detail = (): JSX.Element => {
     }
     await fetchData();
   };
-  if (isLoading) {
-    return <Loading />;
-  }
   if (isError) {
     navigate("/diary/error");
   }
   return (
-    <DetailBg>
-      <SubWave />
-      <DetailContentContainer>
-        <DetailMainContent>
-          <DetailTitleContainer>
-            <DetailArrowContainer>
-              <img src={backArrow} onClick={() => navigate(-1)} />
-            </DetailArrowContainer>
-            <DetailTitle>{data?.data.title}</DetailTitle>
-          </DetailTitleContainer>
-          <DetailReaderRecordContainer>
-            <DetailSide>
-              <DetailDiaryInfo>{data?.data.name}</DetailDiaryInfo>
-              <DetailDiaryInfo>
-                {getFormattedDate(
-                  data?.data.modifiedAt ? data?.data.modifiedAt : data?.data.createdAt,
-                )}
-              </DetailDiaryInfo>
-            </DetailSide>
-            <DetailReaderRecord>
-              <img src={thumbUp} />
-              <div>{data?.data.recommendedCount}</div>
-            </DetailReaderRecord>
-            <DetailReaderRecord>
-              <img src={eye} />
-              <div>{data?.data.views}</div>
-            </DetailReaderRecord>
-          </DetailReaderRecordContainer>
-          <DetailConentParagraph>
-            <div dangerouslySetInnerHTML={{ __html: data?.data.content }}></div>
-          </DetailConentParagraph>
-          <DetailBtnContainer>
-            {data?.data.recommend ? (
-              <DetailLikeBtnFocus
-                onClick={() => {
-                  likeBtnHandler();
-                }}
-              >
-                <img src={thumbUpWhite} />
-                <span>추천</span>
-              </DetailLikeBtnFocus>
-            ) : (
-              <DetailLikeBtn
-                onClick={() => {
-                  likeBtnHandler();
-                }}
-              >
+    <>
+      {isLoading ? <Loading /> : null}
+      <DetailBg>
+        <SubWave />
+        <DetailContentContainer>
+          <DetailMainContent>
+            <DetailTitleContainer>
+              <DetailArrowContainer>
+                <img src={backArrow} onClick={() => navigate(-1)} />
+              </DetailArrowContainer>
+              <DetailTitle>{data?.data.title}</DetailTitle>
+            </DetailTitleContainer>
+            <DetailReaderRecordContainer>
+              <DetailSide>
+                <DetailDiaryInfo>{data?.data.name}</DetailDiaryInfo>
+                <DetailDiaryInfo>
+                  {getFormattedDate(
+                    data?.data.modifiedAt ? data?.data.modifiedAt : data?.data.createdAt,
+                  )}
+                </DetailDiaryInfo>
+              </DetailSide>
+              <DetailReaderRecord>
                 <img src={thumbUp} />
-                <span>추천</span>
-              </DetailLikeBtn>
-            )}
-            <DetailEditBtnContainer>
-              {data?.data.scrap === true ? (
-                <DetailUnscrapBtn
+                <div>{data?.data.recommendedCount}</div>
+              </DetailReaderRecord>
+              <DetailReaderRecord>
+                <img src={eye} />
+                <div>{data?.data.views}</div>
+              </DetailReaderRecord>
+            </DetailReaderRecordContainer>
+            <DetailConentParagraph>
+              <div dangerouslySetInnerHTML={{ __html: data?.data.content }}></div>
+            </DetailConentParagraph>
+            <DetailBtnContainer>
+              {data?.data.recommend ? (
+                <DetailLikeBtnFocus
                   onClick={() => {
-                    scrapBtnHandler();
+                    likeBtnHandler();
                   }}
                 >
-                  스크랩 취소
-                </DetailUnscrapBtn>
+                  <img src={thumbUpWhite} />
+                  <span>추천</span>
+                </DetailLikeBtnFocus>
               ) : (
-                <DetailScrapBtn
+                <DetailLikeBtn
                   onClick={() => {
-                    scrapBtnHandler();
+                    likeBtnHandler();
                   }}
                 >
-                  스크랩
-                </DetailScrapBtn>
+                  <img src={thumbUp} />
+                  <span>추천</span>
+                </DetailLikeBtn>
               )}
-              {getEmail() === data.data.email ? (
-                <DetailEditBtn
-                  onClick={() => {
-                    patchBtnHandler();
-                  }}
-                >
-                  수정
-                </DetailEditBtn>
-              ) : (
-                <></>
-              )}
-              {getEmail() === data.data.email ? (
-                <DetailCancelBtn
-                  onClick={() => {
-                    deleteBtnHandler();
-                  }}
-                >
-                  삭제
-                </DetailCancelBtn>
-              ) : (
-                <></>
-              )}
-            </DetailEditBtnContainer>
-          </DetailBtnContainer>
-        </DetailMainContent>
-      </DetailContentContainer>
-    </DetailBg>
+              <DetailEditBtnContainer>
+                {data?.data.scrap === true ? (
+                  <DetailUnscrapBtn
+                    onClick={() => {
+                      scrapBtnHandler();
+                    }}
+                  >
+                    스크랩 취소
+                  </DetailUnscrapBtn>
+                ) : (
+                  <DetailScrapBtn
+                    onClick={() => {
+                      scrapBtnHandler();
+                    }}
+                  >
+                    스크랩
+                  </DetailScrapBtn>
+                )}
+                {getEmail() === data.data.email ? (
+                  <DetailEditBtn
+                    onClick={() => {
+                      patchBtnHandler();
+                    }}
+                  >
+                    수정
+                  </DetailEditBtn>
+                ) : (
+                  <></>
+                )}
+                {getEmail() === data.data.email ? (
+                  <DetailCancelBtn
+                    onClick={() => {
+                      deleteBtnHandler();
+                    }}
+                  >
+                    삭제
+                  </DetailCancelBtn>
+                ) : (
+                  <></>
+                )}
+              </DetailEditBtnContainer>
+            </DetailBtnContainer>
+          </DetailMainContent>
+        </DetailContentContainer>
+      </DetailBg>
+    </>
   );
 };
 
