@@ -38,7 +38,8 @@ const Recommend = (): JSX.Element => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const address = recommendData.length > 0 ? recommendData[0].area2 : "부산";
+        // 옵셔널 체이닝으로 0번째 데이터가 있는지 확인후,렌더링
+        const address = recommendData[0]?.area2;
         const res = await axios.get(
           `http://ec2-43-202-120-133.ap-northeast-2.compute.amazonaws.com:8080/api?address=${address}`,
         );
