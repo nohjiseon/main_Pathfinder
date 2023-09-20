@@ -61,8 +61,8 @@ npm start<br />
         <a href="https://github.com/minyongP" target="_blank">BE 팀원 : 박민용</a>
         <p>
           - open api<br />
-          - 웹 에디터<br />
-          - 인프라
+          - 이미지 업로드 <br />
+          - CI/CD
         </p>
       </td>
       <td style='vertical-align: top'>
