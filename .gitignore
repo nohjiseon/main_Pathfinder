@@ -1,0 +1,6 @@
+.DS_Store
+*.xml
+*.iml
+server/src/main/resources/application-secret.yml
+*.xml
+*.iml
