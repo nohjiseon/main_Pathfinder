@@ -6,6 +6,7 @@ import com.pathfinder.server.diary.repository.DiaryRepository;
 import com.pathfinder.server.global.exception.diaryexception.DiaryDeleteUnAuthorizedException;
 import com.pathfinder.server.global.exception.diaryexception.DiaryEditUnAuthorizedException;
 import com.pathfinder.server.global.exception.diaryexception.DiaryNotFoundException;
+import com.pathfinder.server.member.entity.Authority;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.member.service.MemberService;
 import com.pathfinder.server.reward.service.RewardService;
@@ -112,9 +113,10 @@ public class DiaryService {
         rewardService.unlockRewards(findUser,findUser.getRewards());
     }
     public boolean verifyIdentification(Diary diary) {
-        if(diary.getMember().getMemberId() == SecurityUtil.getCurrentId()) {
+        if((diary.getMember().getMemberId() == SecurityUtil.getCurrentId()) || (SecurityUtil.getAuthority() == Authority.ROLE_ADMIN)) {
             return true;
         }
         return false;
     }
+
 }
