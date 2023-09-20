@@ -1,6 +1,7 @@
 package com.pathfinder.server.member.entity;
 
 import com.pathfinder.server.diary.entity.Diary;
+import com.pathfinder.server.member.dto.MemberDto;
 import com.pathfinder.server.recommend.entity.Recommend;
 import com.pathfinder.server.reward.entity.Reward;
 import com.pathfinder.server.scrap.entity.Scrap;
@@ -115,4 +116,18 @@ public class Member {
                 .agreeToTerms(true)
                 .build();
     }
+
+    public static Member createAdmin(MemberDto.AdminPost admin){
+        return Member.builder()
+                .email(admin.getEmail())
+                .name(admin.getName())
+                .password(admin.getPassword())
+                .introduce("관리자 계정입니다.")
+                .authority(Authority.ROLE_ADMIN)
+                .profileImageUrl("https://main20-pathfinder.s3.ap-northeast-2.amazonaws.com/profileimage.png")
+                .diaryCount(0)
+                .agreeToTerms(true)
+                .build();
+    }
+
 }

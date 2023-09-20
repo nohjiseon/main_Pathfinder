@@ -46,4 +46,17 @@ public class MemberDto {
         private String introduce;
         private String profileImageUrl;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class AdminPost{
+        @NotNull
+        @Email
+        private String email;
+        @NotNull
+        private String name;
+        @NotNull
+        @Size(min = 15)
+        private String password;
+    }
 }
