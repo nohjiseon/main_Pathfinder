@@ -241,6 +241,9 @@ const AreaBox = styled.div`
   width: 500px;
   height: 770px;
   z-index: 2;
+  area {
+    cursor: pointer;
+  }
 `;
 
 const Bounce = keyframes`
