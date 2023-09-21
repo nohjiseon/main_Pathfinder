@@ -227,9 +227,9 @@ const MenuBtn = styled.button`
 `;
 
 const Menu = styled.div`
-  position: fixed;
-  right: 20px;
-  top: 82px;
+  position: absolute;
+  right: -20px;
+  top: 55px;
   width: 231px;
   background-color: #fff;
   box-shadow: 3px 4px 7px rgba(190, 190, 190, 0.3);
