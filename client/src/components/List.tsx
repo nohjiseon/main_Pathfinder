@@ -52,6 +52,9 @@ const Listbox = styled.div`
         background: url(${Arrow}) no-repeat right center / 36px transparent;
         color: transparent;
         cursor: pointer;
+        option {
+          color: #444;
+        }
       }
       select::-ms-expand {
         display: none;
