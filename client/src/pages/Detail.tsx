@@ -197,6 +197,10 @@ const DetailContentContainer = styled.div`
   box-shadow: 2px 4px 6px rgba(185, 185, 185, 0.25);
   border: 1px solid #eaeaea;
   border-radius: 12px;
+
+  img {
+    max-width: 100%;
+  }
 `;
 
 const DetailArrowContainer = styled.button`
