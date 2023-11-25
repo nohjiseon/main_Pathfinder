@@ -14,8 +14,6 @@ const RandomCard = ({ data }: { data: RandomData }) => {
         <p>
           {data.addr1} {data.addr2}
         </p>
-        <span>관광타입: {data.tag}</span>
-        <span>{data.tel ? `Tel: ${data.tel}` : null}</span>
       </InfoBox>
     </RandomBox>
   );
@@ -23,7 +21,7 @@ const RandomCard = ({ data }: { data: RandomData }) => {
 export default RandomCard;
 
 const RandomBox = styled.li`
-  width: calc(33.33% - 20px);
+  width: calc(33.33% - 13.33px);
   background-color: #fff;
   border: 1px solid #eaeaea;
   border-radius: 8px;

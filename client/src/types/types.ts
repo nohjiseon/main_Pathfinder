@@ -30,12 +30,9 @@ export interface PageInfo {
 }
 
 export interface RandomData {
+  contentId: number;
   title: string;
   addr1: string;
   addr2: string;
-  tel: string;
   firstimage: string;
-  firstimage2: string;
-  tag: string;
-  zipcode: string;
 }
