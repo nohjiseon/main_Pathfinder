@@ -16,6 +16,11 @@
 - 각 지역에 해당 하는 지역의 리스트 열람가능<br />
 - 작성한 기록 갯수에 따라 귀여운 캐릭터 프로필 설정가능<br />
 
+### ✏️ 로그인 정보
+
+ID : test111@test.com<br />
+PW : 123456789<br />
+
 ### ✏️ npm
 
 npm install --force<br />
@@ -156,7 +161,8 @@ npm start<br />
 
 ### ✏️ 산출물
 
-<a href='https://grand-tamarind-037.notion.site/Pathfinder-de21ccc26721484b8916931d4f49e692' target='_blank'>사용자 요구사항 명세서</a><br />
+<!-- <a href='https://grand-tamarind-037.notion.site/Pathfinder-de21ccc26721484b8916931d4f49e692' target='_blank'>사용자 요구사항 명세서</a><br /> -->
+
 <a href='https://www.notion.so/Pathfinder-8c592798df594be59e3b54c33898bfc2' target='_blank'>화면정의서</a><br />
 <a href='https://www.figma.com/file/LMc2q3WzqItb5MAnX0rbRr/main-project?type=design&node-id=0%3A1&mode=dev' target='_blank'>디자인</a><br />
 <a href='https://documenter.getpostman.com/view/27565029/2s9YBz1uiA#52e9b235-85d4-4769-a3e2-151d227821e6' target='_blank'>api 명세서</a><br />
